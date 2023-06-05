@@ -11,8 +11,8 @@ android {
         applicationId "me.taste2plate.app.customer"
         minSdkVersion 21
         targetSdkVersion 33
-        versionCode 157
-        versionName "1.7.7"
+        versionCode 158
+        versionName "1.7.8"
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
     }
