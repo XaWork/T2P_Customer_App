@@ -1,0 +1,24 @@
+//import org.gradle.api.initialization.resolve.RepositoriesMode
+//
+//pluginManagement {
+//    repositories {
+//        gradlePluginPortal()
+//        google()
+//        mavenCentral()
+//    }
+//}
+//dependencyResolutionManagement {
+//    repositoriesMode.set(RepositoriesMode.PREFER_SETTINGS)
+//    repositories {
+//        google()
+//        mavenCentral()
+//        // Clickzin App Changes starts here
+//        maven {
+//            url "https://mymavenrepo.com/repo/gap8CjauTS8VrUs57tgf/"
+//        }
+//        // Clickzin App Changes starts here
+//
+//    }
+//}
+//rootProject.name = "Tastes2Plate"
+include ':app', ':woodroid', ':library'

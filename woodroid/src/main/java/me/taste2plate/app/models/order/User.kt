@@ -1,0 +1,53 @@
+package me.taste2plate.app.models.order
+
+import androidx.annotation.Keep
+import java.io.Serializable
+
+@Keep
+data class User(
+    val __v: Int,
+    val _id: String,
+    val about: String,
+    val acc_holder_name: Any,
+    val acc_number: Any,
+    val active: Int,
+    val address: String,
+    val bank_address: Any,
+    val bank_name: Any,
+    val branch_code: Any,
+    val cargo_position: Position,
+    val city: Any,
+    val cod: Int,
+    val commission: String,
+    val commission_type: String,
+    val communication_zipcode: String,
+    val created_date: String,
+    val customer_support_city: List<Any>,
+    val deleted: Int,
+    val delivery_boy: List<Any>,
+    val delivery_city: List<Any>,
+    val delivery_partner_position: Position,
+    val device_token: String,
+    val device_type: String,
+    val email: String,
+    val email_otp: Int,
+    val `file`: String,
+    val full_name: String,
+    val ifsc: Any,
+    val lp_manager: List<Any>,
+    val master: Any,
+    val mobile: String,
+    val note: String,
+    val otp: Int,
+    val password: String,
+    val price_per_kg: String,
+    val price_per_pack: String,
+    val profile_image: String,
+    val seo_desc: String,
+    val seo_title: String,
+    val service_zipcode: String,
+    val slug: String,
+    val update_date: String,
+    val user_type: String,
+    val vendor_position: Position
+):Serializable

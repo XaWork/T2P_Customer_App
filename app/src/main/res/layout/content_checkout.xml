@@ -1,0 +1,513 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:background="@color/white"
+  android:orientation="vertical"
+  android:paddingBottom="80dp"
+  app:layout_behavior="@string/appbar_scrolling_view_behavior"
+  tools:ignore="MissingPrefix">
+
+  <LinearLayout
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:background="@color/white"
+	android:orientation="vertical">
+
+	<LinearLayout
+	  android:layout_width="match_parent"
+	  android:layout_height="wrap_content"
+	  android:layout_weight="1"
+	  android:background="@color/light_gray">
+
+	  <androidx.recyclerview.widget.RecyclerView
+		android:id="@+id/rvCheckOutCart"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_margin="16dp"
+		android:elevation="2dp">
+
+	  </androidx.recyclerview.widget.RecyclerView>
+
+	</LinearLayout>
+
+	<View
+	  android:layout_width="match_parent"
+	  android:layout_height="1dp"
+	  android:layout_marginLeft="16dp"
+	  android:layout_marginTop="16dp"
+	  android:layout_marginRight="16dp"
+	  android:layout_marginBottom="16dp"
+	  android:background="#d8d8d8"
+	  android:visibility="gone" />
+
+	<LinearLayout
+	  android:layout_width="match_parent"
+	  android:layout_height="wrap_content"
+	  android:layout_margin="10dp"
+	  android:background="@drawable/rectangle_grey"
+	  android:orientation="horizontal"
+	  android:paddingLeft="24dp"
+	  android:paddingRight="24dp">
+
+	  <TextView
+		android:id="@+id/tvTotalItemCostTitle"
+		fontPath="@string/font_regular"
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		android:layout_gravity="center"
+		android:layout_weight="1"
+		android:gravity="left"
+		android:text="@string/total_item_cost"
+
+		android:textColor="@color/text_black_9"
+		android:textSize="14sp" />
+
+	  <TextView
+		android:id="@+id/tvTotalItemCostValue"
+		fontPath="@string/font_medium"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_gravity="center"
+		android:gravity="right"
+		android:padding="5dp"
+		android:textColor="@color/text_black_9"
+		android:textSize="20sp" />
+	</LinearLayout>
+
+	<LinearLayout
+	  android:layout_width="match_parent"
+	  android:layout_height="wrap_content"
+	  android:layout_margin="10dp"
+	  android:background="@drawable/rectangle_grey"
+	  android:orientation="horizontal"
+	  android:paddingLeft="24dp"
+	  android:paddingTop="5dp"
+	  android:paddingRight="24dp"
+	  android:paddingBottom="5dp">
+
+	  <TextView
+		android:id="@+id/tvShippingTitle"
+		fontPath="@string/font_regular"
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		android:layout_gravity="center"
+		android:layout_weight="1"
+		android:gravity="left"
+		android:text="@string/shipping_charges"
+		android:textColor="@color/text_black_9"
+		android:textSize="14sp" />
+
+	  <TextView
+		android:id="@+id/tvShippingCost"
+		fontPath="@string/font_medium"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_gravity="center"
+		android:gravity="right"
+		android:textColor="@color/text_black_9"
+		android:textSize="20sp" />
+
+	</LinearLayout>
+
+	<LinearLayout
+	  android:layout_width="match_parent"
+	  android:layout_height="wrap_content"
+	  android:layout_margin="10dp"
+	  android:background="@drawable/rectangle_grey"
+	  android:orientation="horizontal"
+	  android:paddingLeft="24dp"
+	  android:paddingTop="5dp"
+	  android:paddingRight="24dp"
+	  android:paddingBottom="5dp">
+
+	  <TextView
+		android:id="@+id/tvPackagingChargeTitle"
+		fontPath="@string/font_regular"
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		android:layout_gravity="center"
+		android:layout_weight="1"
+		android:gravity="left"
+		android:text="@string/packaging_charges"
+		android:textColor="@color/text_black_9"
+		android:textSize="14sp" />
+
+	  <TextView
+		android:id="@+id/tvPackagingChargeCost"
+		fontPath="@string/font_medium"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_gravity="center"
+		android:gravity="right"
+		android:textColor="@color/text_black_9"
+		android:textSize="20sp" />
+
+	</LinearLayout>
+
+
+	<LinearLayout
+	  android:id="@+id/llcgst"
+	  android:layout_width="match_parent"
+	  android:layout_height="wrap_content"
+	  android:layout_margin="10dp"
+	  android:background="@drawable/rectangle_grey"
+	  android:orientation="horizontal"
+	  android:paddingLeft="24dp"
+	  android:paddingTop="5dp"
+	  android:paddingRight="24dp"
+	  android:paddingBottom="5dp">
+
+	  <TextView
+		android:id="@+id/tvCGSTTitle"
+		fontPath="@string/font_regular"
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		android:layout_gravity="center"
+		android:layout_weight="1"
+		android:gravity="left"
+		android:text="@string/cgst"
+		android:textColor="@color/text_black_9"
+		android:textSize="14sp" />
+
+	  <TextView
+		android:id="@+id/tvCGSTCost"
+		fontPath="@string/font_medium"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_gravity="center"
+		android:gravity="right"
+		android:textColor="@color/text_black_9"
+		android:textSize="20sp" />
+
+	</LinearLayout>
+
+
+	<LinearLayout
+	  android:id="@+id/llSgst"
+	  android:layout_width="match_parent"
+	  android:layout_height="wrap_content"
+	  android:layout_margin="10dp"
+	  android:background="@drawable/rectangle_grey"
+	  android:orientation="horizontal"
+	  android:paddingLeft="24dp"
+	  android:paddingTop="5dp"
+	  android:paddingRight="24dp"
+	  android:paddingBottom="5dp">
+
+	  <TextView
+		android:id="@+id/tvSGSTTitle"
+		fontPath="@string/font_regular"
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		android:layout_gravity="center"
+		android:layout_weight="1"
+		android:gravity="left"
+		android:text="@string/sgst"
+		android:textColor="@color/text_black_9"
+		android:textSize="14sp" />
+
+	  <TextView
+		android:id="@+id/tvSGSTCost"
+		fontPath="@string/font_medium"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_gravity="center"
+		android:gravity="right"
+		android:textColor="@color/text_black_9"
+		android:textSize="20sp" />
+
+	</LinearLayout>
+
+	<LinearLayout
+	  android:id="@+id/llIgst"
+	  android:layout_width="match_parent"
+	  android:layout_height="wrap_content"
+	  android:layout_margin="10dp"
+	  android:background="@drawable/rectangle_grey"
+	  android:orientation="horizontal"
+	  android:paddingLeft="24dp"
+	  android:paddingTop="5dp"
+	  android:paddingRight="24dp"
+	  android:paddingBottom="5dp">
+
+	  <TextView
+		android:id="@+id/tvIGSTTitle"
+		fontPath="@string/font_regular"
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		android:layout_gravity="center"
+		android:layout_weight="1"
+		android:gravity="left"
+		android:text="@string/igst"
+		android:textColor="@color/text_black_9"
+		android:textSize="14sp" />
+
+	  <TextView
+		android:id="@+id/tvIGSTCost"
+		fontPath="@string/font_medium"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_gravity="center"
+		android:gravity="right"
+		android:textColor="@color/text_black_9"
+		android:textSize="20sp" />
+
+	</LinearLayout>
+
+	<LinearLayout
+	  android:id="@+id/llCoupon"
+	  android:layout_width="match_parent"
+	  android:layout_height="wrap_content"
+	  android:layout_margin="10dp"
+	  android:background="@drawable/rectangle_grey"
+	  android:orientation="horizontal"
+	  android:paddingLeft="24dp"
+	  android:paddingTop="5dp"
+	  android:paddingRight="24dp"
+	  android:paddingBottom="5dp"
+	  android:visibility="gone">
+
+	  <TextView
+		android:id="@+id/tvCouponTitle"
+		fontPath="@string/font_regular"
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		android:layout_gravity="center"
+		android:layout_weight="1"
+		android:gravity="left"
+		android:text="Applied Coupon"
+		android:textColor="@color/text_black_9"
+		android:textSize="14sp" />
+
+	  <TextView
+		android:id="@+id/tvCouponCost"
+		fontPath="@string/font_medium"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_gravity="center"
+		android:gravity="right"
+		android:textColor="@color/green"
+		android:textSize="20sp" />
+
+	</LinearLayout>
+
+
+	<View
+	  android:layout_width="match_parent"
+	  android:layout_height="1dp"
+	  android:layout_marginLeft="16dp"
+	  android:layout_marginTop="16dp"
+	  android:layout_marginRight="16dp"
+	  android:background="#d8d8d8"
+	  android:visibility="gone" />
+
+	<LinearLayout
+	  android:layout_width="match_parent"
+	  android:layout_height="wrap_content"
+	  android:layout_gravity="center_vertical"
+	  android:layout_margin="10dp"
+	  android:background="@drawable/rectangle_red"
+	  android:gravity="center_vertical"
+	  android:orientation="horizontal"
+	  android:paddingLeft="24dp"
+	  android:paddingTop="5dp"
+	  android:paddingRight="24dp"
+	  android:paddingBottom="5dp">
+
+	  <TextView
+		fontPath="@string/font_medium"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_weight="1"
+		android:gravity="left"
+		android:text="@string/final_total"
+		android:textColor="#c10c08"
+		android:textSize="20sp" />
+
+	  <TextView
+		android:id="@+id/tvTotal"
+		fontPath="@string/font_medium"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:gravity="right"
+		android:textColor="#c10c08"
+		android:textSize="20sp" />
+
+	</LinearLayout>
+
+
+	<TextView
+	  android:id="@+id/tvApplyRemoveCoupon"
+	  fontPath="@string/font_medium"
+	  android:layout_width="wrap_content"
+	  android:layout_height="wrap_content"
+	  android:layout_margin="10dp"
+	  android:gravity="start"
+	  android:padding="5dp"
+	  android:text="@string/apply_coupon"
+	  android:textColor="@color/com_facebook_blue"
+	  android:textSize="20sp" />
+
+	<TextView
+	  fontPath="@string/font_medium"
+	  android:layout_width="wrap_content"
+	  android:layout_height="wrap_content"
+	  android:layout_marginLeft="10dp"
+	  android:layout_marginTop="24dp"
+	  android:layout_marginRight="24dp"
+	  android:gravity="left"
+	  android:text="@string/address"
+	  android:textColor="#341f46"
+	  android:textSize="20sp" />
+
+	<View
+	  android:layout_width="match_parent"
+	  android:layout_height="1dp"
+	  android:layout_marginLeft="16dp"
+	  android:layout_marginRight="16dp"
+	  android:background="#d8d8d8" />
+
+	<LinearLayout
+	  android:layout_width="match_parent"
+	  android:layout_height="wrap_content"
+	  android:orientation="vertical"
+	  android:padding="16dp">
+
+	  <TextView
+		android:id="@+id/tvBillingAddress"
+		fontPath="@string/font_regular"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:background="@drawable/rect_white"
+		android:elevation="2dp"
+		android:gravity="left"
+		android:lineSpacingMultiplier="1.2"
+		android:maxLines="6"
+		android:padding="10dp"
+		android:textColor="@color/text_black_5"
+		android:textSize="16sp"
+		android:visibility="gone" />
+
+	  <TextView
+		android:id="@+id/tvBillingAddressEdit"
+		fontPath="@string/font_regular"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="8dp"
+		android:background="@drawable/rect_grey_stroke"
+		android:elevation="2dp"
+		android:gravity="center"
+		android:lineSpacingMultiplier="1.2"
+		android:padding="10dp"
+		android:text="@string/select_update_address"
+
+		android:textSize="16sp" />
+
+	</LinearLayout>
+
+
+	<View
+	  android:layout_width="match_parent"
+	  android:layout_height="1dp"
+	  android:layout_margin="10dp"
+	  android:background="#d8d8d8" />
+
+	<TextView
+	  fontPath="@string/font_medium"
+	  android:layout_width="wrap_content"
+	  android:layout_height="wrap_content"
+	  android:layout_marginLeft="24dp"
+	  android:layout_marginTop="24dp"
+	  android:layout_marginRight="24dp"
+	  android:gravity="left"
+	  android:text="@string/custom_delivery_time"
+	  android:textColor="@color/text_black_2"
+	  android:textSize="20sp" />
+
+	<LinearLayout
+	  android:layout_width="match_parent"
+	  android:layout_height="wrap_content"
+	  android:layout_marginLeft="24dp"
+	  android:layout_marginTop="24dp"
+	  android:layout_marginRight="24dp">
+
+
+	  <TextView
+		android:id="@+id/tvDeliveryDate"
+		android:layout_width="0dp"
+		android:layout_height="match_parent"
+		android:layout_gravity="center"
+		android:layout_marginEnd="5dp"
+		android:layout_weight="1"
+		android:background="@drawable/rect_grey_stroke"
+		android:gravity="center_vertical|left"
+		android:onClick="clickDataPicker"
+		android:padding="10dp"
+		android:text="@string/select_date" />
+
+	  <androidx.appcompat.widget.AppCompatSpinner
+		android:id="@+id/spDeliveryTime"
+		style="@style/Widget.AppCompat.Spinner"
+		android:layout_width="0dp"
+		android:layout_height="match_parent"
+		android:layout_gravity="center"
+		android:layout_marginStart="5dp"
+		android:layout_weight="1"
+		android:background="@drawable/rect_grey_stroke"
+		android:entries="@array/delivery_time"
+		android:padding="10dp">
+
+	  </androidx.appcompat.widget.AppCompatSpinner>
+	</LinearLayout>
+
+	<View
+	  android:layout_width="match_parent"
+	  android:layout_height="1dp"
+	  android:layout_margin="16dp"
+	  android:background="#d8d8d8" />
+
+
+	<RadioGroup
+	  android:id="@+id/rgPaymentType"
+	  android:layout_width="match_parent"
+	  android:layout_height="wrap_content"
+	  android:layout_marginLeft="16dp"
+	  android:layout_marginRight="16dp"
+	  android:orientation="horizontal"
+	  android:theme="@style/CustomRadioTheme">
+
+
+	  <RadioButton
+		android:id="@+id/rbEnableCOD"
+		fontPath="@string/font_medium"
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		android:layout_margin="5dp"
+		android:textSize="16sp"
+		android:layout_weight="1"
+		android:checked="false"
+		android:text="@string/cash_on_delivery" />
+
+	  <RadioButton
+		android:id="@+id/rbEnablePayNow"
+		fontPath="@string/font_medium"
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		android:layout_margin="5dp"
+		android:layout_weight="1"
+		android:checked="true"
+		android:textSize="16sp"
+		android:text="@string/pay_now" />
+	</RadioGroup>
+
+	<View
+	  android:layout_width="match_parent"
+	  android:layout_height="1dp"
+	  android:layout_margin="16dp"
+	  android:background="#d8d8d8" />
+
+  </LinearLayout>
+</androidx.core.widget.NestedScrollView>

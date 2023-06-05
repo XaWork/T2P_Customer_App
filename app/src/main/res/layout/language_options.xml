@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content">
+
+  <LinearLayout
+	android:layout_width="250dp"
+	android:layout_height="wrap_content"
+	android:gravity="center"
+	android:orientation="vertical">
+
+	<TextView
+	  android:id="@+id/english"
+	  android:layout_width="match_parent"
+	  android:layout_height="48dp"
+	  android:gravity="center"
+	  android:text="English"
+	  android:textColor="@color/colorPrimary" />
+
+
+	<TextView
+	  android:id="@+id/hindi"
+	  android:layout_width="match_parent"
+	  android:layout_height="48dp"
+	  android:gravity="center"
+	  android:text="Hindi"
+	  android:textColor="@color/colorPrimary" />
+
+
+	<TextView
+	  android:id="@+id/oriya"
+	  android:layout_width="match_parent"
+	  android:layout_height="48dp"
+	  android:gravity="center"
+	  android:text="Oriya"
+	  android:textColor="@color/colorPrimary" />
+
+	<TextView
+	  android:id="@+id/punjabi"
+	  android:layout_width="match_parent"
+	  android:layout_height="48dp"
+	  android:gravity="center"
+	  android:text="Punjabi"
+	  android:textColor="@color/colorPrimary" />
+
+
+	<TextView
+	  android:id="@+id/tamil"
+	  android:layout_width="match_parent"
+	  android:layout_height="48dp"
+	  android:gravity="center"
+	  android:text="Tamil"
+	  android:textColor="@color/colorPrimary" />
+
+	<TextView
+	  android:id="@+id/telugu"
+	  android:layout_width="match_parent"
+	  android:layout_height="48dp"
+	  android:gravity="center"
+	  android:text="Telugu"
+	  android:textColor="@color/colorPrimary" />
+
+	<TextView
+	  android:id="@+id/bengali"
+	  android:layout_width="match_parent"
+	  android:layout_height="48dp"
+	  android:gravity="center"
+	  android:text="Bengali"
+	  android:textColor="@color/colorPrimary" />
+
+
+	<TextView
+	  android:id="@+id/malayalam"
+	  android:layout_width="match_parent"
+	  android:layout_height="48dp"
+	  android:gravity="center"
+	  android:text="Malayalam"
+	  android:textColor="@color/colorPrimary" />
+
+	<TextView
+	  android:id="@+id/marathi"
+	  android:layout_width="match_parent"
+	  android:layout_height="48dp"
+	  android:gravity="center"
+	  android:text="Marathi"
+	  android:textColor="@color/colorPrimary" />
+  </LinearLayout>
+</ScrollView>

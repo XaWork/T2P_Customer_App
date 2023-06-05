@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout android:id="@+id/content"
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+
+  >
+
+  <include layout="@layout/toolbar" />
+
+  <include layout="@layout/content_checkout"/>
+
+
+  <FrameLayout
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:background="#c273c3"
+	android:orientation="horizontal"
+	android:paddingTop="4dp"
+	android:paddingBottom="4dp"
+	android:paddingRight="16dp"
+	android:layout_margin="16dp"
+	android:gravity="center"
+	android:layout_gravity="bottom"
+	android:elevation="2dp"
+	android:id="@+id/flSave"
+	>
+
+	<TextView
+	  android:id="@+id/bNext"
+	  fontPath="@string/font_regular"
+	  android:layout_width="wrap_content"
+	  android:layout_height="wrap_content"
+	  android:layout_gravity="center_horizontal"
+	  android:background="#c273c3"
+	  android:text="@string/proceed_to_payment"
+	  android:padding="12dp"
+	  android:gravity="center"
+	  android:textAllCaps="false"
+	  android:textColor="#ffffff"
+	  android:textSize="16sp"
+	  tools:ignore="MissingPrefix"/>
+
+
+  </FrameLayout>
+
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:orientation="vertical"
+  tools:ignore="MissingPrefix">
+
+
+  <FrameLayout
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:layout_marginLeft="8dp"
+	android:layout_marginTop="8dp"
+	android:gravity="bottom"
+	android:orientation="horizontal">
+
+	<TextView
+	  fontPath="@string/font_medium"
+	  android:layout_width="wrap_content"
+	  android:layout_height="wrap_content"
+	  android:layout_gravity="center_vertical"
+	  android:gravity="left"
+	  android:text="Reviews"
+	  android:textColor="@color/text_black_2"
+	  android:textSize="20sp" />
+
+	<TextView
+	  android:id="@+id/tvAddAReview"
+	  fontPath="@string/font_regular"
+	  android:layout_width="wrap_content"
+	  android:layout_height="wrap_content"
+	  android:layout_gravity="right"
+	  android:gravity="left"
+	  android:padding="16dp"
+	  android:text="Add Review"
+	  android:textColor="#1c5c9a"
+	  android:textSize="16sp" />
+
+
+  </FrameLayout>
+
+
+  <androidx.recyclerview.widget.RecyclerView
+	android:id="@+id/rvReviews"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:layout_margin="8dp"
+	android:background="@drawable/rect_white"/>
+
+
+</LinearLayout>

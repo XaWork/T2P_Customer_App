@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools">
+
+  <data>
+	<variable
+	  name="planModel"
+	  type="me.taste2plate.app.models.membership.Plan" />
+  </data>
+
+  <androidx.constraintlayout.widget.ConstraintLayout
+	android:layout_width="match_parent"
+	android:layout_marginTop="16dp"
+	android:background="@drawable/rect_grey_unpadded"
+	android:layout_height="wrap_content">
+
+
+	<androidx.constraintlayout.widget.Guideline
+	  android:id="@+id/guideline"
+	  android:layout_width="wrap_content"
+	  android:layout_height="wrap_content"
+	  app:layout_constraintGuide_percent="0.25"
+	  android:orientation="vertical" />
+
+	<androidx.constraintlayout.widget.Guideline
+	  android:id="@+id/guideline_end"
+	  app:layout_constraintGuide_percent="0.75"
+	  android:layout_width="wrap_content"
+	  android:layout_height="wrap_content"
+	  android:orientation="vertical"/>
+
+
+	<View
+	  app:layout_constraintTop_toTopOf="parent"
+	  app:layout_constraintBottom_toBottomOf="parent"
+	  app:layout_constraintEnd_toStartOf="@id/guideline"
+	  android:rotation="45"
+	  android:background="#F39431"
+	  android:layout_width="30dp"
+	  android:layout_height="30dp"/>
+
+	<LinearLayout
+	  app:layout_constraintTop_toTopOf="parent"
+	  app:layout_constraintBottom_toBottomOf="parent"
+	  app:layout_constraintStart_toStartOf="parent"
+	  app:layout_constraintEnd_toStartOf="@id/guideline"
+	  android:layout_width="0dp"
+	  android:layout_marginEnd="4dp"
+	  android:background="#F39431"
+	  android:gravity="center"
+	  android:layout_height="0dp">
+
+	  <TextView
+		android:id="@+id/plan_name"
+		android:layout_gravity="center"
+		android:gravity="center"
+		tools:text="SILVER"
+		android:text="@{planModel.name}"
+		android:textStyle="bold"
+		android:textAllCaps="true"
+		android:textSize="18sp"
+		android:textColor="@color/white"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"/>
+	</LinearLayout>
+
+	<androidx.constraintlayout.widget.ConstraintLayout
+	  android:paddingVertical="8dp"
+	  android:paddingHorizontal="8dp"
+	  app:layout_constraintTop_toTopOf="parent"
+	  app:layout_constraintStart_toStartOf="@id/guideline"
+	  app:layout_constraintEnd_toStartOf="@id/guideline_end"
+	  android:layout_width="0dp"
+	  android:layout_height="wrap_content">
+
+	  <TextView
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintTop_toTopOf="parent"
+		android:id="@+id/description_title"
+		android:layout_width="0dp"
+		android:textColor="@color/black"
+		android:textStyle="bold"
+		android:text="@string/descriptions"
+		android:layout_height="wrap_content"/>
+
+	  <TextView
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintTop_toBottomOf="@id/description_title"
+		android:id="@+id/description_text"
+		android:textSize="10sp"
+		android:maxLines="3"
+		android:text="@{planModel.description}"
+		android:textColor="@color/black"
+		android:layout_width="0dp"
+		tools:text="alkjskfjdhlka jdfhklj dfhlkahdjk fahjklddhfjkl adhkjlfa gdjklfg akjdga kljdsgkjladgjkl adbjkfgablkdsgfajd"
+		android:layout_height="wrap_content"
+		tools:ignore="SmallSp" />
+
+
+	  <TextView
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintTop_toBottomOf="@id/description_text"
+		android:layout_marginTop="16dp"
+		android:id="@+id/validity_text"
+		android:layout_width="0dp"
+		android:textColor="@color/black"
+		android:textStyle="bold"
+		android:text="@{planModel.validityText}"
+		tools:text="Validity\n365 Days"
+		android:layout_height="wrap_content"/>
+
+	  <TextView
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintEnd_toStartOf="@id/validity_text"
+		app:layout_constraintTop_toTopOf="@id/validity_text"
+		android:layout_marginEnd="8dp"
+		android:id="@+id/benefits_title"
+		android:layout_width="0dp"
+		android:textColor="@color/black"
+		android:textStyle="bold"
+		android:text="@string/benefits"
+		android:layout_height="wrap_content"/>
+
+	  <TextView
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintEnd_toStartOf="@id/validity_text"
+		app:layout_constraintTop_toBottomOf="@id/benefits_title"
+		android:id="@+id/benefits_content"
+		android:textSize="10sp"
+		android:text="@{planModel.benefits}"
+		android:layout_marginEnd="8dp"
+		android:textColor="@color/black"
+		android:layout_width="0dp"
+		tools:text="alkjskfjdhlka jdfhklj dfhlkahdjk fahjklddhfjkl adhkjlfa gdjklfg akjdga kljdsgkjladgjkl adbjkfgablkdsgfajd"
+		android:layout_height="wrap_content"
+		tools:ignore="SmallSp" />
+
+	</androidx.constraintlayout.widget.ConstraintLayout>
+
+	<LinearLayout
+	  app:layout_constraintTop_toTopOf="parent"
+	  app:layout_constraintEnd_toEndOf="parent"
+	  app:layout_constraintBottom_toBottomOf="parent"
+	  app:layout_constraintStart_toEndOf="@id/guideline_end"
+	  android:layout_width="0dp"
+	  android:gravity="center"
+	  android:orientation="vertical"
+	  android:background="#ADADAC"
+	  android:layout_height="0dp">
+
+	  <TextView
+		android:text="@string/plan"
+		android:textColor="@color/white"
+		android:textStyle="bold"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"/>
+
+	  <TextView
+		android:text="@{planModel.itemPrice}"
+		android:textColor="@color/white"
+		android:textStyle="bold"
+		tools:text="Rs 2000"
+		android:textSize="18sp"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"/>
+
+	  <LinearLayout
+		android:id="@+id/buy_button"
+		android:layout_marginTop="8dp"
+		android:background="@drawable/plan_button"
+		android:layout_width="wrap_content"
+		android:paddingHorizontal="8dp"
+		android:paddingVertical="4dp"
+		android:layout_gravity="center"
+		android:gravity="center"
+		android:layout_height="wrap_content">
+
+		<TextView
+		  android:textSize="12sp"
+		  android:layout_gravity="center"
+		  android:gravity="center"
+		  android:textColor="@color/black"
+		  android:textStyle="bold"
+		  android:text="@string/buy_now"
+		  android:layout_width="wrap_content"
+		  android:layout_height="wrap_content"/>
+
+	  </LinearLayout>
+
+	</LinearLayout>
+
+  </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

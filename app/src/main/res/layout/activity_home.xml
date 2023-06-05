@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:id="@+id/drawer_layout"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:fitsSystemWindows="true">
+
+  <androidx.coordinatorlayout.widget.CoordinatorLayout
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:fitsSystemWindows="true">
+
+	  <FrameLayout
+		  android:id="@+id/container"
+		  android:layout_width="match_parent"
+		  android:layout_height="match_parent"
+		  android:layout_marginTop="?actionBarSize"
+		  app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+	  </FrameLayout>
+
+	  <androidx.appcompat.widget.Toolbar
+	  android:id="@+id/toolbar"
+	  android:elevation="0dp"
+	  android:layout_width="match_parent"
+	  android:layout_height="wrap_content"
+	  android:background="?attr/colorPrimary"
+	  android:minHeight="?actionBarSize"
+	  app:contentInsetLeft="0dp"
+	  app:contentInsetStart="0dp"
+	  app:titleTextColor="@color/white"
+	  app:subtitleTextColor="@color/white"
+	  app:contentInsetStartWithNavigation="0dp"
+	  app:logo="@drawable/ic_t2p_logo_curves"
+	  app:subtitle="Intercity Food Delivery"
+	  app:subtitleTextAppearance="@style/ToolbarSubtitleAppearance"
+	  app:titleTextAppearance="@style/ToolbarTitleAppearance" />
+
+<!--	<com.google.android.material.bottomnavigation.BottomNavigationView
+	  android:id="@+id/navigation"
+	  android:layout_width="match_parent"
+	  android:layout_height="wrap_content"
+	  android:layout_gravity="bottom"
+	  android:layout_marginStart="0dp"
+	  android:layout_marginEnd="0dp"
+	  app:labelVisibilityMode="labeled"
+	  app:itemTextColor="@color/bottom_nav_item_color"
+	  app:itemIconTint="@color/bottom_nav_item_color"
+	  app:layout_constraintBottom_toBottomOf="parent"
+	  app:layout_constraintLeft_toLeftOf="parent"
+	  app:layout_constraintRight_toRightOf="parent"
+	  app:menu="@menu/navigation" />-->
+
+	  <com.google.android.material.floatingactionbutton.FloatingActionButton
+		  android:id="@+id/fab"
+		  android:layout_width="wrap_content"
+		  android:layout_height="wrap_content"
+		  app:elevation="0dp"
+		  app:backgroundTint="@android:color/transparent"
+		  android:layout_marginEnd="30dp"
+		  android:layout_marginBottom="30dp"
+		  app:tint="@null"
+		  app:maxImageSize="50dp"
+		  app:srcCompat="@drawable/whatsapp_sv"
+		  app:layout_anchorGravity="end|bottom"
+		  android:layout_gravity="end|bottom"
+		  android:contentDescription="TODO" />
+		  <!--app:layout_anchor="@id/navigation"-->
+
+  </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+  <com.google.android.material.navigation.NavigationView
+	android:id="@+id/navView"
+	android:layout_width="wrap_content"
+	android:layout_height="match_parent"
+	android:layout_gravity="start"
+	android:fitsSystemWindows="true"
+	app:headerLayout="@layout/nav_header_main"
+	app:menu="@menu/activity_main_drawer" />
+
+</androidx.drawerlayout.widget.DrawerLayout>

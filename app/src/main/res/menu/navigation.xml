@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/deals"
+        android:icon="@drawable/ic_action_deals"
+        android:title="Deals" />
+
+    <item
+        android:id="@+id/city"
+        android:icon="@drawable/ic_action_city"
+        android:title="City" />
+
+    <item
+        android:id="@+id/brands"
+        android:icon="@drawable/brands"
+        android:title="Brands" />
+
+    <item
+        android:id="@+id/category"
+        android:icon="@drawable/cat_menu"
+        android:title="Explore" />
+
+    <item
+        android:id="@+id/cuisine"
+        android:icon="@drawable/cuisine"
+        android:title="Flavours" />
+
+</menu>

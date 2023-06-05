@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest package="me.taste2plate.app.customer" xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-sdk tools:overrideLibrary="com.maps.route" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.EXTERNAL_STORAGE_READ " />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.GET_PACKAGE_SIZE"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="com.google.android.gms.permission.AD_ID"/>
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+
+    <uses-feature
+        android:glEsVersion="0x00020000"
+        android:required="true" />
+
+    <application
+        android:name=".WcApp"
+        android:icon="@drawable/t2p_logo"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme"
+        android:allowBackup="false"
+        android:fullBackupContent="false"
+        android:usesCleartextTraffic="true"
+        tools:ignore="GoogleAppIndexingWarning">
+
+        <!-- Set custom default icon. This is used when no icon is set for incoming notification messages.
+     See README(https://goo.gl/l4GJaQ) for more. -->
+
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
+        <!--//clever tap-->
+        <meta-data
+            android:name="CLEVERTAP_ACCOUNT_ID"
+            android:value="4W5-5RZ-976Z"/>
+        <meta-data
+            android:name="CLEVERTAP_TOKEN"
+            android:value="125-504"/>
+        <!-- IMPORTANT: To force use Google AD ID to uniquely identify  users, use the following meta tag. GDPR mandates that if you are using this tag, there is prominent disclousure to your end customer in their application. Read more about GDPR here - https://clevertap.com/blog/in-preparation-of-gdpr-compliance/ -->
+        <meta-data
+            android:name="CLEVERTAP_USE_GOOGLE_AD_ID"
+            android:value="749-755-6547"/>
+
+        <!--<meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/t2p_logo" />-->
+        <!-- Set color used with incoming notification messages. This is used when no color is set for the incoming
+             notification message. See README(https://goo.gl/6BKBk7) for more. -->
+        <!--<meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/colorAccent" />-->
+
+        <receiver
+            android:name="com.clickzin.tracking.ClickzinReferrerReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.android.vending.INSTALL_REFERRER" />
+            </intent-filter>
+        </receiver>
+
+        <activity android:name=".ui.wallet.WalletActivity" />
+        <activity android:name=".ui.membership.MyPlanActivity" />
+        <activity
+            android:name=".ui.rewards.RewardActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".ui.membership.MembershipListActivity" />
+        <activity
+            android:name=".common.TermsActivity"
+
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.offers.OffersActivity"
+
+            android:screenOrientation="portrait" />
+
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
+
+        <activity
+            android:name=".ui.ContactUsDetailActivity"
+
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.location.TrackLocationActivity"
+
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.order.OrderActivity"
+
+            android:label="@string/title_activity_order"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.order.OrderConfirmationActivity"
+
+            android:label="@string/title_activity_order"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.DetailsActivity"
+
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.onboarding.AnonymousSignInActivity"
+
+            android:label="@string/title_activity_anonymous_sign_in"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.checkout.CheckoutActivity"
+            android:label="@string/title_activity_checkout"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".updated_flow.CheckoutActivity"
+            android:label="@string/title_activity_checkout"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.product.CartActivity"
+
+            android:label="@string/title_activity_cart"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+
+        <activity
+            android:name=".ui.product.WishlistActivity"
+            android:label="@string/title_activity_cart"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+
+        <activity
+            android:name=".ui.customer.ProfileActivity"
+
+            android:label="@string/title_activity_profile"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.customer.ShippingAddressActivity"
+
+            android:label="@string/title_activity_shipping_address"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.customer.BillingAddressActivity"
+
+            android:label="@string/title_activity_billing_address"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.customer.BasicCustomerDetailsActivity"
+
+            android:label="@string/title_activity_basic_customer_details"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.onboarding.UserDetailsActivity"
+
+            android:label="@string/title_activity_user_details"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.order.MyOrdersActivity"
+
+            android:label="@string/title_activity_my_orders"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.home.HomeActivity"
+
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.product.ProductActivity"
+
+            android:label="@string/title_activity_product"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name=".ui.product.ProductSearchActivity"
+            android:exported="true"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
+        </activity>
+        <activity
+            android:name=".ui.coupon.CouponActivity"
+
+            android:label="@string/title_activity_coupon"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.coupon.CouponListActivity"
+
+            android:label="@string/title_activity_coupons"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.coupon.AddCouponActivity"
+
+            android:label="@string/title_activity_add_coupon"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.MenuActivity"
+
+            android:label="@string/title_activity_menu"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.product.ShopActivity"
+            android:label="@string/title_activity_shop"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
+        </activity>
+        <activity
+            android:name=".SplashActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ui.product.SubCategoryActivity"
+
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.product.CityBrandActivity"
+
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.product.CategoryActivity"
+
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.customer.BulkOrderActivity"
+
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.customer.DirectFromHomeActivity"
+
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.customer.AddNewAddressActivity"
+
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".common.LocationPickerActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.customer.AddressListActivity"
+
+            android:label="@string/title_activity_address_list"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".ui.onboarding.OnBoardActivity" />
+        <activity android:name=".ui.landing.DetailsActivity" />
+        <activity android:name=".ui.landing.DashboardActivity" />
+        <activity android:name=".ui.coupon.AllOffersActivity" />
+        <activity android:name=".ui.coupon.DealsNComboListActivity" />
+
+        <service
+            android:name=".service.FirebaseInstanceService"
+            android:exported="true"
+            android:enabled="true">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+        <receiver
+            android:name=".utils.MySMSBroadcastReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.auth.api.phone.SMS_RETRIEVED" />
+            </intent-filter>
+        </receiver>
+
+        <meta-data
+            android:name="com.razorpay.ApiKey"
+            android:value="rzp_live_ZLgzjgdHBJDlP8" />
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyAe_TB4tSHMVBT2weqw74MR5-EHZZ4HBnc" />
+
+        <!--<meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyC3GgiT8g5sokSH4ILnYKwO9jnim25oFtk" />-->
+
+        <receiver
+            android:name="com.razorpay.RzpTokenReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="rzp.device_token.share" />
+            </intent-filter>
+        </receiver>
+
+        <activity
+            android:name="com.razorpay.CheckoutActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+            android:exported="true"
+            android:theme="@style/CheckoutTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <data
+                    android:host="rzp.io"
+                    android:scheme="io.rzp" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>

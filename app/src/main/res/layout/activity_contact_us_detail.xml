@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:orientation="vertical"
+  tools:context=".ui.ContactUsDetailActivity">
+
+  <androidx.appcompat.widget.Toolbar
+	android:id="@+id/toolbar"
+	android:layout_width="match_parent"
+	android:layout_height="48dp"
+	android:background="?attr/colorPrimary"
+	app:contentInsetStartWithNavigation="0dp"
+	app:navigationIcon="@drawable/ic_back_1"
+	app:subtitleTextAppearance="@style/ToolbarSubtitleAppearance"
+	app:titleTextAppearance="@style/ToolbarTitleAppearance"
+	app:titleTextColor="@color/colorAccent" />
+
+  <TextView
+	android:id="@+id/tvTitle"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:layout_gravity="center"
+	android:layout_margin="16dp"
+	android:gravity="center"
+	android:padding="5dp"
+	android:text="Customer Support"
+	android:textSize="24sp" />
+
+  <ImageView
+	android:layout_margin="16dp"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content"
+	android:layout_gravity="center"
+	android:src="@drawable/logo_new" />
+
+
+
+  <View
+	android:layout_width="match_parent"
+	android:layout_height="1dp"
+	android:layout_margin="16dp"
+	android:background="@color/grey" />
+
+  <LinearLayout
+	android:orientation="horizontal"
+	android:layout_width="match_parent"
+	android:paddingStart="32dp"
+	android:paddingEnd="32dp"
+	  android:id="@+id/callUs"
+	android:layout_height="wrap_content">
+
+	<ImageView
+	  android:src="@drawable/call"
+		android:layout_width="24dp"
+	  android:layout_height="24dp"
+		app:tint="@color/colorPrimary" />
+
+	<TextView
+	  android:id="@+id/tvMobile"
+	  android:layout_gravity="center_vertical"
+	  android:layout_width="match_parent"
+	  android:textColor="@color/black"
+	  android:text="Call: 18008434001"
+	  android:layout_marginHorizontal="16dp"
+	  android:layout_height="wrap_content"/>
+  </LinearLayout>
+
+
+  <View
+	android:layout_width="match_parent"
+	android:layout_height="1dp"
+	android:layout_margin="16dp"
+	android:background="@color/grey" />
+
+  <LinearLayout
+	android:orientation="horizontal"
+	android:layout_width="match_parent"
+	android:paddingStart="32dp"
+	android:paddingEnd="32dp"
+	android:layout_height="wrap_content">
+
+	<ImageView
+	  android:src="@drawable/call"
+		android:layout_width="24dp"
+	  android:layout_height="24dp"
+		app:tint="@color/colorPrimary" />
+
+	<TextView
+	  android:id="@+id/whatsapp"
+	  android:layout_width="match_parent"
+	  android:layout_gravity="center_vertical"
+	  android:layout_height="wrap_content"
+	  android:textColor="@color/black"
+	  android:layout_marginHorizontal="16dp"
+	  android:text="WhatsApp: 9330500492"
+	  />
+  </LinearLayout>
+
+  <View
+	android:layout_width="match_parent"
+	android:layout_height="1dp"
+	android:layout_margin="16dp"
+	android:background="@color/grey" />
+
+  <LinearLayout
+	android:orientation="horizontal"
+	android:layout_width="match_parent"
+	  android:id="@+id/mailUs"
+	android:paddingStart="32dp"
+	android:paddingEnd="32dp"
+	android:layout_height="wrap_content">
+
+	<ImageView
+	  android:src="@drawable/mail"
+	  android:tint="@color/colorPrimary"
+	  android:layout_width="24dp"
+	  android:layout_height="24dp"/>
+
+	<TextView
+	  android:id="@+id/supportMail"
+	  android:layout_width="match_parent"
+	  android:layout_height="wrap_content"
+	  android:layout_gravity="center_vertical"
+	  android:textColor="@color/black"
+	  android:text="support@tastes2plate.com"
+	  android:layout_marginHorizontal="16dp" />
+  </LinearLayout>
+
+  <View
+	android:layout_width="match_parent"
+	android:layout_height="1dp"
+	android:layout_margin="16dp"
+	android:background="@color/grey" />
+
+
+  <LinearLayout
+	android:orientation="horizontal"
+	android:layout_width="match_parent"
+	android:paddingStart="32dp"
+	android:paddingEnd="32dp"
+	android:layout_height="wrap_content">
+
+	<ImageView
+	  android:src="@drawable/location"
+	  android:tint="@color/colorPrimary"
+	  android:layout_width="24dp"
+	  android:layout_height="24dp"/>
+
+	<TextView
+	  android:id="@+id/location"
+	  android:layout_width="match_parent"
+	  android:layout_height="wrap_content"
+	  android:layout_gravity="center_vertical"
+	  android:textColor="@color/black"
+	  android:text="Charabuni Services Pvt. Ltd. 811 Qube,\nNear City Center II, New Town\nKolkata 700156"
+	  android:layout_marginHorizontal="16dp" />
+  </LinearLayout>
+
+
+  <View
+	android:layout_width="match_parent"
+	android:layout_height="1dp"
+	android:layout_margin="16dp"
+	android:background="@color/grey" />
+
+
+</LinearLayout>

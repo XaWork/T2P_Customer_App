@@ -1,0 +1,115 @@
+{
+  "project_info": {
+    "project_number": "569149647523",
+    "firebase_url": "https://taste2plate-1be43-default-rtdb.firebaseio.com",
+    "project_id": "taste2plate-1be43",
+    "storage_bucket": "taste2plate-1be43.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:569149647523:android:e7aaffc28923a2b744ed16",
+        "android_client_info": {
+          "package_name": "me.taste2plate.app.customer"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "569149647523-bajhet2ktm7e3sug9c3t8mm7q17qsh4v.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "me.taste2plate.app.customer",
+            "certificate_hash": "6d1869b2eec9c5652554c8a9c44c3a5eb0102dcd"
+          }
+        },
+        {
+          "client_id": "569149647523-elrn1igdc2n51gvf46ctjrn301gt3hl8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "me.taste2plate.app.customer",
+            "certificate_hash": "6cf300eb4c78e927b7ec408aa4e6100dc07b49d5"
+          }
+        },
+        {
+          "client_id": "569149647523-j6lq94p8cmmmuh83kepk91v2p4bne1hr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "me.taste2plate.app.customer",
+            "certificate_hash": "7cd75d3c43fae206d8104e22b67ce50c5d189f1b"
+          }
+        },
+        {
+          "client_id": "569149647523-3drp8ftf01adtkkcdvugq5mgmn8mj7gf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAe_TB4tSHMVBT2weqw74MR5-EHZZ4HBnc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "569149647523-3drp8ftf01adtkkcdvugq5mgmn8mj7gf.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "569149647523-1br5fi07domkigof5sgru1g2aeov60oh.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "me.taste2plate.app.customer"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:569149647523:android:f0c374eb02c3c2a944ed16",
+        "android_client_info": {
+          "package_name": "taste2plates.app.logistics"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "569149647523-knsh00t8egg82hb6ucagoq37v30pcd32.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "taste2plates.app.logistics",
+            "certificate_hash": "4259945177e12f9ea9079793188c5b9285e53fba"
+          }
+        },
+        {
+          "client_id": "569149647523-3drp8ftf01adtkkcdvugq5mgmn8mj7gf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAe_TB4tSHMVBT2weqw74MR5-EHZZ4HBnc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "569149647523-3drp8ftf01adtkkcdvugq5mgmn8mj7gf.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "569149647523-1br5fi07domkigof5sgru1g2aeov60oh.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "me.taste2plate.app.customer"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

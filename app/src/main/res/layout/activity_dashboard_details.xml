@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:orientation="vertical">
+
+  <ProgressBar
+	android:id="@+id/dashboardProgress"
+	style="@style/Widget.AppCompat.ProgressBar"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content"
+	android:layout_centerInParent="true"
+	android:visibility="visible" />
+
+  <include layout="@layout/toolbar" />
+
+  <View
+	android:id="@+id/marginView"
+	android:layout_width="match_parent"
+	android:layout_height="10dp"
+	android:layout_marginTop="?android:actionBarSize" />
+
+  <LinearLayout
+	android:id="@+id/ll_skip_layout"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content"
+	android:layout_below="@+id/marginView"
+	android:layout_alignParentEnd="true"
+	android:layout_margin="10dp"
+	android:background="@color/black"
+	android:paddingLeft="5dp"
+	android:paddingRight="5dp">
+
+	<TextView
+	  android:layout_width="wrap_content"
+	  android:layout_height="wrap_content"
+	  android:padding="5dp"
+	  android:text="Skip"
+	  android:textColor="@color/white" />
+
+	<ImageView
+	  android:layout_width="15dp"
+	  android:layout_height="15dp"
+	  android:layout_gravity="center"
+	  android:src="@drawable/skip" />
+
+  </LinearLayout>
+
+  <ScrollView
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:layout_above="@+id/enterAlways"
+	android:layout_below="@+id/ll_skip_layout">
+
+	<LinearLayout
+	  android:layout_width="match_parent"
+	  android:layout_height="wrap_content">
+
+
+	  <RelativeLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content">
+
+		<RelativeLayout
+		  android:id="@+id/our_journery_layout"
+		  android:layout_width="match_parent"
+		  android:layout_height="wrap_content"
+		  android:layout_margin="15dp"
+		  android:padding="10dp">
+
+		  <TextView
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:background="@drawable/shadow" />
+
+		  <ImageView
+			android:id="@+id/our_journery_icon"
+			android:layout_width="80dp"
+			android:layout_height="80dp"
+			android:background="@color/our_journey_color"
+			android:padding="10dp"
+			android:src="@drawable/our_journey_icon" />
+
+		  <TextView
+			android:id="@+id/our_journery_title"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_toEndOf="@+id/our_journery_icon"
+			android:padding="8dp"
+			android:text="Our Journey"
+			android:textColor="@color/our_journey_color"
+			android:textSize="16sp"
+			android:textStyle="bold" />
+
+		  <TextView
+			android:id="@+id/our_journery_details"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_below="@+id/our_journery_title"
+			android:layout_toEndOf="@+id/our_journery_icon"
+			android:lineSpacingExtra="1dp"
+			android:padding="8dp"
+			android:text="Our Journey"
+			android:textColor="@color/black" />
+		</RelativeLayout>
+
+		<RelativeLayout
+		  android:id="@+id/our_imp_pkg_layout"
+		  android:layout_width="match_parent"
+		  android:layout_height="wrap_content"
+		  android:layout_below="@+id/our_journery_layout"
+		  android:layout_margin="15dp"
+		  android:padding="10dp">
+
+		  <TextView
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:background="@drawable/shadow" />
+
+		  <ImageView
+			android:id="@+id/our_imp_pkg_icon"
+			android:layout_width="80dp"
+			android:layout_height="80dp"
+			android:background="@color/imp_pkg_color"
+			android:padding="10dp"
+			android:src="@drawable/importence_icon" />
+
+		  <TextView
+			android:id="@+id/our_imp_pkg_title"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_toEndOf="@+id/our_imp_pkg_icon"
+			android:padding="8dp"
+			android:text="Our Journey"
+			android:textColor="@color/imp_pkg_color"
+			android:textSize="16sp"
+			android:textStyle="bold" />
+
+		  <TextView
+			android:id="@+id/our_imp_pkg_details"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_below="@+id/our_imp_pkg_title"
+			android:layout_toEndOf="@+id/our_imp_pkg_icon"
+			android:padding="8dp"
+			android:text="Our Journey"
+			android:textColor="@color/black" />
+		</RelativeLayout>
+
+		<RelativeLayout
+		  android:id="@+id/safe_pkg_layout"
+		  android:layout_width="match_parent"
+		  android:layout_height="wrap_content"
+		  android:layout_below="@+id/our_imp_pkg_layout"
+		  android:layout_margin="15dp"
+		  android:padding="10dp">
+
+		  <TextView
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:background="@drawable/shadow" />
+
+		  <ImageView
+			android:id="@+id/safe_pkg_icon"
+			android:layout_width="80dp"
+			android:layout_height="80dp"
+			android:background="@color/safe_pkg_color"
+			android:padding="10dp"
+			android:src="@drawable/safe_icon" />
+
+		  <TextView
+			android:id="@+id/safe_pkg_title"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_toEndOf="@+id/safe_pkg_icon"
+			android:padding="8dp"
+			android:text="Our Journey"
+			android:textColor="@color/safe_pkg_color"
+			android:textSize="16sp"
+			android:textStyle="bold" />
+
+		  <TextView
+			android:id="@+id/safe_pkg_details"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_below="@+id/safe_pkg_title"
+			android:layout_toEndOf="@+id/safe_pkg_icon"
+			android:padding="8dp"
+			android:text="Our Journey"
+			android:textColor="@color/black" />
+		</RelativeLayout>
+
+		<RelativeLayout
+		  android:id="@+id/track_delivery_layout"
+		  android:layout_width="match_parent"
+		  android:layout_height="wrap_content"
+		  android:layout_below="@+id/safe_pkg_layout"
+		  android:layout_margin="15dp"
+		  android:padding="10dp">
+
+		  <TextView
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:background="@drawable/shadow" />
+
+		  <ImageView
+			android:id="@+id/track_delivery_icon"
+			android:layout_width="80dp"
+			android:layout_height="80dp"
+			android:background="@color/track_delivery_color"
+			android:padding="10dp"
+			android:src="@drawable/track_icon" />
+
+		  <TextView
+			android:id="@+id/track_delivery_title"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_toEndOf="@+id/track_delivery_icon"
+			android:padding="8dp"
+			android:text="Our Journey"
+			android:textColor="@color/track_delivery_color"
+			android:textSize="16sp"
+			android:textStyle="bold" />
+
+		  <TextView
+			android:id="@+id/track_delivery_details"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_below="@+id/track_delivery_title"
+			android:layout_toEndOf="@+id/track_delivery_icon"
+			android:padding="8dp"
+			android:text="Our Journey"
+			android:textColor="@color/black" />
+		</RelativeLayout>
+
+		<RelativeLayout
+		  android:id="@+id/when_do_pkg_layout"
+		  android:layout_width="match_parent"
+		  android:layout_height="wrap_content"
+		  android:layout_below="@+id/track_delivery_layout"
+		  android:layout_margin="15dp"
+		  android:padding="10dp">
+
+		  <TextView
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:background="@drawable/shadow" />
+
+		  <ImageView
+			android:id="@+id/when_do_pkg_icon"
+			android:layout_width="80dp"
+			android:layout_height="80dp"
+			android:background="@color/when_do_pkg_color"
+			android:padding="10dp"
+			android:src="@drawable/detail_bg" />
+
+		  <TextView
+			android:id="@+id/when_do_pkg_title"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_toEndOf="@+id/when_do_pkg_icon"
+			android:padding="8dp"
+			android:text="Our Journey"
+			android:textColor="@color/when_do_pkg_color"
+			android:textStyle="bold" />
+
+		  <TextView
+			android:id="@+id/when_do_pkg_details"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_below="@+id/when_do_pkg_title"
+			android:layout_toEndOf="@+id/when_do_pkg_icon"
+			android:padding="8dp"
+			android:text="Our Journey"
+			android:textColor="@color/black"
+			android:textSize="16sp" />
+		</RelativeLayout>
+
+
+	  </RelativeLayout>
+	</LinearLayout>
+  </ScrollView>
+
+  <TextView
+	android:id="@+id/enterAlways"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content"
+	android:layout_alignParentBottom="true"
+	android:layout_centerInParent="true"
+	android:layout_margin="10dp"
+	android:background="@color/red"
+	android:padding="10dp"
+	android:text="ENTER"
+	android:textColor="@color/white" />
+
+</RelativeLayout>

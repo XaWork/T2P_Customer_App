@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools">
+
+  <androidx.constraintlayout.widget.ConstraintLayout
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	tools:context=".ui.offers.OffersActivity">
+
+	<androidx.appcompat.widget.Toolbar
+	  android:id="@+id/toolbar"
+	  android:layout_width="match_parent"
+	  android:layout_height="48dp"
+	  app:layout_constraintEnd_toEndOf="parent"
+	  app:layout_constraintStart_toStartOf="parent"
+	  android:background="?attr/colorPrimary"
+	  app:contentInsetStartWithNavigation="0dp"
+	  app:layout_constraintTop_toTopOf="parent"
+	  app:logo="@drawable/ic_t2p_logo_curves"
+	  app:title="Offers"
+	  app:navigationIcon="@drawable/ic_back_1"
+	  app:subtitleTextAppearance="@style/ToolbarSubtitleAppearance"
+	  app:titleTextAppearance="@style/ToolbarTitleAppearance"
+	  app:titleTextColor="@color/colorAccent" />
+
+	<androidx.recyclerview.widget.RecyclerView
+	  app:layout_constraintTop_toBottomOf="@id/toolbar"
+	  app:layout_constraintBottom_toBottomOf="parent"
+	  android:id="@+id/offers"
+	  app:layout_constraintEnd_toEndOf="parent"
+	  app:layout_constraintStart_toStartOf="parent"
+	  android:layout_width="match_parent"
+	  android:layout_height="0dp"/>
+
+	<TextView
+	  android:id="@+id/noOffers"
+	  android:layout_width="match_parent"
+	  android:layout_height="wrap_content"
+	  android:layout_margin="16dp"
+	  android:textAlignment="center"
+	  app:layout_constraintTop_toTopOf="parent"
+	  app:layout_constraintBottom_toBottomOf="parent"
+	  app:layout_constraintEnd_toEndOf="parent"
+	  app:layout_constraintStart_toStartOf="parent"
+	  android:visibility="gone"
+	  android:text="No Offers"
+	  android:textSize="24sp"
+	  android:textColor="@color/colorPrimary"
+	  android:textStyle="bold" />
+
+  </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

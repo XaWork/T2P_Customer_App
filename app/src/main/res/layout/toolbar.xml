@@ -1,0 +1,20 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto">
+  <com.google.android.material.appbar.AppBarLayout
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content">
+
+	<androidx.appcompat.widget.Toolbar
+	  android:id="@+id/toolbar"
+	  android:layout_width="match_parent"
+	  android:layout_height="48dp"
+	  android:background="?attr/colorPrimary"
+	  app:contentInsetStartWithNavigation="0dp"
+	  app:logo="@drawable/ic_t2p_logo_curves"
+	  app:navigationIcon="@drawable/ic_back_1"
+	  app:titleTextColor="@color/colorAccent"
+	  app:subtitleTextAppearance="@style/ToolbarSubtitleAppearance"
+	  app:titleTextAppearance="@style/ToolbarTitleAppearance" />
+
+  </com.google.android.material.appbar.AppBarLayout>
+</layout>

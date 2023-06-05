@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:background="@drawable/bg_dashboard"
+  android:orientation="vertical">
+
+  <include
+	layout="@layout/toolbar" />
+
+  <androidx.recyclerview.widget.RecyclerView
+	android:id="@+id/rvDashboardList"
+	android:visibility="gone"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:layout_gravity="center"
+	android:paddingTop="?android:actionBarSize">
+
+  </androidx.recyclerview.widget.RecyclerView>
+
+  <androidx.constraintlayout.widget.ConstraintLayout
+	android:paddingTop="?android:actionBarSize"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
+
+	<androidx.cardview.widget.CardView
+	  app:layout_constraintStart_toStartOf="parent"
+	  app:layout_constraintEnd_toEndOf="parent"
+	  app:layout_constraintTop_toTopOf="parent"
+	  android:id="@+id/ifd"
+	  android:visibility="gone"
+	  app:layout_constraintBottom_toTopOf="@id/guideline"
+	  android:layout_width="0dp"
+	  android:clipChildren="true"
+	  app:cardCornerRadius="24dp"
+	  android:layout_margin="16dp"
+	  android:layout_height="0dp">
+
+	  <ImageView
+		android:id="@+id/ifdImage"
+		android:scaleType="fitXY"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"/>
+
+	</androidx.cardview.widget.CardView>
+
+
+	<androidx.constraintlayout.widget.Guideline
+	  android:id="@+id/guideline"
+	  app:layout_constraintGuide_percent="0.5"
+	  android:layout_width="wrap_content"
+	  android:layout_height="wrap_content"
+	  android:orientation="horizontal"/>
+
+	<androidx.cardview.widget.CardView
+	  app:layout_constraintStart_toStartOf="parent"
+	  app:layout_constraintEnd_toEndOf="parent"
+	  app:layout_constraintTop_toBottomOf="@id/guideline"
+	  app:layout_constraintBottom_toBottomOf="parent"
+	  android:layout_width="0dp"
+	  android:clipChildren="true"
+	  android:visibility="gone"
+	  android:id="@+id/mkk"
+	  app:cardCornerRadius="24dp"
+	  android:layout_marginHorizontal="16dp"
+	  android:layout_marginBottom="16dp"
+	  android:layout_height="0dp">
+
+	  <ImageView
+		android:id="@+id/mkkImage"
+		android:scaleType="fitXY"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"/>
+
+	</androidx.cardview.widget.CardView>
+  </androidx.constraintlayout.widget.ConstraintLayout>
+
+  <ProgressBar
+	android:id="@+id/dashboardProgress"
+	style="@style/Widget.AppCompat.ProgressBar"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content"
+	android:layout_centerInParent="true"
+	android:visibility="gone"/>
+</RelativeLayout>

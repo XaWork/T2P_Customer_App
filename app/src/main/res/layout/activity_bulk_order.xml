@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:background="@drawable/screen_bg"
+  android:layout_height="match_parent">
+
+  <include layout="@layout/toolbar" />
+
+  <include layout="@layout/content_bulk_order" />
+
+
+  <Button
+	android:id="@+id/flPlaceBulkOrder"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:layout_gravity="bottom"
+	android:layout_margin="16dp"
+	android:background="@color/colorPrimary"
+	android:gravity="center"
+	android:orientation="horizontal"
+	android:text="Confirm Order"/>
+
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
