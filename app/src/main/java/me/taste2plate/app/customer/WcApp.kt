@@ -50,7 +50,7 @@ class WcApp : DaggerApplication() {
         Fresco.initialize(this);
         FacebookSdk.sdkInitialize(getApplicationContext());
         AppEventsLogger.activateApp(this);
-        Places.initialize(applicationContext, "AIzaSyAe_TB4tSHMVBT2weqw74MR5-EHZZ4HBnc")
+        Places.initialize(applicationContext, "AIzaSyCO5CDU2-xVi6VRy14HhptZ3A8Bztx5Ps4")
         ViewPump.init(
             ViewPump.builder()
                 .addInterceptor(

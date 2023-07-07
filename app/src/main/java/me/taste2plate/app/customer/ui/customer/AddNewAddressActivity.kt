@@ -33,14 +33,14 @@ class AddNewAddressActivity : WooDroidActivity<CustomerViewModel>() {
 
     override lateinit var viewModel: CustomerViewModel
     lateinit var binding: ActivityNewAddressBinding
-    private lateinit var stateResponse:AllStateResponse
-    lateinit var cites:List<CityListResult>
-    var selectedStateId:String? = null
-    var selectedCityId:String? = null
-    var lat:Double = 0.toDouble()
-    var long:Double = 0.toDouble()
-    var selectedAddressType:String? = null
-    var address : Address? = null;
+    private lateinit var stateResponse: AllStateResponse
+    lateinit var cites: List<CityListResult>
+    var selectedStateId: String? = null
+    var selectedCityId: String? = null
+    var lat: Double = 0.toDouble()
+    var long: Double = 0.toDouble()
+    var selectedAddressType: String? = null
+    var address: Address? = null;
     val pinList = mutableListOf<String>()
     var validPin = false;
 
@@ -56,17 +56,19 @@ class AddNewAddressActivity : WooDroidActivity<CustomerViewModel>() {
         viewModel = getViewModel(CustomerViewModel::class.java)
 
         binding.addressType.setOnCheckedChangeListener { _, checkedId ->
-            when(checkedId){
+            when (checkedId) {
                 R.id.home -> {
                     binding.tilOtherText.visibility = View.GONE
                     selectedAddressType = "home"
                 }
+
                 R.id.work -> {
                     selectedAddressType = "work"
                     binding.tilOtherText.visibility = View.GONE
                 }
-                else->{
-                    selectedAddressType=null
+
+                else -> {
+                    selectedAddressType = null
                     binding.tilOtherText.visibility = View.VISIBLE
                 }
             }
@@ -79,35 +81,43 @@ class AddNewAddressActivity : WooDroidActivity<CustomerViewModel>() {
                     name.text.toString().trim().isEmpty() -> {
                         showError("Enter name!")
                     }
+
                     etPhone.text.toString().trim().isEmpty() -> {
                         showError("Enter phone number!")
                     }
+
                     etAddress1.text.toString().trim().isEmpty() -> {
                         showError("Enter address")
                     }
+
                     etState.text.toString().trim().isEmpty() -> {
                         showError("Enter state")
                     }
-                    etPin.text.toString().trim().isEmpty() || !validPin -> {
+
+                    etPin.text.toString().trim().isEmpty() || !validPin && !pinList.contains(etPin.text.toString().trim())-> {
                         showError("Enter valid pin code")
                     }
+
                     etCity.text.toString().trim().isEmpty() -> {
                         showError("Select City")
                     }
                     /*etpostOffice.text.toString().trim().isEmpty() -> {
                         showError("Enter landmark")
                     }*/
-                    binding.tilOtherText.visibility==View.VISIBLE && binding.otherAddress.text.toString().trim().isEmpty()->{
+                    binding.tilOtherText.visibility == View.VISIBLE && binding.otherAddress.text.toString()
+                        .trim().isEmpty() -> {
                         showError("Enter address type, or select an option!")
                     }
-                    (lat==0.toDouble() || long==0.toDouble()) -> {
-                            startActivityForResult(
-                                Intent(
-                                    this@AddNewAddressActivity,
-                                    LocationPickerActivity::class.java
-                                ), 23
-                            )
+
+                    (lat == 0.toDouble() || long == 0.toDouble()) -> {
+                        startActivityForResult(
+                            Intent(
+                                this@AddNewAddressActivity,
+                                LocationPickerActivity::class.java
+                            ), 23
+                        )
                     }
+
                     else -> {
                         saveAddress()
                     }
@@ -116,7 +126,7 @@ class AddNewAddressActivity : WooDroidActivity<CustomerViewModel>() {
         }
 
 
-        binding.run{
+        binding.run {
             etCountry.setupDropDown(
                 listOf("India").toTypedArray(),
                 { it },
@@ -130,8 +140,8 @@ class AddNewAddressActivity : WooDroidActivity<CustomerViewModel>() {
         }
 
         address = intent.getSerializableExtra("Address") as Address?
-        if(address!=null){
-            binding.run{
+        if (address != null) {
+            binding.run {
                 validPin = true
                 name.setText(address!!.contact_name)
                 etPhone.setText(address!!.contact_mobile)
@@ -139,20 +149,23 @@ class AddNewAddressActivity : WooDroidActivity<CustomerViewModel>() {
                 etState.setText(address!!.state.name)
                 etAddress2.setText(address!!.address2)
                 etPin.setText(address!!.pincode)
-                Log.e("landmark", "landmark get : ${address!!.landmark}", )
+                Log.e("landmark", "landmark get : ${address!!.landmark}")
                 etpostOffice.setText(address!!.landmark)
                 etCountry.setText("India")
-                etCity.setText(address!!.city!!.name)
-                selectedCityId = address!!.city!!._id
+                etCity.setText(address!!.city.name)
+                selectedCityId = address!!.city._id
                 selectedStateId = address!!.state._id
+
 
                 when {
                     address!!.title.equals("Home", ignoreCase = true) -> {
                         home.isChecked = true
                     }
+
                     address!!.title.equals("Work", ignoreCase = true) -> {
                         work.isChecked = true
                     }
+
                     else -> {
                         other.isChecked = true
                         binding.tilOtherText.editText!!.setText(address!!.title)
@@ -165,14 +178,14 @@ class AddNewAddressActivity : WooDroidActivity<CustomerViewModel>() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if(requestCode==23 && resultCode == RESULT_OK){
-            lat =  data!!.getDoubleExtra("lat", 0.toDouble())
+        if (requestCode == 23 && resultCode == RESULT_OK) {
+            lat = data!!.getDoubleExtra("lat", 0.toDouble())
             long = data.getDoubleExtra("long", 0.toDouble())
         }
     }
 
     private fun saveAddress() {
-        if(address!=null){
+        if (address != null) {
             binding.run {
                 viewModel.editAddress(
                     address!!._id,
@@ -195,9 +208,11 @@ class AddNewAddressActivity : WooDroidActivity<CustomerViewModel>() {
                             showError("Address Saved!")
                             finish()
                         }
+
                         Status.LOADING -> {
                             showLoading()
                         }
+
                         else -> {
                             stopShowingLoading()
                             showError("Something went wrong! retry")
@@ -205,7 +220,7 @@ class AddNewAddressActivity : WooDroidActivity<CustomerViewModel>() {
                     }
                 })
             }
-        }else {
+        } else {
 
             binding.run {
                 viewModel.saveAddress(
@@ -229,9 +244,11 @@ class AddNewAddressActivity : WooDroidActivity<CustomerViewModel>() {
                             showError("Address Saved!")
                             finish()
                         }
+
                         Status.LOADING -> {
                             showLoading()
                         }
+
                         else -> {
                             stopShowingLoading()
                             showError("Something went wrong! retry")
@@ -249,7 +266,7 @@ class AddNewAddressActivity : WooDroidActivity<CustomerViewModel>() {
     }
 
     private fun getCityAndZip() {
-        viewModel.allStates.observe(this, Observer { response ->
+        viewModel.allStates.observe(this) { response ->
             when (response.status()) {
                 Status.SUCCESS -> {
                     stopShowingLoading()
@@ -259,24 +276,29 @@ class AddNewAddressActivity : WooDroidActivity<CustomerViewModel>() {
                     } else {
                         //cityList.addAll(response.data().result)
                         stateResponse = response.data()
+                        if (address != null) {
+                            getCityByState()
+                        }
                         setupOptions()
                     }
                 }
+
                 Status.LOADING -> {
                     showLoading()
                 }
+
                 else -> {
                     stopShowingLoading()
                     showError("Something went wrong!")
                     finish()
                 }
             }
-        })
+        }
     }
 
-    private fun getZipList(){
+    private fun getZipList() {
         validPin = false
-        viewModel.fetchZipList(selectedCityId).observe(this, Observer { response ->
+        viewModel.fetchZipList(selectedCityId).observe(this) { response ->
             when (response.status()) {
                 Status.SUCCESS -> {
                     stopShowingLoading()
@@ -296,24 +318,29 @@ class AddNewAddressActivity : WooDroidActivity<CustomerViewModel>() {
                         }
                     }
                 }
+
                 Status.LOADING -> {
                     showLoading()
                 }
+
                 else -> {
                     stopShowingLoading()
                     showError("Something went wrong!")
                     finish()
                 }
             }
-        })
+        }
     }
 
-    private fun getCityByState(){
+    private fun getCityByState() {
         viewModel.fetchCityByState(selectedStateId).observe(this, Observer { response ->
             when (response.status()) {
                 Status.SUCCESS -> {
                     stopShowingLoading()
                     cites = response.data().result
+                    if(address!=null && selectedCityId != null){
+                        getZipList()
+                    }
                     selectedCityId = null
                     etCity.setupDropDown(cites.toTypedArray(), { it.name }, { city ->
                         etCity.setText(city.name)
@@ -328,9 +355,11 @@ class AddNewAddressActivity : WooDroidActivity<CustomerViewModel>() {
                         }
                     })
                 }
+
                 Status.LOADING -> {
                     showLoading()
                 }
+
                 else -> {
                     stopShowingLoading()
                     showError("Something went wrong!")
