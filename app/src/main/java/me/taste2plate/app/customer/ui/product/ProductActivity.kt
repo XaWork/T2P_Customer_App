@@ -35,6 +35,8 @@ import me.taste2plate.app.customer.ui.address.SaveAddressListener
 import me.taste2plate.app.customer.ui.state.ProgressDialogFragment
 import me.taste2plate.app.customer.utils.AppUtils
 import me.taste2plate.app.customer.viewmodels.ProductViewModel
+import me.taste2plate.app.data.api.AnalyticsAPI
+import me.taste2plate.app.data.api.LogRequest
 import me.taste2plate.app.models.AppDataResponse
 import me.taste2plate.app.models.Image
 import me.taste2plate.app.models.address.Address
@@ -73,6 +75,18 @@ class ProductActivity : BaseActivity(), SaveAddressListener {
         title = getString(R.string.Product)
 
         productId = intent.getStringExtra("productId")!!
+
+        //send event info
+        val analytics = AnalyticsAPI()
+        val logRequest = LogRequest(
+            type = "page visit",
+            event = "visit to product details page",
+            page_name = "/ProductDetails",
+            source = "android",
+            user_id = AppUtils(this).user.id,
+            product_id = intent.getStringExtra("productId")!!
+        )
+        analytics.addLog(logRequest)
 
         if (AppUtils(this).appData == null) {
             AppUtils(this).logOut()
@@ -123,7 +137,18 @@ class ProductActivity : BaseActivity(), SaveAddressListener {
                     stopShowingLoading()
                     Toast.makeText(this, response.data().message, Toast.LENGTH_SHORT).show()
                     addToWishlist.setImageResource(R.drawable.product_in_wishlist)
-                    sendProductInfoToCleverTap("Add to wishlist")
+
+                    //send event info
+                    val analytics = AnalyticsAPI()
+                    val logRequest = LogRequest(
+                        type = "add to cart",
+                        event = "add product to wishlist",
+                        page_name = "/ProductList",
+                        source = "android",
+                        user_id = AppUtils(this).user.id,
+                        product_id = product._id
+                    )
+                    analytics.addLog(logRequest)
                 }
                 Status.ERROR -> stopShowingLoading()
                 Status.EMPTY -> stopShowingLoading()
@@ -196,7 +221,20 @@ class ProductActivity : BaseActivity(), SaveAddressListener {
                         mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.ADD_TO_CART, bundle)
 
                         addAppEvent()
-                        sendProductInfoToCleverTap("Add to cart")
+
+
+                        //send event info
+                        val analytics = AnalyticsAPI()
+                        val logRequest = LogRequest(
+                            type = "add to cart",
+                            event = "add product to cart",
+                            event_data = "Item added to cart : ${tvQty!!.text.toString()}",
+                            page_name = "/ProductList",
+                            source = "android",
+                            user_id = AppUtils(this).user.id,
+                            product_id = productId
+                        )
+                        analytics.addLog(logRequest)
                     }
 
                     Status.ERROR, Status.EMPTY -> {

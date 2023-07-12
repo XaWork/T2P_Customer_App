@@ -12,6 +12,8 @@ import me.taste2plate.app.customer.databinding.ActivityMyPlanBinding
 import me.taste2plate.app.customer.toDate
 import me.taste2plate.app.customer.ui.WooDroidActivity
 import me.taste2plate.app.customer.utils.AppUtils
+import me.taste2plate.app.data.api.AnalyticsAPI
+import me.taste2plate.app.data.api.LogRequest
 
 class MyPlanActivity :  WooDroidActivity<MyPlanViewModel>(){
 
@@ -20,6 +22,19 @@ class MyPlanActivity :  WooDroidActivity<MyPlanViewModel>(){
     var userId:String? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+
+        //send event info
+        val analytics = AnalyticsAPI()
+        val logRequest = LogRequest(
+            type = "page visit",
+            event = "Visit to my plan page",
+            page_name = "/MyPlanActivity",
+            source = "android",
+            user_id = AppUtils(this).user.id,
+        )
+        analytics.addLog(logRequest)
+
         viewModel = getViewModel(MyPlanViewModel::class.java)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_my_plan)
 

@@ -29,6 +29,8 @@ import me.taste2plate.app.customer.ui.product.ProductSearchActivity
 import me.taste2plate.app.customer.ui.state.ProgressDialogFragment
 import me.taste2plate.app.customer.utils.AppUtils
 import me.taste2plate.app.customer.viewmodels.ProductViewModel
+import me.taste2plate.app.data.api.AnalyticsAPI
+import me.taste2plate.app.data.api.LogRequest
 import me.taste2plate.app.models.filters.ProductCategoryFilter
 
 class HomeFragment : Fragment(), SaveAddressListener {
@@ -81,6 +83,18 @@ class HomeFragment : Fragment(), SaveAddressListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = (activity as HomeActivity).getViewModel(ProductViewModel::class.java)
+
+        val analytics = AnalyticsAPI()
+        val appUtils = AppUtils(context)
+        val logRequest = LogRequest(
+            type = "page visit",
+            event = "visit to home page",
+            page_name = "/home",
+            source = "android",
+            user_id = appUtils.user.id,
+        )
+        analytics.addLog(logRequest)
+
         progressBar.visibility = VISIBLE
         search_container.setOnClickListener {
             startActivity(

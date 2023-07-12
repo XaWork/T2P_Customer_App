@@ -5,7 +5,10 @@ import android.os.Bundle
 import me.taste2plate.app.customer.databinding.ActivityOrderConfirmedBinding
 import me.taste2plate.app.customer.ui.WooDroidActivity
 import me.taste2plate.app.customer.ui.home.HomeActivity
+import me.taste2plate.app.customer.utils.AppUtils
 import me.taste2plate.app.customer.viewmodels.OrderViewModel
+import me.taste2plate.app.data.api.AnalyticsAPI
+import me.taste2plate.app.data.api.LogRequest
 
 class OrderConfirmationActivity : WooDroidActivity<OrderViewModel>() {
 
@@ -20,10 +23,24 @@ class OrderConfirmationActivity : WooDroidActivity<OrderViewModel>() {
 
         intent.run {
             confirmedBinding.orderId.text = getStringExtra("orderId")
-            confirmedBinding.deliveryDateTime.text = "${getStringExtra("deliverDate")} ${getStringExtra("slot")}"
+            confirmedBinding.deliveryDateTime.text =
+                "${getStringExtra("deliverDate")} ${getStringExtra("slot")}"
         }
 
-        confirmedBinding.continueShopping.setOnClickListener{
+        //send event info
+        val analytics = AnalyticsAPI()
+        val logRequest = LogRequest(
+            type = "order",
+            event = "visit to order confirmation page",
+            event_data = "order id : ${intent.getStringExtra("orderId")}",
+            page_name = "/order confirmed",
+            source = "android",
+            user_id = AppUtils(this).user.id,
+            product_id = ""
+        )
+        analytics.addLog(logRequest)
+
+        confirmedBinding.continueShopping.setOnClickListener {
             finishAffinity()
             startActivity(Intent(this, HomeActivity::class.java))
         }

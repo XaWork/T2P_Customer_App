@@ -30,6 +30,8 @@ import me.taste2plate.app.customer.ui.home.HomeActivity
 import me.taste2plate.app.customer.ui.state.ProgressDialogFragment
 import me.taste2plate.app.customer.utils.AppUtils
 import me.taste2plate.app.customer.viewmodels.UserViewModel
+import me.taste2plate.app.data.api.AnalyticsAPI
+import me.taste2plate.app.data.api.LogRequest
 import me.taste2plate.app.data.api.RegistrationData
 import retrofit2.Call
 import retrofit2.Callback
@@ -49,7 +51,7 @@ class SignUpFragment : Fragment() {
     private var matcher: Matcher? = null
     private var phoneNumber: String? = ""
     private var detailId: String? = ""
-    private var data:RegistrationData? = null
+    private var data: RegistrationData? = null
 
     fun newInstance(): SignUpFragment? {
         return SignUpFragment()
@@ -70,24 +72,41 @@ class SignUpFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+//send event info
+        val analytics = AnalyticsAPI()
+        val appUtils = AppUtils(context)
+        val logRequest = LogRequest(
+            type = "signup",
+            event = "Enter signup screen",
+            event_data = "signup",
+            page_name = "/signup",
+            source = "android",
+            user_id = appUtils.user.id,
+            product_id = ""
+        )
+        analytics.addLog(logRequest)
 
         viewModel = (activity as OnBoardActivity).getViewModel(UserViewModel::class.java)
         detailId = ""
         etOtp.isEnabled = false
         bNext.text = getString(R.string.get_otp)
         bNext.setOnClickListener {
-            if(tc.isChecked) {
+            if (tc.isChecked) {
                 if (detailId?.isEmpty()!!) {
                     signUp()
                 } else {
                     validateOtp()
                 }
-            }else{
-                Toast.makeText(context, "Please accept the Terms and Conditions!", Toast.LENGTH_LONG).show()
+            } else {
+                Toast.makeText(
+                    context,
+                    "Please accept the Terms and Conditions!",
+                    Toast.LENGTH_LONG
+                ).show()
             }
         }
-        val text = "By signing up, you agree to our <span style=\"color:#de2228\">Terms</span> and <span style=\"color:#de2228\">Conditions</span>"
+        val text =
+            "By signing up, you agree to our <span style=\"color:#de2228\">Terms</span> and <span style=\"color:#de2228\">Conditions</span>"
         terms.text = Html.fromHtml(text.trim())
 
         terms.setOnClickListener {
@@ -100,49 +119,52 @@ class SignUpFragment : Fragment() {
         phoneNumber = etPhoneNumber.text.toString()
         val referredBy = referral.text.toString()
         if (validates()) {
-            viewModel.signup(email, phoneNumber, AppUtils(activity).token, referredBy).observe(viewLifecycleOwner, Observer { response ->
-                when (response!!.status()) {
-                    Status.LOADING -> {
-                        (activity as OnBoardActivity).showLoading()
-                    }
+            viewModel.signup(email, phoneNumber, AppUtils(activity).token, referredBy)
+                .observe(viewLifecycleOwner, Observer { response ->
+                    when (response!!.status()) {
+                        Status.LOADING -> {
+                            (activity as OnBoardActivity).showLoading()
+                        }
 
-                    Status.SUCCESS -> {
-                        (activity as OnBoardActivity).stopShowingLoading()
-                        if (response.isSuccessful && response.data().status.orEmpty().contentEquals("success")) {
-                            Log.e("Data", response.data().toString())
-                            etOtp.isEnabled = true
-                            detailId = response.data().message
-                            bNext.text = "Verify OTP"
+                        Status.SUCCESS -> {
+                            (activity as OnBoardActivity).stopShowingLoading()
+                            if (response.isSuccessful && response.data().status.orEmpty()
+                                    .contentEquals("success")
+                            ) {
+                                Log.e("Data", response.data().toString())
+                                etOtp.isEnabled = true
+                                detailId = response.data().message
+                                bNext.text = "Verify OTP"
+                                Toast.makeText(
+                                    activity,
+                                    response.data().message,
+                                    Toast.LENGTH_LONG
+                                ).show()
+                            } else {
+                                Log.e("TAG", "signUp: $response")
+                                Toast.makeText(
+                                    activity,
+                                    response.data().message,
+                                    Toast.LENGTH_SHORT
+                                )
+                                    .show()
+                            }
+                        }
+
+                        Status.ERROR -> {
+                            (activity as OnBoardActivity).stopShowingLoading()
                             Toast.makeText(
                                 activity,
-                                response.data().message,
+                                response.error().message.toString(),
                                 Toast.LENGTH_LONG
                             ).show()
-                        } else {
-                            Log.e("TAG", "signUp: $response", )
-                            Toast.makeText(
-                                activity,
-                                response.data().message,
-                                Toast.LENGTH_SHORT
-                            )
-                                .show()
+                        }
+
+                        Status.EMPTY -> {
+                            (activity as OnBoardActivity).stopShowingLoading()
                         }
                     }
-
-                    Status.ERROR -> {
-                        (activity as OnBoardActivity).stopShowingLoading()
-                        Toast.makeText(
-                            activity,
-                            response.error().message.toString(),
-                            Toast.LENGTH_LONG
-                        ).show()
-                    }
-
-                    Status.EMPTY -> {
-                        (activity as OnBoardActivity).stopShowingLoading()
-                    }
-                }
-            })
+                })
         } else {
             Toast.makeText(activity, "Please correct the information entered", Toast.LENGTH_SHORT)
                 .show()
@@ -158,10 +180,14 @@ class SignUpFragment : Fragment() {
 
 
         if (!validateEmail(email)) {
-            Toast.makeText(context,"Invalid Email!", Toast.LENGTH_LONG).show()
+            Toast.makeText(context, "Invalid Email!", Toast.LENGTH_LONG).show()
             validation = false
-        }else if (mobile.isEmpty()) {
-            Toast.makeText(context,getString(R.string.please_enter_mobile_number), Toast.LENGTH_LONG).show()
+        } else if (mobile.isEmpty()) {
+            Toast.makeText(
+                context,
+                getString(R.string.please_enter_mobile_number),
+                Toast.LENGTH_LONG
+            ).show()
             validation = false
         }
 
@@ -201,6 +227,19 @@ class SignUpFragment : Fragment() {
                             if (otpResponse.status == "success") {
                                 data = otpResponse.data
                                 AppUtils(activity).saveUser(data)
+
+                                //send event info
+                                val analytics = AnalyticsAPI()
+                                val logRequest = LogRequest(
+                                    type = "signup",
+                                    event = "create new account successfully",
+                                    event_data = "signup",
+                                    page_name = "/signup",
+                                    source = "android",
+                                    user_id = AppUtils(activity).user.id,
+                                    product_id = ""
+                                )
+                                analytics.addLog(logRequest)
 
                                 addAppEvent()
                                 sendUserInfoToCleverTap()
@@ -246,7 +285,7 @@ class SignUpFragment : Fragment() {
         //Log.e("trackier", "start login tracker event: ${TrackierSDK.isEnabled()}", )
     }
 
-    private fun addAppEvent(){
+    private fun addAppEvent() {
         val logger = AppEventsLogger.newLogger(requireContext())
         logger.logEvent(AppEventsConstants.EVENT_NAME_COMPLETED_REGISTRATION);
     }

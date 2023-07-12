@@ -21,6 +21,8 @@ import me.taste2plate.app.customer.common.Status
 import me.taste2plate.app.customer.ui.state.ProgressDialogFragment
 import me.taste2plate.app.customer.utils.AppUtils
 import me.taste2plate.app.customer.viewmodels.ProductViewModel
+import me.taste2plate.app.data.api.AnalyticsAPI
+import me.taste2plate.app.data.api.LogRequest
 import me.taste2plate.app.models.CityBrand
 import java.util.*
 
@@ -41,7 +43,18 @@ class CityBrandActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_subcategory)
-        CleverTapAPI.getDefaultInstance(this)?.recordScreen("City Brand")
+
+        //send event info
+        val analytics = AnalyticsAPI()
+        val logRequest = LogRequest(
+            type = "page visit",
+            event = "visit to city list page",
+            page_name = "/CityBrand",
+            source = "android",
+            user_id = AppUtils(this).user.id,
+        )
+        analytics.addLog(logRequest)
+
         setSupportActionBar(toolbar)
         searchCityBrand.visibility = View.VISIBLE
 

@@ -13,6 +13,8 @@ import kotlinx.android.synthetic.main.activity_product.*
 import kotlinx.android.synthetic.main.activity_product.toolbar
 import me.taste2plate.app.customer.R
 import me.taste2plate.app.customer.utils.AppUtils
+import me.taste2plate.app.data.api.AnalyticsAPI
+import me.taste2plate.app.data.api.LogRequest
 
 class ContactUsDetailActivity : AppCompatActivity() {
 
@@ -26,6 +28,18 @@ class ContactUsDetailActivity : AppCompatActivity() {
         toolbar.setNavigationOnClickListener {
             finish()
         }
+
+
+        //send event info
+        val analytics = AnalyticsAPI()
+        val logRequest = LogRequest(
+            type = "page visit",
+            event = "Visit to contact us page",
+            page_name = "/ContactusDetailActivity",
+            source = "android",
+            user_id = AppUtils(this).user.id,
+        )
+        analytics.addLog(logRequest)
 
         val customAppData = AppUtils(this).appData
 

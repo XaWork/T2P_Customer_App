@@ -16,6 +16,8 @@ import me.taste2plate.app.customer.setupDropDown
 import me.taste2plate.app.customer.ui.WooDroidActivity
 import me.taste2plate.app.customer.utils.AppUtils
 import me.taste2plate.app.customer.viewmodels.ProductViewModel
+import me.taste2plate.app.data.api.AnalyticsAPI
+import me.taste2plate.app.data.api.LogRequest
 import me.taste2plate.app.models.CityBrand
 import me.taste2plate.app.models.Customer
 import me.taste2plate.app.models.custom.BulkOrder
@@ -32,6 +34,19 @@ class BulkOrderActivity : WooDroidActivity<ProductViewModel>() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_bulk_order)
         setSupportActionBar(toolbar)
+
+        //send event info
+        val analytics = AnalyticsAPI()
+        val logRequest = LogRequest(
+            type = "page visit",
+            event = "Visit to bulk order page",
+            page_name = "/bulk order",
+            source = "android",
+            user_id = AppUtils(this).user.id,
+        )
+        analytics.addLog(logRequest)
+
+
         viewModel = getViewModel(ProductViewModel::class.java)
         title = getString(R.string.bulk_order)
         toolbar.setNavigationOnClickListener {
@@ -101,6 +116,17 @@ class BulkOrderActivity : WooDroidActivity<ProductViewModel>() {
                     Status.SUCCESS -> {
                         stopShowingLoading()
                         alert(response.data().message)
+
+                        //send event info
+                        val analytics = AnalyticsAPI()
+                        val logRequest = LogRequest(
+                            type = "page visit",
+                            event = "create bulk order successfully.",
+                            page_name = "/bulk order",
+                            source = "android",
+                            user_id = AppUtils(this).user.id,
+                        )
+                        analytics.addLog(logRequest)
                     }
                     Status.ERROR, Status.EMPTY -> {
                         stopShowingLoading()

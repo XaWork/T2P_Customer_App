@@ -19,6 +19,8 @@ import me.taste2plate.app.customer.common.Status
 import me.taste2plate.app.customer.ui.product.ProductActivity
 import me.taste2plate.app.customer.utils.AppUtils
 import me.taste2plate.app.customer.viewmodels.ProductViewModel
+import me.taste2plate.app.data.api.AnalyticsAPI
+import me.taste2plate.app.data.api.LogRequest
 import me.taste2plate.app.models.home.ProductDeal
 import me.taste2plate.app.models.newproducts.NewProduct
 
@@ -87,7 +89,18 @@ class SliderProductListingViewHolder(
                             addToWishlist.setImageResource(R.drawable.product_in_wishlist)
                             Toast.makeText(context, response.data().message, Toast.LENGTH_SHORT)
                                 .show()
-                            sendProductInfoToCleverTap(product)
+
+                            //send event info
+                            val analytics = AnalyticsAPI()
+                            val logRequest = LogRequest(
+                                type = "add to cart",
+                                event = "add product to wishlist",
+                                page_name = "/ProductList",
+                                source = "android",
+                                user_id = AppUtils(context).user.id,
+                                product_id = product._id
+                            )
+                            analytics.addLog(logRequest)
                         }
                         Status.EMPTY -> {
                             progressBar.visibility = View.GONE

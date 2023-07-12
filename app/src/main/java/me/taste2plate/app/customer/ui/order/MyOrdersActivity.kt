@@ -19,6 +19,8 @@ import me.taste2plate.app.customer.ui.home.HomeActivity
 import me.taste2plate.app.customer.ui.onboarding.OnBoardActivity
 import me.taste2plate.app.customer.utils.AppUtils
 import me.taste2plate.app.customer.viewmodels.OrderViewModel
+import me.taste2plate.app.data.api.AnalyticsAPI
+import me.taste2plate.app.data.api.LogRequest
 import me.taste2plate.app.models.order.Order
 
 class MyOrdersActivity : WooDroidActivity<OrderViewModel>() {
@@ -31,8 +33,21 @@ class MyOrdersActivity : WooDroidActivity<OrderViewModel>() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_my_orders)
         setSupportActionBar(toolbar)
-        CleverTapAPI.getDefaultInstance(this)?.recordScreen("My Orders")
-        val customAppData = AppUtils(this).appData
+
+        //send event info
+        val analytics = AnalyticsAPI()
+        val logRequest = LogRequest(
+            type = "page visit",
+            event = "my orders",
+            event_data = "my orders",
+            page_name = "/my orders",
+            source = "android",
+            user_id = AppUtils(this).user.id,
+            product_id = ""
+        )
+        analytics.addLog(logRequest)
+
+         val customAppData = AppUtils(this).appData
 
         toolbar.setNavigationOnClickListener {
             finish()

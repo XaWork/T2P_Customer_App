@@ -6,6 +6,9 @@ import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.details_activity.*
 import kotlinx.android.synthetic.main.toolbar.*
 import me.taste2plate.app.customer.R
+import me.taste2plate.app.customer.utils.AppUtils
+import me.taste2plate.app.data.api.AnalyticsAPI
+import me.taste2plate.app.data.api.LogRequest
 
 class DetailsActivity:BaseActivity(){
 
@@ -18,6 +21,17 @@ class DetailsActivity:BaseActivity(){
         toolbar.setNavigationOnClickListener {
             finish()
         }
+
+        //send event info
+        val analytics = AnalyticsAPI()
+        val logRequest = LogRequest(
+            type = "page visit",
+            event = "visit to ${intent.getStringExtra("name")} details page",
+            page_name = "/CityBrand",
+            source = "android",
+            user_id = AppUtils(this).user.id,
+        )
+        analytics.addLog(logRequest)
 
         tvTitle.text = intent.getStringExtra("name")
         val type = intent.getStringExtra("type")

@@ -21,6 +21,8 @@ import me.taste2plate.app.customer.toDate
 import me.taste2plate.app.customer.ui.WooDroidActivity
 import me.taste2plate.app.customer.ui.membership.MembershipListActivity
 import me.taste2plate.app.customer.utils.AppUtils
+import me.taste2plate.app.data.api.AnalyticsAPI
+import me.taste2plate.app.data.api.LogRequest
 
 class WalletActivity : WooDroidActivity<WalletViewModel>() {
 
@@ -31,6 +33,19 @@ class WalletActivity : WooDroidActivity<WalletViewModel>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_wallet)
+
+        //send event info
+        val analytics = AnalyticsAPI()
+        val logRequest = LogRequest(
+            type = "page visit",
+            event = "Visit to wallet page",
+            page_name = "/WalletActivity",
+            source = "android",
+            user_id = AppUtils(this).user.id,
+        )
+        analytics.addLog(logRequest)
+
+
         viewModel = getViewModel(WalletViewModel::class.java)
         CleverTapAPI.getDefaultInstance(this)?.recordScreen("Wallet")
         setSupportActionBar(binding.toolbarContainer.toolbar)

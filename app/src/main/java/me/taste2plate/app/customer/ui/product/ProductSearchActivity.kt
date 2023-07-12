@@ -27,7 +27,10 @@ import me.taste2plate.app.customer.adapter.ProductAdapter
 import me.taste2plate.app.customer.common.BaseActivity
 import me.taste2plate.app.customer.common.Status
 import me.taste2plate.app.customer.ui.state.ProgressDialogFragment
+import me.taste2plate.app.customer.utils.AppUtils
 import me.taste2plate.app.customer.viewmodels.ProductViewModel
+import me.taste2plate.app.data.api.AnalyticsAPI
+import me.taste2plate.app.data.api.LogRequest
 import me.taste2plate.app.models.newproducts.NewProduct
 import java.util.concurrent.TimeUnit
 
@@ -49,7 +52,20 @@ class ProductSearchActivity : BaseActivity() {
         compositeDisposable = CompositeDisposable()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_product_search)
-        CleverTapAPI.getDefaultInstance(this)?.recordScreen("Product Search")
+
+
+        //send event info
+        val analytics = AnalyticsAPI()
+        val logRequest = LogRequest(
+            type = "page visit",
+            event = "visit to product search page",
+            page_name = "/ProductSearch",
+            source = "android",
+            user_id = AppUtils(this).user.id,
+        )
+        analytics.addLog(logRequest)
+
+       // CleverTapAPI.getDefaultInstance(this)?.recordScreen("Product Search")
         setSupportActionBar(toolbar)
         toolbar.setNavigationOnClickListener {
             finish()

@@ -266,8 +266,9 @@
 
         <service
             android:name=".service.FirebaseInstanceService"
-            android:exported="true"
-            android:enabled="true">
+            android:exported="false"
+            android:enabled="true"
+            android:permission="TODO">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>

@@ -23,6 +23,8 @@ import me.taste2plate.app.customer.interfaces.OnSelectListener
 import me.taste2plate.app.customer.ui.WooDroidActivity
 import me.taste2plate.app.customer.utils.AppUtils
 import me.taste2plate.app.customer.viewmodels.CustomerViewModel
+import me.taste2plate.app.data.api.AnalyticsAPI
+import me.taste2plate.app.data.api.LogRequest
 import me.taste2plate.app.models.Customer
 import me.taste2plate.app.models.UserAddress
 import me.taste2plate.app.models.address.Address
@@ -48,6 +50,20 @@ class AddressListActivity : WooDroidActivity<CustomerViewModel>(), OnSelectListe
         toolbar.setNavigationOnClickListener {
             finish()
         }
+
+        //send event info
+        val analytics = AnalyticsAPI()
+        val logRequest = LogRequest(
+            type = "page visit",
+            event = "address list",
+            event_data = "address list",
+            page_name = "/AddressList",
+            source = "android",
+            user_id = AppUtils(this).user.id,
+            product_id = ""
+        )
+        analytics.addLog(logRequest)
+
         CleverTapAPI.getDefaultInstance(this)?.recordScreen("Address List")
 
         viewModel = getViewModel(CustomerViewModel::class.java)

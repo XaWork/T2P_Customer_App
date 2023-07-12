@@ -42,6 +42,8 @@ import me.taste2plate.app.customer.utils.AppUtils
 import me.taste2plate.app.customer.utils.Utils
 import me.taste2plate.app.customer.viewmodels.CustomerViewModel
 import me.taste2plate.app.customer.viewmodels.ProductViewModel
+import me.taste2plate.app.data.api.AnalyticsAPI
+import me.taste2plate.app.data.api.LogRequest
 import me.taste2plate.app.models.address.checkout.CouponResponse
 import me.taste2plate.app.models.cart.CartItem
 import me.taste2plate.app.models.cart.CartItemResponse
@@ -87,6 +89,20 @@ class CheckoutActivity : WooDroidActivity<CheckoutViewModel>(), SaveAddressListe
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        //send event info
+        val analytics = AnalyticsAPI()
+        val logRequest = LogRequest(
+            type = "page visit",
+            event = "visit to checkout page",
+            event_data = "Item in cart while checkout : ${cartItems.size}",
+            page_name = "/CheckoutActivity",
+            source = "android",
+            user_id = AppUtils(this).user.id,
+        )
+        analytics.addLog(logRequest)
+
+
         CleverTapAPI.getDefaultInstance(this)?.recordScreen("Checkout")
         binding = CheckoutFlowLayoutBinding.inflate(layoutInflater)
         setContentView(binding.root)

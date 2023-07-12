@@ -34,6 +34,8 @@ import me.taste2plate.app.customer.updated_flow.CheckoutActivity
 import me.taste2plate.app.customer.utils.AppUtils
 import me.taste2plate.app.customer.viewmodels.CartViewModel
 import me.taste2plate.app.customer.viewmodels.ProductViewModel
+import me.taste2plate.app.data.api.AnalyticsAPI
+import me.taste2plate.app.data.api.LogRequest
 import me.taste2plate.app.models.Customer
 import me.taste2plate.app.models.address.Address
 import me.taste2plate.app.models.cart.CartItem
@@ -58,6 +60,19 @@ class WishlistActivity : WooDroidActivity<ProductViewModel>() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_wishlist)
         setSupportActionBar(toolbar)
+
+        //send event info
+        val analytics = AnalyticsAPI()
+        val logRequest = LogRequest(
+            type = "page visit",
+            event = "Visit to wishlist page",
+            page_name = "/WishlistActivity",
+            source = "android",
+            user_id = AppUtils(this).user.id,
+        )
+        analytics.addLog(logRequest)
+
+
         CleverTapAPI.getDefaultInstance(this)?.recordScreen("Wishlist")
 
         Log.e("wishlist", "inside wishlist activities onCreate function")
@@ -153,6 +168,17 @@ class WishlistActivity : WooDroidActivity<ProductViewModel>() {
                     stopShowingLoading()
                     Toast.makeText(this, response.data().message, Toast.LENGTH_SHORT).show()
 
+                    //send event info
+                    val analytics = AnalyticsAPI()
+                    val logRequest = LogRequest(
+                        type = "page visit",
+                        event = "delete item from wishlist",
+                        page_name = "/WishlistActivity",
+                        source = "android",
+                        user_id = AppUtils(this).user.id,
+                        product_id = wishlistItems[position].product.id
+                    )
+                    analytics.addLog(logRequest)
                    /* //remove that product from list and update the list
                     wishlistItems.removeAt(position)
                     adapter = WishlistAdapter(wishlistItems)

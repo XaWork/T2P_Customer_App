@@ -18,6 +18,8 @@ import me.taste2plate.app.customer.ui.WooDroidActivity
 import me.taste2plate.app.customer.ui.onboarding.OnBoardActivity
 import me.taste2plate.app.customer.utils.AppUtils
 import me.taste2plate.app.customer.viewmodels.CustomerViewModel
+import me.taste2plate.app.data.api.AnalyticsAPI
+import me.taste2plate.app.data.api.LogRequest
 import me.taste2plate.app.data.api.RegistrationData
 import me.taste2plate.app.models.Customer
 
@@ -40,6 +42,19 @@ class ProfileActivity : WooDroidActivity<CustomerViewModel>() {
         toolbar.setNavigationOnClickListener {
             finish()
         }
+
+        //send event info
+        val analytics = AnalyticsAPI()
+        val logRequest = LogRequest(
+            type = "page visit",
+            event = "profile",
+            event_data = "profile",
+            page_name = "/profile",
+            source = "android",
+            user_id = AppUtils(this).user.id,
+            product_id = ""
+        )
+        analytics.addLog(logRequest)
 
         title = getString(R.string.Profile)
 

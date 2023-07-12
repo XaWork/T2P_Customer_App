@@ -18,6 +18,8 @@ import me.taste2plate.app.customer.ui.state.ProgressDialogFragment
 import me.taste2plate.app.customer.utils.AppUtils
 import me.taste2plate.app.customer.utils.ItemOffsetDecoration
 import me.taste2plate.app.customer.viewmodels.ProductViewModel
+import me.taste2plate.app.data.api.AnalyticsAPI
+import me.taste2plate.app.data.api.LogRequest
 import me.taste2plate.app.models.Category
 import me.taste2plate.app.models.filters.ProductCategoryFilter
 
@@ -41,7 +43,19 @@ class SubCategoryActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_subcategory)
         setSupportActionBar(toolbar)
-        CleverTapAPI.getDefaultInstance(this)?.recordScreen("Sub Category")
+
+
+        //send event info
+        val analytics = AnalyticsAPI()
+        val logRequest = LogRequest(
+            type = "page visit",
+            event = "visit to sub category page",
+            page_name = "/Sub Category",
+            source = "android",
+            user_id = AppUtils(this).user.id,
+        )
+        analytics.addLog(logRequest)
+
         val customAppData = AppUtils(this).appData
         parentId = intent.getStringExtra("parent_id")!!
 

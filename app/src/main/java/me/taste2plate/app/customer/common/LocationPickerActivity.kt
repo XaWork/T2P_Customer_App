@@ -29,6 +29,9 @@ import com.gun0912.tedpermission.PermissionListener
 import com.gun0912.tedpermission.TedPermission
 import me.taste2plate.app.customer.R
 import me.taste2plate.app.customer.databinding.LocationPickerBinding
+import me.taste2plate.app.customer.utils.AppUtils
+import me.taste2plate.app.data.api.AnalyticsAPI
+import me.taste2plate.app.data.api.LogRequest
 import java.util.*
 
 
@@ -48,6 +51,20 @@ class LocationPickerActivity : AppCompatActivity(), OnMapReadyCallback, Location
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        //send event info
+        val analytics = AnalyticsAPI()
+        val logRequest = LogRequest(
+            type = "page visit",
+            event = "location picker",
+            event_data = "location picker",
+            page_name = "/Location Picker",
+            source = "android",
+            user_id = AppUtils(this).user.id,
+            product_id = ""
+        )
+        analytics.addLog(logRequest)
+
         CleverTapAPI.getDefaultInstance(this)?.recordScreen("Location Picker")
         binding = LocationPickerBinding.inflate(layoutInflater)
         setContentView(binding.root)

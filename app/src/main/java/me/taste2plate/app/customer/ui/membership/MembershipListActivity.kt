@@ -18,6 +18,8 @@ import me.taste2plate.app.customer.disableChangeAnimations
 import me.taste2plate.app.customer.items.PlanAdapterItem
 import me.taste2plate.app.customer.ui.WooDroidActivity
 import me.taste2plate.app.customer.utils.AppUtils
+import me.taste2plate.app.data.api.AnalyticsAPI
+import me.taste2plate.app.data.api.LogRequest
 import me.taste2plate.app.models.membership.Plan
 import org.json.JSONObject
 
@@ -31,6 +33,20 @@ class MembershipListActivity : WooDroidActivity<MembershipListViewModel>(), Paym
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         memberBinding = DataBindingUtil.setContentView(this, R.layout.activity_membership_list)
+
+
+        //send event info
+        val analytics = AnalyticsAPI()
+        val logRequest = LogRequest(
+            type = "page visit",
+            event = "Visit to membership plan page",
+            page_name = "/MembershipListActivity",
+            source = "android",
+            user_id = AppUtils(this).user.id,
+        )
+        analytics.addLog(logRequest)
+
+
         viewModel = getViewModel(MembershipListViewModel::class.java)
         setSupportActionBar(memberBinding.toolbarContainer.toolbar)
         title = getString(R.string.plans_title)
@@ -130,6 +146,19 @@ class MembershipListActivity : WooDroidActivity<MembershipListViewModel>(), Paym
                                 startActivity(Intent(this@MembershipListActivity, MyPlanActivity::class.java))
                             }
                             .show()
+
+
+                        //send event info
+                        val analytics = AnalyticsAPI()
+                        val logRequest = LogRequest(
+                            type = "page visit",
+                            event = "Membership plan buy successfully.",
+                            event_data = "Plan Id : ${selectedPlan!!.id}",
+                            page_name = "/MembershipListActivity",
+                            source = "android",
+                            user_id = AppUtils(this).user.id,
+                        )
+                        analytics.addLog(logRequest)
                     }
                     Status.ERROR, Status.EMPTY -> {
                         stopShowingLoading()

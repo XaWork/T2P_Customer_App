@@ -18,6 +18,8 @@ import me.taste2plate.app.customer.ui.WooDroidActivity
 import me.taste2plate.app.customer.ui.onboarding.OnBoardActivity
 import me.taste2plate.app.customer.utils.AppUtils
 import me.taste2plate.app.customer.viewmodels.CustomerViewModel
+import me.taste2plate.app.data.api.AnalyticsAPI
+import me.taste2plate.app.data.api.LogRequest
 import me.taste2plate.app.data.api.RegistrationData
 import me.taste2plate.app.models.Customer
 import java.util.regex.Matcher
@@ -40,6 +42,19 @@ class BasicCustomerDetailsActivity : WooDroidActivity<CustomerViewModel>() {
 
         viewModel = getViewModel(CustomerViewModel::class.java)
         title = "Basic Details"
+
+        //send event info
+        val analytics = AnalyticsAPI()
+        val logRequest = LogRequest(
+            type = "page visit",
+            event = "edit profile",
+            event_data = "edit profile",
+            page_name = "/EditProfile",
+            source = "android",
+            user_id = AppUtils(this).user.id,
+            product_id = ""
+        )
+        analytics.addLog(logRequest)
 
         customer()
 

@@ -27,6 +27,8 @@ import me.taste2plate.app.customer.ui.state.ProgressDialogFragment
 import me.taste2plate.app.customer.utils.AppUtils
 import me.taste2plate.app.customer.utils.MySMSBroadcastReceiver
 import me.taste2plate.app.customer.viewmodels.UserViewModel
+import me.taste2plate.app.data.api.AnalyticsAPI
+import me.taste2plate.app.data.api.LogRequest
 import me.taste2plate.app.models.filters.CustomerFilter
 import java.util.regex.Matcher
 import java.util.regex.Pattern
@@ -62,6 +64,20 @@ class SignInFragment : androidx.fragment.app.Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val analytics = AnalyticsAPI()
+        val appUtils = AppUtils(context)
+        val logRequest = LogRequest(
+            type = "login",
+            event = "Enter in loginScreen screen",
+            event_data = "login",
+            page_name = "/login",
+            source = "android",
+            user_id = appUtils.user.id,
+            product_id = ""
+        )
+        analytics.addLog(logRequest)
+
         viewModel = (activity as OnBoardActivity).getViewModel(UserViewModel::class.java)
         detailId = ""
         CleverTapAPI.getDefaultInstance(context)?.recordScreen("Sign in")
@@ -195,6 +211,20 @@ class SignInFragment : androidx.fragment.app.Fragment() {
                             (activity as OnBoardActivity).showError("Verified")
                             AppUtils(activity).saveUser(otpResponse.data!!)
                             sendUserInfoToCleverTap()
+
+                            //send event info
+                            val analytics = AnalyticsAPI()
+                            val appUtils = AppUtils(context)
+                            val logRequest = LogRequest(
+                                type = "login",
+                                event = "login successfully",
+                                event_data = "login",
+                                page_name = "/login",
+                                source = "android",
+                                user_id = appUtils.user.id,
+                                product_id = ""
+                            )
+                            analytics.addLog(logRequest)
 
                             // check which data is saved
                             Log.e("TAG", "validateOtp: ${otpResponse.data}")

@@ -18,6 +18,8 @@ import me.taste2plate.app.customer.common.Status
 import me.taste2plate.app.customer.ui.state.ProgressDialogFragment
 import me.taste2plate.app.customer.utils.AppUtils
 import me.taste2plate.app.customer.viewmodels.ProductViewModel
+import me.taste2plate.app.data.api.AnalyticsAPI
+import me.taste2plate.app.data.api.LogRequest
 import me.taste2plate.app.models.Category
 import me.taste2plate.app.models.filters.ProductCategoryFilter
 import java.util.*
@@ -41,6 +43,18 @@ class CategoryActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_subcategory)
         setSupportActionBar(toolbar)
+
+
+        //send event info
+        val analytics = AnalyticsAPI()
+        val logRequest = LogRequest(
+            type = "page visit",
+            event = "visit to category page",
+            page_name = "/Category",
+            source = "android",
+            user_id = AppUtils(this).user.id,
+        )
+        analytics.addLog(logRequest)
 
         val customAppData = AppUtils(this).appData
 

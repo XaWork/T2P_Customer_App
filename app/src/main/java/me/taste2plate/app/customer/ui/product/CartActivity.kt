@@ -27,6 +27,8 @@ import me.taste2plate.app.customer.ui.onboarding.OnBoardActivity
 import me.taste2plate.app.customer.updated_flow.CheckoutActivity
 import me.taste2plate.app.customer.utils.AppUtils
 import me.taste2plate.app.customer.viewmodels.CartViewModel
+import me.taste2plate.app.data.api.AnalyticsAPI
+import me.taste2plate.app.data.api.LogRequest
 import me.taste2plate.app.models.Customer
 import me.taste2plate.app.models.address.Address
 import me.taste2plate.app.models.cart.CartItem
@@ -50,6 +52,19 @@ class CartActivity : WooDroidActivity<CartViewModel>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_cart)
+
+        //send event info
+        val analytics = AnalyticsAPI()
+        val logRequest = LogRequest(
+            type = "page visit",
+            event = "Visit to cart page",
+            page_name = "/WishlistActivity",
+            source = "android",
+            user_id = AppUtils(this).user.id,
+        )
+        analytics.addLog(logRequest)
+
+
         CleverTapAPI.getDefaultInstance(this)?.recordScreen("Cart")
         address = AppUtils(this).defaultAddress
         setSupportActionBar(toolbar)
@@ -153,6 +168,20 @@ class CartActivity : WooDroidActivity<CartViewModel>() {
 
                 Status.SUCCESS -> {
                     stopShowingLoading()
+
+                    //send event info
+                    val analytics = AnalyticsAPI()
+                    val logRequest = LogRequest(
+                        type = "add to cart",
+                        event = "update item quantity.",
+                        event_data = "Quantity : $quantity",
+                        page_name = "/WishlistActivity",
+                        source = "android",
+                        user_id = AppUtils(this).user.id,
+                        product_id = productId
+                    )
+                    analytics.addLog(logRequest)
+
                     cart(AppUtils(this).user.id , address!!.city!!._id, address!!.pincode!!)
                 }
 
@@ -175,6 +204,18 @@ class CartActivity : WooDroidActivity<CartViewModel>() {
 
                 Status.SUCCESS -> {
                     stopShowingLoading()
+
+                    //send event info
+                    val analytics = AnalyticsAPI()
+                    val logRequest = LogRequest(
+                        type = "add to cart",
+                        event = "delete item from cart.",
+                        page_name = "/WishlistActivity",
+                        source = "android",
+                        user_id = AppUtils(this).user.id,
+                        product_id = productId
+                    )
+                    analytics.addLog(logRequest)
                     cart(AppUtils(this).user.id , address!!.city!!._id, address!!.pincode!!)
                 }
 

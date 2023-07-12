@@ -16,7 +16,10 @@ import me.rozkmin.directions.Directions
 import me.rozkmin.directions.DirectionsSdk
 import me.taste2plate.app.customer.R
 import me.taste2plate.app.customer.ui.WooDroidActivity
+import me.taste2plate.app.customer.utils.AppUtils
 import me.taste2plate.app.customer.viewmodels.CustomerViewModel
+import me.taste2plate.app.data.api.AnalyticsAPI
+import me.taste2plate.app.data.api.LogRequest
 import me.taste2plate.app.models.Driver
 import me.taste2plate.app.models.order.Order
 
@@ -36,6 +39,20 @@ class TrackLocationActivity : WooDroidActivity<CustomerViewModel>(), OnMapReadyC
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_track_location)
         viewModel = getViewModel(CustomerViewModel::class.java)
+
+
+        //send event info
+        val analytics = AnalyticsAPI()
+        val logRequest = LogRequest(
+            type = "track order",
+            event = "visit to track order page",
+            event_data = "track order",
+            page_name = "/track order",
+            source = "android",
+            user_id = AppUtils(this).user.id,
+            product_id = ""
+        )
+        analytics.addLog(logRequest)
 
         order = intent.getSerializableExtra("order")!! as Order
 

@@ -26,6 +26,8 @@ import me.taste2plate.app.customer.ui.location.TrackLocationActivity
 import me.taste2plate.app.customer.utils.AppUtils
 import me.taste2plate.app.customer.utils.Utils
 import me.taste2plate.app.customer.viewmodels.OrderViewModel
+import me.taste2plate.app.data.api.AnalyticsAPI
+import me.taste2plate.app.data.api.LogRequest
 import me.taste2plate.app.models.address.toSummary
 import me.taste2plate.app.models.order.*
 import kotlinx.android.synthetic.main.content_order.tvPackagingChargeCost as tvPackagingChargeCost1
@@ -67,6 +69,20 @@ class OrderActivity : WooDroidActivity<OrderViewModel>() {
         cartItems = ArrayList()
         order = intent.getSerializableExtra("order") as Order
         serverTime = intent.getStringExtra("time")!!
+
+        //send event info
+        val productIdList = order!!.products.map { it.id }
+        val analytics = AnalyticsAPI()
+        val logRequest = LogRequest(
+            type = "page visit",
+            event = "order details",
+            event_data = order!!._id,
+            page_name = "/order details",
+            source = "android",
+            user_id = AppUtils(this).user.id,
+            product_id = productIdList.joinToString(",")
+        )
+        analytics.addLog(logRequest)
 
         val serverTimeDate = serverTime.toDateObject("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
         val createdAt = order!!.created_date.toDateObject("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
