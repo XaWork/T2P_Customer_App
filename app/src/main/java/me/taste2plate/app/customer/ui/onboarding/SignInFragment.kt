@@ -1,38 +1,30 @@
 package me.taste2plate.app.customer.ui.onboarding
 
 import android.content.Intent
-import android.content.IntentFilter
 import android.os.Bundle
 import android.text.TextUtils
-import android.util.Base64
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.lifecycle.Observer
 import com.clevertap.android.sdk.CleverTapAPI
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.firebase.installations.FirebaseInstallations
 import com.google.firebase.messaging.FirebaseMessaging
-import kotlinx.android.synthetic.main.fragment_sign_in.*
 import kotlinx.android.synthetic.main.fragment_sign_in.bNext
-import me.taste2plate.app.customer.BuildConfig
+import kotlinx.android.synthetic.main.fragment_sign_in.etOtp
+import kotlinx.android.synthetic.main.fragment_sign_in.etPhoneNumber
 import me.taste2plate.app.customer.R
 import me.taste2plate.app.customer.common.Status
 import me.taste2plate.app.customer.service.FirebaseInstanceService
 import me.taste2plate.app.customer.ui.home.HomeActivity
-import me.taste2plate.app.customer.ui.landing.DashboardActivity
 import me.taste2plate.app.customer.ui.state.ProgressDialogFragment
 import me.taste2plate.app.customer.utils.AppUtils
-import me.taste2plate.app.customer.utils.MySMSBroadcastReceiver
 import me.taste2plate.app.customer.viewmodels.UserViewModel
 import me.taste2plate.app.data.api.AnalyticsAPI
 import me.taste2plate.app.data.api.LogRequest
-import me.taste2plate.app.models.filters.CustomerFilter
 import java.util.regex.Matcher
 import java.util.regex.Pattern
-import kotlin.math.min
 import kotlin.system.exitProcess
 
 
@@ -73,7 +65,7 @@ class SignInFragment : androidx.fragment.app.Fragment() {
             event_data = "login",
             page_name = "/login",
             source = "android",
-            user_id = appUtils.user.id,
+            user_id = "",
             product_id = ""
         )
         analytics.addLog(logRequest)
@@ -221,7 +213,7 @@ class SignInFragment : androidx.fragment.app.Fragment() {
                                 event_data = "login",
                                 page_name = "/login",
                                 source = "android",
-                                user_id = appUtils.user.id,
+                                user_id = "",
                                 product_id = ""
                             )
                             analytics.addLog(logRequest)

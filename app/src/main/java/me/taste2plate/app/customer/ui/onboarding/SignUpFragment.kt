@@ -81,7 +81,7 @@ class SignUpFragment : Fragment() {
             event_data = "signup",
             page_name = "/signup",
             source = "android",
-            user_id = appUtils.user.id,
+            user_id = "",
             product_id = ""
         )
         analytics.addLog(logRequest)
@@ -236,7 +236,7 @@ class SignUpFragment : Fragment() {
                                     event_data = "signup",
                                     page_name = "/signup",
                                     source = "android",
-                                    user_id = AppUtils(activity).user.id,
+                                    user_id = "",
                                     product_id = ""
                                 )
                                 analytics.addLog(logRequest)

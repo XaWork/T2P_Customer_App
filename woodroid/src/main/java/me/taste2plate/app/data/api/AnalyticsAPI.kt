@@ -27,7 +27,7 @@ class AnalyticsAPI {
             .build()
 
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://analytics-api-weld.vercel.app/admin/")
+            .baseUrl("https://api.trap2win.com/admin/")
             .client(httpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
