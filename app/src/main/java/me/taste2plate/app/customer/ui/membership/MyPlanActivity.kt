@@ -31,6 +31,7 @@ class MyPlanActivity :  WooDroidActivity<MyPlanViewModel>(){
             event = "Visit to my plan page",
             page_name = "/MyPlanActivity",
             source = "android",
+            geo_ip = AppUtils(this).ipAddress,
             user_id = AppUtils(this).user.id,
         )
         analytics.addLog(logRequest)

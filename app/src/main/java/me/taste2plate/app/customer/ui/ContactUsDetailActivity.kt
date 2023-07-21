@@ -37,6 +37,7 @@ class ContactUsDetailActivity : AppCompatActivity() {
             event = "Visit to contact us page",
             page_name = "/ContactusDetailActivity",
             source = "android",
+            geo_ip = AppUtils(this).ipAddress,
             user_id = AppUtils(this).user.id,
         )
         analytics.addLog(logRequest)

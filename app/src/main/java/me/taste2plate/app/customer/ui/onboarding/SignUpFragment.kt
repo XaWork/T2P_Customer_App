@@ -82,6 +82,7 @@ class SignUpFragment : Fragment() {
             page_name = "/signup",
             source = "android",
             user_id = "",
+            geo_ip = AppUtils(context).ipAddress,
             product_id = ""
         )
         analytics.addLog(logRequest)
@@ -237,6 +238,7 @@ class SignUpFragment : Fragment() {
                                     page_name = "/signup",
                                     source = "android",
                                     user_id = "",
+                                    geo_ip = AppUtils(context).ipAddress,
                                     product_id = ""
                                 )
                                 analytics.addLog(logRequest)

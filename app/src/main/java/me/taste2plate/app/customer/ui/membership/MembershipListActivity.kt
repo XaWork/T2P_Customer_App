@@ -42,6 +42,7 @@ class MembershipListActivity : WooDroidActivity<MembershipListViewModel>(), Paym
             event = "Visit to membership plan page",
             page_name = "/MembershipListActivity",
             source = "android",
+            geo_ip = AppUtils(this).ipAddress,
             user_id = AppUtils(this).user.id,
         )
         analytics.addLog(logRequest)
@@ -156,6 +157,7 @@ class MembershipListActivity : WooDroidActivity<MembershipListViewModel>(), Paym
                             event_data = "Plan Id : ${selectedPlan!!.id}",
                             page_name = "/MembershipListActivity",
                             source = "android",
+                            geo_ip = AppUtils(this).ipAddress,
                             user_id = AppUtils(this).user.id,
                         )
                         analytics.addLog(logRequest)

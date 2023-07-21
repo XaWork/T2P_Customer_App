@@ -65,6 +65,7 @@ class SignInFragment : androidx.fragment.app.Fragment() {
             event_data = "login",
             page_name = "/login",
             source = "android",
+            geo_ip = AppUtils(context).ipAddress,
             user_id = "",
             product_id = ""
         )
@@ -206,7 +207,6 @@ class SignInFragment : androidx.fragment.app.Fragment() {
 
                             //send event info
                             val analytics = AnalyticsAPI()
-                            val appUtils = AppUtils(context)
                             val logRequest = LogRequest(
                                 type = "login",
                                 event = "login successfully",
@@ -214,6 +214,7 @@ class SignInFragment : androidx.fragment.app.Fragment() {
                                 page_name = "/login",
                                 source = "android",
                                 user_id = "",
+                                geo_ip = AppUtils(context).ipAddress,
                                 product_id = ""
                             )
                             analytics.addLog(logRequest)

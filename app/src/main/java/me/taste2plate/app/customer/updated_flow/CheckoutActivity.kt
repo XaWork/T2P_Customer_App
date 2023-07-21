@@ -98,6 +98,7 @@ class CheckoutActivity : WooDroidActivity<CheckoutViewModel>(), SaveAddressListe
             event_data = "Item in cart while checkout : ${cartItems.size}",
             page_name = "/CheckoutActivity",
             source = "android",
+            geo_ip = AppUtils(this).ipAddress,
             user_id = AppUtils(this).user.id,
         )
         analytics.addLog(logRequest)

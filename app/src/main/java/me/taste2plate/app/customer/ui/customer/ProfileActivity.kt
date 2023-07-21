@@ -52,6 +52,7 @@ class ProfileActivity : WooDroidActivity<CustomerViewModel>() {
             page_name = "/profile",
             source = "android",
             user_id = AppUtils(this).user.id,
+            geo_ip = AppUtils(this).ipAddress,
             product_id = ""
         )
         analytics.addLog(logRequest)

@@ -61,6 +61,7 @@ class LocationPickerActivity : AppCompatActivity(), OnMapReadyCallback, Location
             page_name = "/Location Picker",
             source = "android",
             user_id = AppUtils(this).user.id,
+            geo_ip = AppUtils(this).ipAddress,
             product_id = ""
         )
         analytics.addLog(logRequest)

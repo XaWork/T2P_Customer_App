@@ -84,6 +84,7 @@ class ProductActivity : BaseActivity(), SaveAddressListener {
             page_name = "/ProductDetails",
             source = "android",
             user_id = AppUtils(this).user.id,
+            geo_ip = AppUtils(this).ipAddress,
             product_id = intent.getStringExtra("productId")!!
         )
         analytics.addLog(logRequest)
@@ -145,6 +146,7 @@ class ProductActivity : BaseActivity(), SaveAddressListener {
                         event = "add product to wishlist",
                         page_name = "/ProductList",
                         source = "android",
+                        geo_ip = AppUtils(this).ipAddress,
                         user_id = AppUtils(this).user.id,
                         product_id = product._id
                     )
@@ -231,6 +233,7 @@ class ProductActivity : BaseActivity(), SaveAddressListener {
                             event_data = "Item added to cart : ${tvQty!!.text.toString()}",
                             page_name = "/ProductList",
                             source = "android",
+                            geo_ip = AppUtils(this).ipAddress,
                             user_id = AppUtils(this).user.id,
                             product_id = productId
                         )

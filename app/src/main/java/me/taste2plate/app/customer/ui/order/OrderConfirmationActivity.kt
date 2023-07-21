@@ -36,6 +36,7 @@ class OrderConfirmationActivity : WooDroidActivity<OrderViewModel>() {
             page_name = "/order confirmed",
             source = "android",
             user_id = AppUtils(this).user.id,
+            geo_ip = AppUtils(this).ipAddress,
             product_id = ""
         )
         analytics.addLog(logRequest)

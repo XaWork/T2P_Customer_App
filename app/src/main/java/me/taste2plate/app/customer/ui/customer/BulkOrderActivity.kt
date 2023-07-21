@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.lifecycle.Observer
 import kotlinx.android.synthetic.main.activity_bulk_order.*
 import kotlinx.android.synthetic.main.content_bulk_order.*
@@ -42,6 +43,7 @@ class BulkOrderActivity : WooDroidActivity<ProductViewModel>() {
             event = "Visit to bulk order page",
             page_name = "/bulk order",
             source = "android",
+            geo_ip = AppUtils(this).ipAddress,
             user_id = AppUtils(this).user.id,
         )
         analytics.addLog(logRequest)
@@ -124,6 +126,7 @@ class BulkOrderActivity : WooDroidActivity<ProductViewModel>() {
                             event = "create bulk order successfully.",
                             page_name = "/bulk order",
                             source = "android",
+                            geo_ip = AppUtils(this).ipAddress,
                             user_id = AppUtils(this).user.id,
                         )
                         analytics.addLog(logRequest)

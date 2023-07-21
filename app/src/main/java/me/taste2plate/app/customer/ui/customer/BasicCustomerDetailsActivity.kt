@@ -51,6 +51,7 @@ class BasicCustomerDetailsActivity : WooDroidActivity<CustomerViewModel>() {
             event_data = "edit profile",
             page_name = "/EditProfile",
             source = "android",
+            geo_ip = AppUtils(this).ipAddress,
             user_id = AppUtils(this).user.id,
             product_id = ""
         )

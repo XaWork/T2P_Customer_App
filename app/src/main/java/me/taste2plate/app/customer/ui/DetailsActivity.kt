@@ -29,6 +29,7 @@ class DetailsActivity:BaseActivity(){
             event = "visit to ${intent.getStringExtra("name")} details page",
             page_name = "/CityBrand",
             source = "android",
+            geo_ip = AppUtils(this).ipAddress,
             user_id = AppUtils(this).user.id,
         )
         analytics.addLog(logRequest)

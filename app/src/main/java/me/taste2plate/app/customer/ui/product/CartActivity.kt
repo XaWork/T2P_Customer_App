@@ -60,6 +60,7 @@ class CartActivity : WooDroidActivity<CartViewModel>() {
             event = "Visit to cart page",
             page_name = "/WishlistActivity",
             source = "android",
+            geo_ip = AppUtils(this).ipAddress,
             user_id = AppUtils(this).user.id,
         )
         analytics.addLog(logRequest)
@@ -177,6 +178,7 @@ class CartActivity : WooDroidActivity<CartViewModel>() {
                         event_data = "Quantity : $quantity",
                         page_name = "/WishlistActivity",
                         source = "android",
+                        geo_ip = AppUtils(this).ipAddress,
                         user_id = AppUtils(this).user.id,
                         product_id = productId
                     )
@@ -212,6 +214,7 @@ class CartActivity : WooDroidActivity<CartViewModel>() {
                         event = "delete item from cart.",
                         page_name = "/WishlistActivity",
                         source = "android",
+                        geo_ip = AppUtils(this).ipAddress,
                         user_id = AppUtils(this).user.id,
                         product_id = productId
                     )

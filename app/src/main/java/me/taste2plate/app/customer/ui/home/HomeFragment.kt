@@ -91,6 +91,7 @@ class HomeFragment : Fragment(), SaveAddressListener {
             event = "visit to home page",
             page_name = "/home",
             source = "android",
+            geo_ip = AppUtils(context).ipAddress,
             user_id = appUtils.user.id,
         )
         analytics.addLog(logRequest)

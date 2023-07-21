@@ -80,6 +80,7 @@ class OrderActivity : WooDroidActivity<OrderViewModel>() {
             page_name = "/order details",
             source = "android",
             user_id = AppUtils(this).user.id,
+            geo_ip = AppUtils(this).ipAddress,
             product_id = productIdList.joinToString(",")
         )
         analytics.addLog(logRequest)

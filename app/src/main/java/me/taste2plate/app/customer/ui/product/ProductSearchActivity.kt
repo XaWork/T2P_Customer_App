@@ -61,6 +61,7 @@ class ProductSearchActivity : BaseActivity() {
             event = "visit to product search page",
             page_name = "/ProductSearch",
             source = "android",
+            geo_ip = AppUtils(this).ipAddress,
             user_id = AppUtils(this).user.id,
         )
         analytics.addLog(logRequest)

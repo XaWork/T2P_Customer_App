@@ -173,6 +173,20 @@ public class AppUtils {
         editor.apply();
     }
 
+    public void saveIpAddress(String ip) {
+        SharedPreferences.Editor editor = context.getSharedPreferences(MY_PREFS_NAME, context.MODE_PRIVATE).edit();
+        editor.putString("ip", ip);
+        Log.e("apputils", "Ip Address is saved successfully" +ip);
+        editor.apply();
+        getIpAddress();
+    }
+
+    public String getIpAddress() {
+        SharedPreferences prefs = context.getSharedPreferences(MY_PREFS_NAME, context.MODE_PRIVATE);
+        Log.e("apputils", "Ip Address is " +prefs.getString("ip", ""));
+        return prefs.getString("ip", "");
+    }
+
     public void saveToken(String token) {
         SharedPreferences.Editor editor = context.getSharedPreferences(MY_PREFS_NAME, context.MODE_PRIVATE).edit();
         editor.putString("token", token);

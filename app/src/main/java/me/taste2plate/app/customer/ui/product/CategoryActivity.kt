@@ -52,6 +52,7 @@ class CategoryActivity : BaseActivity() {
             event = "visit to category page",
             page_name = "/Category",
             source = "android",
+            geo_ip = AppUtils(this).ipAddress,
             user_id = AppUtils(this).user.id,
         )
         analytics.addLog(logRequest)

@@ -41,6 +41,7 @@ class WalletActivity : WooDroidActivity<WalletViewModel>() {
             event = "Visit to wallet page",
             page_name = "/WalletActivity",
             source = "android",
+            geo_ip = AppUtils(this).ipAddress,
             user_id = AppUtils(this).user.id,
         )
         analytics.addLog(logRequest)

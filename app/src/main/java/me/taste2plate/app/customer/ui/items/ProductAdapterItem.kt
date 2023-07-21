@@ -118,6 +118,7 @@ class ProductAdapterItem(
                                     event = "add product to wishlist",
                                     page_name = "/ProductList",
                                     source = "android",
+                                    geo_ip = AppUtils(context).ipAddress,
                                     user_id = AppUtils(context).user.id,
                                     product_id = product._id
                                 )

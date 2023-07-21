@@ -51,6 +51,7 @@ class CityBrandActivity : BaseActivity() {
             event = "visit to city list page",
             page_name = "/CityBrand",
             source = "android",
+            geo_ip = AppUtils(this).ipAddress,
             user_id = AppUtils(this).user.id,
         )
         analytics.addLog(logRequest)

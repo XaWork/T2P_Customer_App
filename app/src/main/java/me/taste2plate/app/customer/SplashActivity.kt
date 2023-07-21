@@ -28,7 +28,14 @@ import me.taste2plate.app.customer.ui.home.HomeActivity
 import me.taste2plate.app.customer.ui.onboarding.OnBoardActivity
 import me.taste2plate.app.customer.utils.AppUtils
 import me.taste2plate.app.customer.viewmodels.UserViewModel
+import me.taste2plate.app.data.api.ApiService
+import me.taste2plate.app.data.api.IpAddressResponse
 import me.taste2plate.app.data.api.RegistrationData
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Call
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import java.io.IOException
 import kotlin.math.min
 import kotlin.system.exitProcess
@@ -48,7 +55,8 @@ class SplashActivity : WooDroidActivity<UserViewModel>() {
         super.onCreate(savedInstanceState)
 
         //initialises the CleverTap SDK.
-        var cleverTapDefaultInstance: CleverTapAPI? = CleverTapAPI.getDefaultInstance(applicationContext)
+        var cleverTapDefaultInstance: CleverTapAPI? =
+            CleverTapAPI.getDefaultInstance(applicationContext)
 
         setContentView(R.layout.activity_main)
         viewModel = getViewModel(UserViewModel::class.java)
@@ -221,13 +229,59 @@ class SplashActivity : WooDroidActivity<UserViewModel>() {
     }
 
     private fun apiCalls() {
-        getAppData()
 
         startTracking()
+
+        getIpAddress()
 
         startTrackingWithTrackier()
 
         pushNotification()
+    }
+
+    private fun getIpAddress() {
+        var context = this
+        val loggingInterceptor = HttpLoggingInterceptor().apply {
+            level = HttpLoggingInterceptor.Level.BODY
+        }
+
+        val httpClient = OkHttpClient.Builder()
+            .addInterceptor(loggingInterceptor)
+            .build()
+
+
+        val retrofit = Retrofit.Builder()
+            .baseUrl("https://api.ipify.org")
+            .client(httpClient)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+        var ip = ""
+
+
+        val apiService = retrofit.create(ApiService::class.java)
+
+        val call = apiService.getIpAddress()
+        call.enqueue(object : retrofit2.Callback<IpAddressResponse> {
+            override fun onResponse(
+                call: Call<IpAddressResponse>,
+                response: retrofit2.Response<IpAddressResponse>
+            ) {
+                if (response.isSuccessful) {
+                    ip = response.body()?.ip ?: ""
+                    Log.e("IP", "Success : $response")
+                    AppUtils(context).saveIpAddress(ip)
+                    getAppData()
+                } else {
+                    Log.e("Analytics", "failed : $response")
+                }
+            }
+
+            override fun onFailure(call: Call<IpAddressResponse>, t: Throwable) {
+                t.printStackTrace()
+            }
+        })
+
     }
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
@@ -337,7 +391,8 @@ class SplashActivity : WooDroidActivity<UserViewModel>() {
                         ) == PackageManager.PERMISSION_GRANTED
                     ) {
                         apiCalls()
-                        Toast.makeText(this, "Notification Permission Granted", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, "Notification Permission Granted", Toast.LENGTH_SHORT)
+                            .show()
                     }
                 } else {
                     if (!notificationPermissionDoNotAllowed) {
@@ -368,6 +423,7 @@ class SplashActivity : WooDroidActivity<UserViewModel>() {
                     }
                 }
             }
+
             1 -> {
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED
                 ) {
@@ -383,7 +439,8 @@ class SplashActivity : WooDroidActivity<UserViewModel>() {
                     ) {
                         checkNotificationPermission()
 
-                        Toast.makeText(this, "Location Permission Granted", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, "Location Permission Granted", Toast.LENGTH_SHORT)
+                            .show()
                     }
                 } else {
                     if (!permissionDoNotAllowed) {

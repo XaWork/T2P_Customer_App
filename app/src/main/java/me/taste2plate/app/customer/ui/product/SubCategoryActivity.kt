@@ -52,6 +52,7 @@ class SubCategoryActivity : BaseActivity() {
             event = "visit to sub category page",
             page_name = "/Sub Category",
             source = "android",
+            geo_ip = AppUtils(this).ipAddress,
             user_id = AppUtils(this).user.id,
         )
         analytics.addLog(logRequest)

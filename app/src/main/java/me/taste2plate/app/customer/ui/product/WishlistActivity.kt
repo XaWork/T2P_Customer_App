@@ -68,6 +68,7 @@ class WishlistActivity : WooDroidActivity<ProductViewModel>() {
             event = "Visit to wishlist page",
             page_name = "/WishlistActivity",
             source = "android",
+            geo_ip = AppUtils(this).ipAddress,
             user_id = AppUtils(this).user.id,
         )
         analytics.addLog(logRequest)
@@ -176,6 +177,7 @@ class WishlistActivity : WooDroidActivity<ProductViewModel>() {
                         page_name = "/WishlistActivity",
                         source = "android",
                         user_id = AppUtils(this).user.id,
+                        geo_ip = AppUtils(this).ipAddress,
                         product_id = wishlistItems[position].product.id
                     )
                     analytics.addLog(logRequest)
