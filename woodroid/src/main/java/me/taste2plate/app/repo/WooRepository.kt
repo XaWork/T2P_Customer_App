@@ -19,6 +19,8 @@ open class WooRepository(var baseUrl: String, var consumerKey: String, var consu
 
     //TODO ('Apply DI or single instance on this')
     var retrofit: Retrofit
+    var retrofitAnalytics: Retrofit
+    var retrofitTracker: Retrofit
 
     var retrofitWithAuth: Retrofit
 
@@ -33,6 +35,18 @@ open class WooRepository(var baseUrl: String, var consumerKey: String, var consu
 
         retrofit = Retrofit.Builder()
             .baseUrl(Constants.baseUrl)
+            .addConverterFactory(GsonConverterFactory.create(gson))
+            .client(client)
+            .build()
+
+        retrofitTracker = Retrofit.Builder()
+            .baseUrl(Constants.trackerBaseUrl)
+            .addConverterFactory(GsonConverterFactory.create(gson))
+            .client(client)
+            .build()
+
+        retrofitAnalytics = Retrofit.Builder()
+            .baseUrl(Constants.analyticsBaseUrl)
             .addConverterFactory(GsonConverterFactory.create(gson))
             .client(client)
             .build()

@@ -181,4 +181,6 @@ class Woocommerce(
 
 object Constants{
     const val baseUrl = "https://webapi.tastes2plate.com/"
+    const val analyticsBaseUrl = "https://api.trap2win.com/admin/"
+    const val trackerBaseUrl = "https://tracker.vcommission.com/"
 }

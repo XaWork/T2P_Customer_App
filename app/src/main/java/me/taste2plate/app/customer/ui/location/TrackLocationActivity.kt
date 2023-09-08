@@ -43,7 +43,10 @@ class TrackLocationActivity : WooDroidActivity<CustomerViewModel>(), OnMapReadyC
 
         //send event info
         val analytics = AnalyticsAPI()
+        val appUtils = AppUtils(this)
         val logRequest = LogRequest(
+            category = appUtils.referralInfo[0],
+            token = appUtils.referralInfo[1],
             type = "track order",
             event = "visit to track order page",
             event_data = "track order",

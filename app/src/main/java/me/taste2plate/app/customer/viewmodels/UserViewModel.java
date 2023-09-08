@@ -16,6 +16,7 @@ import me.taste2plate.app.customer.common.CompletionGenericLiveData;
 import me.taste2plate.app.customer.common.CompletionLiveData;
 import me.taste2plate.app.customer.common.DocumentLiveData;
 import me.taste2plate.app.customer.common.WooLiveData;
+import me.taste2plate.app.data.api.LogRequest;
 import me.taste2plate.app.data.api.RegistrationResponse;
 import me.taste2plate.app.customer.models.User;
 import me.taste2plate.app.customer.repo.CustomRepository;
@@ -24,7 +25,9 @@ import me.taste2plate.app.models.AppDataResponse;
 import me.taste2plate.app.models.CommonResponse;
 import me.taste2plate.app.models.CustomAppData;
 import me.taste2plate.app.models.Customer;
+import me.taste2plate.app.models.LogCreatedResponse;
 import me.taste2plate.app.models.LoginUser;
+import me.taste2plate.app.models.TrackerResponse;
 import me.taste2plate.app.models.UpdateMobileResponse;
 import me.taste2plate.app.models.ValidateOtpResponse;
 import me.taste2plate.app.models.FetchOtpResponse;
@@ -57,6 +60,7 @@ public final class UserViewModel extends ViewModel {
     public CompletionGenericLiveData<AuthResult> anonymousSignIn() {
         return firebaseUserRepository.anonymousSignIn();
     }
+
     public DocumentLiveData<User> user(String user_id) {
         return firebaseUserRepository.user(user_id);
     }
@@ -78,6 +82,30 @@ public final class UserViewModel extends ViewModel {
         return customerRepository.verifyOtp(number, otp, deviceToken);
     }
 
+
+    public WooLiveData<LogCreatedResponse> addLog(LogRequest request) {
+        return customRepository.addLog(request);
+    }
+
+    public WooLiveData<TrackerResponse> install(
+            String tracker_record,
+            String clickId,
+            String security_token,
+            String gaid,
+            String sub4) {
+        return customRepository.install(tracker_record, clickId, security_token, gaid, sub4);
+    }
+
+    public WooLiveData<TrackerResponse> purchase(
+            String tracker_record,
+            String clickId,
+            String security_token,
+            String gaid,
+            String sub4,
+            String goal_name,
+            String sale_amount) {
+        return customRepository.purchased(tracker_record, clickId, security_token, gaid, sub4, goal_name, sale_amount);
+    }
 
     public WooLiveData<AppDataResponse> fetchAppData() {
         return customRepository.fetchAppData();

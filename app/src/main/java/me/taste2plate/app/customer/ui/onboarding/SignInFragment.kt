@@ -14,6 +14,7 @@ import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.android.synthetic.main.fragment_sign_in.bNext
 import kotlinx.android.synthetic.main.fragment_sign_in.etOtp
 import kotlinx.android.synthetic.main.fragment_sign_in.etPhoneNumber
+import kotlinx.android.synthetic.main.single_category_item.categoryImg
 import me.taste2plate.app.customer.R
 import me.taste2plate.app.customer.common.Status
 import me.taste2plate.app.customer.service.FirebaseInstanceService
@@ -59,7 +60,12 @@ class SignInFragment : androidx.fragment.app.Fragment() {
 
         val analytics = AnalyticsAPI()
         val appUtils = AppUtils(context)
+
+        Log.e("token", appUtils.token)
+
         val logRequest = LogRequest(
+            category = appUtils.referralInfo[0],
+            token = appUtils.referralInfo[1],
             type = "login",
             event = "Enter in loginScreen screen",
             event_data = "login",
@@ -84,21 +90,6 @@ class SignInFragment : androidx.fragment.app.Fragment() {
             }
         }
         getAppData()
-
-        /*FirebaseInstallations.getInstance().getToken(true).addOnCompleteListener {
-            AppUtils(context).saveToken(it.result.token)
-        }*/
-
-        try {
-            FirebaseMessaging.getInstance().token.addOnCompleteListener {
-                if (it.isComplete) {
-                    AppUtils(context).saveToken(it.result)
-                }
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-
     }
 
 
@@ -137,8 +128,7 @@ class SignInFragment : androidx.fragment.app.Fragment() {
     private fun login() {
         val mobile = etPhoneNumber.text.toString()
         if (mobile.isNotEmpty()) {
-
-            viewModel.fetchOtp(mobile, FirebaseInstanceService().getToken(requireContext()))
+            viewModel.fetchOtp(mobile, AppUtils(context).token)
                 .observe(viewLifecycleOwner) { response ->
                     when (response!!.status()) {
                         Status.LOADING -> {
@@ -161,11 +151,13 @@ class SignInFragment : androidx.fragment.app.Fragment() {
                                 (activity as OnBoardActivity).showError("Mobile number is not registered, Please check the number entered or Sign Up")
                             }
                         }
+
                         Status.ERROR -> {
                             (activity as OnBoardActivity).stopShowingLoading()
                             (activity as OnBoardActivity).showError(response.error().message.toString())
 
                         }
+
                         Status.EMPTY -> {
                             (activity as OnBoardActivity).showError("Please check email/id password")
                             (activity as OnBoardActivity).stopShowingLoading()
@@ -207,7 +199,10 @@ class SignInFragment : androidx.fragment.app.Fragment() {
 
                             //send event info
                             val analytics = AnalyticsAPI()
+                            val appUtils = AppUtils(context)
                             val logRequest = LogRequest(
+                                category = appUtils.referralInfo[0],
+                                token = appUtils.referralInfo[1],
                                 type = "login",
                                 event = "login successfully",
                                 event_data = "login",

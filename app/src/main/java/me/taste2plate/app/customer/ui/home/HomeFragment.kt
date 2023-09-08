@@ -87,6 +87,8 @@ class HomeFragment : Fragment(), SaveAddressListener {
         val analytics = AnalyticsAPI()
         val appUtils = AppUtils(context)
         val logRequest = LogRequest(
+            category = appUtils.referralInfo[0],
+            token = appUtils.referralInfo[1],
             type = "page visit",
             event = "visit to home page",
             page_name = "/home",

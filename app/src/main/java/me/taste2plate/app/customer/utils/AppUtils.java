@@ -24,9 +24,11 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 import me.taste2plate.app.customer.R;
 import me.taste2plate.app.customer.ui.onboarding.OnBoardActivity;
@@ -56,7 +58,7 @@ public class AppUtils {
                 .setTitle(context.getString(R.string.app_name))
                 .setMessage(R.string.account_disable_msg)
                 .setCancelable(false)
-                .setPositiveButton(context.getString(R.string.alert_ok), (dialog, which) -> context.startActivity((new Intent(context,OnBoardActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                .setPositiveButton(context.getString(R.string.alert_ok), (dialog, which) -> context.startActivity((new Intent(context, OnBoardActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
                         .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)))).create();
 
         alert.show();
@@ -65,6 +67,7 @@ public class AppUtils {
         buttonbackground.setTextColor(Color.BLACK);
 
     }
+
     public static void showToast(Context context, @StringRes int text, boolean isLong) {
         showToast(context, context.getString(text), isLong);
     }
@@ -72,7 +75,6 @@ public class AppUtils {
     public static void showToast(Context context, String text, boolean isLong) {
         Toast.makeText(context, text, isLong ? Toast.LENGTH_LONG : Toast.LENGTH_SHORT).show();
     }
-
 
 
     public void saveNewUser(Customer customer) {
@@ -84,7 +86,7 @@ public class AppUtils {
     public void saveUser(RegistrationData registrationData) {
         SharedPreferences.Editor editor = context.getSharedPreferences(MY_PREFS_NAME, context.MODE_PRIVATE).edit();
         editor.putString("user_data", new Gson().toJson(registrationData, RegistrationData.class));
-        Log.e("save user", "saveUser: "+registrationData);
+        Log.e("save user", "saveUser: " + registrationData);
         editor.apply();
     }
 
@@ -160,7 +162,6 @@ public class AppUtils {
     }
 
     public void removeCity(String cityId) {
-
         SharedPreferences.Editor editor = context.getSharedPreferences(MY_PREFS_NAME, context.MODE_PRIVATE).edit();
         editor.putString("currentCity", "");
         editor.apply();
@@ -173,19 +174,66 @@ public class AppUtils {
         editor.apply();
     }
 
+    public void setInstallFromPlayStore(Boolean isInstall) {
+        SharedPreferences.Editor editor = context.getSharedPreferences(MY_PREFS_NAME, context.MODE_PRIVATE).edit();
+        editor.putBoolean("is_install_from_playstore", isInstall);
+        Log.e("apputils", "Ip Address is saved successfully" + isInstall);
+        editor.apply();
+        isInstallFromPlayStore();
+    }
+
+    public Boolean isInstallFromPlayStore() {
+        SharedPreferences prefs = context.getSharedPreferences(MY_PREFS_NAME, context.MODE_PRIVATE);
+        Boolean isInstall = prefs.getBoolean("is_install_from_playstore", false);
+        Log.e("apputils", "Is intall from play store" + isInstall);
+        return isInstall;
+    }
+
     public void saveIpAddress(String ip) {
         SharedPreferences.Editor editor = context.getSharedPreferences(MY_PREFS_NAME, context.MODE_PRIVATE).edit();
         editor.putString("ip", ip);
-        Log.e("apputils", "Ip Address is saved successfully" +ip);
+        Log.e("apputils", "Ip Address is saved successfully" + ip);
         editor.apply();
         getIpAddress();
     }
 
     public String getIpAddress() {
         SharedPreferences prefs = context.getSharedPreferences(MY_PREFS_NAME, context.MODE_PRIVATE);
-        Log.e("apputils", "Ip Address is " +prefs.getString("ip", ""));
+        Log.e("apputils", "Ip Address is " + prefs.getString("ip", ""));
         return prefs.getString("ip", "");
     }
+    public void saveAffiliate(String ip) {
+        SharedPreferences.Editor editor = context.getSharedPreferences(MY_PREFS_NAME, context.MODE_PRIVATE).edit();
+        editor.putString("aff", ip);
+        Log.e("apputils", "Ip Address is saved successfully" + ip);
+        editor.apply();
+        getAffiliate();
+    }
+
+    public String getAffiliate() {
+        SharedPreferences prefs = context.getSharedPreferences(MY_PREFS_NAME, context.MODE_PRIVATE);
+        return prefs.getString("aff", "");
+    }
+
+    public void saveReferralInfo(String id, String token) {
+        SharedPreferences.Editor editor = context.getSharedPreferences(MY_PREFS_NAME, context.MODE_PRIVATE).edit();
+        editor.putString("referral_id", id);
+        editor.putString("referral_token", token);
+        editor.apply();
+        getReferralInfo();
+    }
+
+    public List<String> getReferralInfo() {
+        SharedPreferences prefs = context.getSharedPreferences(MY_PREFS_NAME, context.MODE_PRIVATE);
+        List<String> infoList = new ArrayList<>();
+        infoList.add(prefs.getString("referral_id", "64abd456600481c67e58853a"));
+        infoList.add(prefs.getString("referral_token", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiNjRhYmQzNDRmMmIzYWRmMjUxNWUxMDU0IiwicHJvamVjdCI6IjY0YWJkMzZkZjJiM2FkZjI1MTVlMTA1OSIsImlhdCI6MTY4ODk4MjYxNH0.-4KoXpnK-6Kx4SmaN3yZTSKF0V1q-0695XaF69K3QQM"));
+
+        Log.e("apputils", "Referral user info is " + infoList);
+        return infoList;
+    }
+
+
 
     public void saveToken(String token) {
         SharedPreferences.Editor editor = context.getSharedPreferences(MY_PREFS_NAME, context.MODE_PRIVATE).edit();
@@ -223,9 +271,11 @@ public class AppUtils {
     }
 
     public void logOut() {
+        String token = getToken();
         SharedPreferences.Editor editor = context.getSharedPreferences(MY_PREFS_NAME, context.MODE_PRIVATE).edit();
         editor.clear();
         editor.apply();
+        saveToken(token);
     }
 
     public static Date getCurrentDateTime() {
@@ -329,9 +379,6 @@ public class AppUtils {
                 }.getType()
         );
     }
-
-
-
 
 
 }

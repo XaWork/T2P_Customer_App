@@ -55,7 +55,10 @@ class CartActivity : WooDroidActivity<CartViewModel>() {
 
         //send event info
         val analytics = AnalyticsAPI()
+        val appUtils = AppUtils(this)
         val logRequest = LogRequest(
+            category = appUtils.referralInfo[0],
+            token = appUtils.referralInfo[1],
             type = "page visit",
             event = "Visit to cart page",
             page_name = "/WishlistActivity",
@@ -172,7 +175,10 @@ class CartActivity : WooDroidActivity<CartViewModel>() {
 
                     //send event info
                     val analytics = AnalyticsAPI()
+                    val appUtils = AppUtils(this)
                     val logRequest = LogRequest(
+                        category = appUtils.referralInfo[0],
+                        token = appUtils.referralInfo[1],
                         type = "add to cart",
                         event = "update item quantity.",
                         event_data = "Quantity : $quantity",
@@ -209,7 +215,10 @@ class CartActivity : WooDroidActivity<CartViewModel>() {
 
                     //send event info
                     val analytics = AnalyticsAPI()
+                    val appUtils = AppUtils(this)
                     val logRequest = LogRequest(
+                        category = appUtils.referralInfo[0],
+                        token = appUtils.referralInfo[1],
                         type = "add to cart",
                         event = "delete item from cart.",
                         page_name = "/WishlistActivity",

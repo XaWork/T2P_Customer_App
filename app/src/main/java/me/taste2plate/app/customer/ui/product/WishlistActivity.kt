@@ -63,7 +63,10 @@ class WishlistActivity : WooDroidActivity<ProductViewModel>() {
 
         //send event info
         val analytics = AnalyticsAPI()
+        val appUtils = AppUtils(this)
         val logRequest = LogRequest(
+            category = appUtils.referralInfo[0],
+            token = appUtils.referralInfo[1],
             type = "page visit",
             event = "Visit to wishlist page",
             page_name = "/WishlistActivity",
@@ -171,9 +174,12 @@ class WishlistActivity : WooDroidActivity<ProductViewModel>() {
 
                     //send event info
                     val analytics = AnalyticsAPI()
+                    val appUtils = AppUtils(this)
                     val logRequest = LogRequest(
-                        type = "page visit",
-                        event = "delete item from wishlist",
+                        category = appUtils.referralInfo[0],
+                        token = appUtils.referralInfo[1],
+                        type = "wishlist",
+                        event = "delete",
                         page_name = "/WishlistActivity",
                         source = "android",
                         user_id = AppUtils(this).user.id,

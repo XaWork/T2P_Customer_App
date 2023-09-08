@@ -53,7 +53,10 @@ class AddressListActivity : WooDroidActivity<CustomerViewModel>(), OnSelectListe
 
         //send event info
         val analytics = AnalyticsAPI()
+        val appUtils = AppUtils(this)
         val logRequest = LogRequest(
+            category = appUtils.referralInfo[0],
+            token = appUtils.referralInfo[1],
             type = "page visit",
             event = "address list",
             event_data = "address list",

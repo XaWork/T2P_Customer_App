@@ -7,6 +7,8 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.view.Menu
+import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.SearchView
@@ -56,7 +58,10 @@ class ProductSearchActivity : BaseActivity() {
 
         //send event info
         val analytics = AnalyticsAPI()
+        val appUtils = AppUtils(this)
         val logRequest = LogRequest(
+            category = appUtils.referralInfo[0],
+            token = appUtils.referralInfo[1],
             type = "page visit",
             event = "visit to product search page",
             page_name = "/ProductSearch",
@@ -66,7 +71,7 @@ class ProductSearchActivity : BaseActivity() {
         )
         analytics.addLog(logRequest)
 
-       // CleverTapAPI.getDefaultInstance(this)?.recordScreen("Product Search")
+        // CleverTapAPI.getDefaultInstance(this)?.recordScreen("Product Search")
         setSupportActionBar(toolbar)
         toolbar.setNavigationOnClickListener {
             finish()
@@ -132,7 +137,14 @@ class ProductSearchActivity : BaseActivity() {
     }
 
     fun stopShowingLoading() {
-        progressDialog.dismiss()
+
+        if (this::progressDialog.isInitialized)
+            progressDialog.dismiss()
+    }
+
+    private fun hideKeyboard(view: View) {
+        val imm = view.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(view.windowToken, 0)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -155,6 +167,7 @@ class ProductSearchActivity : BaseActivity() {
                     searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                         override fun onQueryTextChange(newText: String?): Boolean {
                             subscriber.onNext(newText!!)
+
                             return false
                         }
 
@@ -172,7 +185,10 @@ class ProductSearchActivity : BaseActivity() {
                 .filter { text -> text.isNotBlank() && text.length >= 3 }
                 .subscribe({
                     Log.d("Demo", "subscriber: $it")
-                    Handler(Looper.getMainLooper()).post { search(it) }
+                    Handler(Looper.getMainLooper()).post {
+
+                        search(it)
+                    }
                 }, {
                     it.printStackTrace()
                 })

@@ -78,7 +78,10 @@ class ProductActivity : BaseActivity(), SaveAddressListener {
 
         //send event info
         val analytics = AnalyticsAPI()
+        val appUtils = AppUtils(this)
         val logRequest = LogRequest(
+            category = appUtils.referralInfo[0],
+            token = appUtils.referralInfo[1],
             type = "page visit",
             event = "visit to product details page",
             page_name = "/ProductDetails",
@@ -141,9 +144,12 @@ class ProductActivity : BaseActivity(), SaveAddressListener {
 
                     //send event info
                     val analytics = AnalyticsAPI()
+                    val appUtils = AppUtils(this)
                     val logRequest = LogRequest(
-                        type = "add to cart",
-                        event = "add product to wishlist",
+                        category = appUtils.referralInfo[0],
+                        token = appUtils.referralInfo[1],
+                        type = "wishlist",
+                        event = "add",
                         page_name = "/ProductList",
                         source = "android",
                         geo_ip = AppUtils(this).ipAddress,
@@ -227,7 +233,10 @@ class ProductActivity : BaseActivity(), SaveAddressListener {
 
                         //send event info
                         val analytics = AnalyticsAPI()
+                        val appUtils = AppUtils(this)
                         val logRequest = LogRequest(
+                            category = appUtils.referralInfo[0],
+                            token = appUtils.referralInfo[1],
                             type = "add to cart",
                             event = "add product to cart",
                             event_data = "Item added to cart : ${tvQty!!.text.toString()}",

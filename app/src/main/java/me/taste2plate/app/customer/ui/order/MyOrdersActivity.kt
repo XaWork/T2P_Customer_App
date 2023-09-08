@@ -36,7 +36,10 @@ class MyOrdersActivity : WooDroidActivity<OrderViewModel>() {
 
         //send event info
         val analytics = AnalyticsAPI()
+        val appUtils = AppUtils(this)
         val logRequest = LogRequest(
+            category = appUtils.referralInfo[0],
+            token = appUtils.referralInfo[1],
             type = "page visit",
             event = "my orders",
             event_data = "my orders",

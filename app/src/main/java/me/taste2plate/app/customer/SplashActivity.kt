@@ -15,9 +15,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
-import com.clevertap.android.sdk.CleverTapAPI
-import com.clickzin.tracking.ClickzinTracker
-import com.google.android.gms.tasks.Task
+import com.android.installreferrer.api.InstallReferrerClient
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.messaging.FirebaseMessaging
 import com.trackier.sdk.TrackierEvent
@@ -28,9 +26,12 @@ import me.taste2plate.app.customer.ui.home.HomeActivity
 import me.taste2plate.app.customer.ui.onboarding.OnBoardActivity
 import me.taste2plate.app.customer.utils.AppUtils
 import me.taste2plate.app.customer.viewmodels.UserViewModel
+import me.taste2plate.app.data.api.AnalyticsAPI
 import me.taste2plate.app.data.api.ApiService
 import me.taste2plate.app.data.api.IpAddressResponse
+import me.taste2plate.app.data.api.LogRequest
 import me.taste2plate.app.data.api.RegistrationData
+import me.taste2plate.app.models.LogCreatedResponse
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
@@ -48,29 +49,114 @@ class SplashActivity : WooDroidActivity<UserViewModel>() {
     private var isVersionCheckComplete: Boolean = false
     private var permissionDoNotAllowed = false
     private var notificationPermissionDoNotAllowed = false
+    private lateinit var referrerClient: InstallReferrerClient
 
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        //initialises the CleverTap SDK.
-        var cleverTapDefaultInstance: CleverTapAPI? =
-            CleverTapAPI.getDefaultInstance(applicationContext)
-
         setContentView(R.layout.activity_main)
         viewModel = getViewModel(UserViewModel::class.java)
         customer = AppUtils(this).user
         isVersionCheckComplete = false
 
+        //if this app download from referral link then save then token and user info who refer it.
+        //checkAndSaveInstallInfo()
 
-        CleverTapAPI.getDefaultInstance(this)?.recordScreen("Splash")
 
         if (checkPermissions()) {
             if (checkNotificationPermission())
                 apiCalls()
         }
-        // Log.e("Token", "onCreate: ${FirebaseInstanceId.getInstance().getToken()}")
+    }
+/*
+    private fun getDynamicLink() {
+        referrerClient = InstallReferrerClient.newBuilder(this).build()
+        referrerClient.startConnection(object : InstallReferrerStateListener {
+            override fun onInstallReferrerSetupFinished(responseCode: Int) {
+                if (responseCode == InstallReferrerClient.InstallReferrerResponse.OK) {
+                    try {
+                        val response: ReferrerDetails = referrerClient.installReferrer
+                        val referrerUrl: String = response.installReferrer
+
+                        extractReferrerData(referrerUrl)
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+                }
+            }
+
+            override fun onInstallReferrerServiceDisconnected() {
+                // Handle disconnect
+            }
+        })
+    }
+
+    private fun extractReferrerData(referrerUrl: String) {
+        // Parse the referrer string to extract affiliateId and token
+        val params = referrerUrl.split("&")
+        var affiliateId: String? = null
+        var token: String? = null
+        for (param in params) {
+            if (param.startsWith("affiliate_id=")) {
+                affiliateId = param.substringAfter("affiliate_id=")
+            } else if (param.startsWith("token=")) {
+                token = param.substringAfter("token=")
+            }
+        }
+        Log.e("Splash", "Affiliate id : $affiliateId\ntoken : $token")
+    }
+
+    private fun saveUserIdAndToken(userId: String?, token: String?) {
+        val appUtils = AppUtils(this)
+        appUtils.isInstallFromPlayStore = false
+        appUtils.saveReferralInfo(userId, token)
+
+    }*/
+
+    override fun onDestroy() {
+        super.onDestroy()
+        if (::referrerClient.isInitialized) {
+            referrerClient.endConnection()
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    private fun checkAndSaveInstallInfo() {
+        val isInstalledFromPlayStore = checkInstallationSource()
+        if (!isInstalledFromPlayStore) {
+            val link = intent.data?.toString()
+            Log.e("splash", "install from play store $isInstalledFromPlayStore \nlink is $link")
+            if (link != null && link.contains("affiliate_id=") && link.contains("token=")) {
+                val userId = link.substringAfter("id=").substringBefore("&")
+                val token = link.substringAfter("token=")
+                Log.e("splash", "User id : $userId\ntoken : $token")
+                saveUserIdAndToken(userId, token)
+            }
+        }
+
+        if (checkPermissions()) {
+            if (checkNotificationPermission())
+                apiCalls()
+        }
+    }
+
+    private fun checkInstallationSource(): Boolean {
+        // A list with valid installers package name
+        // A list with valid installers package name
+        val validInstallers = listOf("com.android.vending", "com.google.android.feedback")
+
+        val installerPackageName = packageManager.getInstallerPackageName(this.packageName)
+        Log.e("splash", "install package name $installerPackageName")
+        // If the installerPackageName is null or empty, it means the app was not installed from the Play Store
+        return installerPackageName != null && validInstallers.contains(installerPackageName)
+    }
+
+    private fun saveUserIdAndToken(userId: String, token: String) {
+        val appUtils = AppUtils(this)
+        appUtils.isInstallFromPlayStore = false
+        appUtils.saveReferralInfo(userId, token)
     }
 
     private fun startTrackingWithTrackier() {
@@ -80,34 +166,12 @@ class SplashActivity : WooDroidActivity<UserViewModel>() {
 
     }
 
-    private fun startTracking() {
-        val appKey = "kalpssoft"
-        ClickzinTracker.getInstance().init(applicationContext, appKey, null)
-        ClickzinTracker.getInstance().setCustomerId("pradeep")
-        ClickzinTracker.getInstance().startTracking("Install")
-
-        /*    val call = TrackerService().getBaseUrl().create(TrackerApi::class.java)
-
-            call.install("1").enqueue(object : Callback<TrackerModel> {
-                override fun onResponse(
-                    call: Call<TrackerModel>,
-                    response: Response<TrackerModel>
-                ) {
-                    Log.e("TAG", "onSuccess: ${response.body()}")
-                }
-
-                override fun onFailure(call: Call<TrackerModel>, t: Throwable) {
-                    Log.e("TAG", "onFailure: $t")
-                }
-            })*/
-    }
-
     private fun pushNotification() {
         try {
 
             FirebaseMessaging.getInstance().subscribeToTopic("install")
 
-            FirebaseMessaging.getInstance().token.addOnSuccessListener { token: String ->
+         /*   FirebaseMessaging.getInstance().token.addOnSuccessListener { token: String ->
                 if (!TextUtils.isEmpty(token)) {
                     Log.e(
                         "Token",
@@ -119,7 +183,8 @@ class SplashActivity : WooDroidActivity<UserViewModel>() {
                         "token should not be null..."
                     )
                 }
-            }.addOnFailureListener { }.addOnCanceledListener {}
+            }.addOnFailureListener { }
+                .addOnCanceledListener {}
                 .addOnCompleteListener { task: Task<String> ->
                     try {
                         Log.e(
@@ -129,11 +194,46 @@ class SplashActivity : WooDroidActivity<UserViewModel>() {
                     } catch (exception: Exception) {
 
                     }
-                }
+                }*/
         } catch (exception: IOException) {
             Log.e("firebase", exception.toString())
         }
 
+    }
+
+    private fun addLog(request: LogRequest) {
+        viewModel.addLog(request).observe(this) { response ->
+            when (response!!.status()) {
+                Status.LOADING -> {}
+                Status.SUCCESS -> {
+                    if (!AppUtils(this).isInstallFromPlayStore)
+                        install(response.data())
+                }
+
+                Status.ERROR -> {}
+                Status.EMPTY -> {}
+            }
+        }
+    }
+
+    private fun install(logResponse: LogCreatedResponse) {
+        viewModel.install(
+            AppUtils(this).referralInfo[1],
+            logResponse.result._id,
+            "fc36e1f99d0cfdee7d34",
+            AppUtils(this).token,
+            logResponse.result.createdAt,
+        ).observe(this) { response ->
+            when (response!!.status()) {
+                Status.LOADING -> {}
+                Status.SUCCESS -> {
+                    getAppData()
+                }
+
+                Status.ERROR -> {}
+                Status.EMPTY -> {}
+            }
+        }
     }
 
     private fun getAppData() {
@@ -230,7 +330,7 @@ class SplashActivity : WooDroidActivity<UserViewModel>() {
 
     private fun apiCalls() {
 
-        startTracking()
+        //startTracking()
 
         getIpAddress()
 
@@ -263,6 +363,7 @@ class SplashActivity : WooDroidActivity<UserViewModel>() {
 
         val call = apiService.getIpAddress()
         call.enqueue(object : retrofit2.Callback<IpAddressResponse> {
+            @RequiresApi(Build.VERSION_CODES.O)
             override fun onResponse(
                 call: Call<IpAddressResponse>,
                 response: retrofit2.Response<IpAddressResponse>
@@ -271,7 +372,22 @@ class SplashActivity : WooDroidActivity<UserViewModel>() {
                     ip = response.body()?.ip ?: ""
                     Log.e("IP", "Success : $response")
                     AppUtils(context).saveIpAddress(ip)
-                    getAppData()
+                    //send event info
+                    val analytics = AnalyticsAPI()
+                    val appUtils = AppUtils(context)
+                    val logRequest = LogRequest(
+                        category = appUtils.referralInfo[0],
+                        token = appUtils.referralInfo[1],
+                        type = "splash",
+                        event = "Enter in splash screen",
+                        page_name = "/splash",
+                        source = "android",
+                        user_id = if (appUtils.user != null) appUtils.user.id else "",
+                        geo_ip = AppUtils(context).ipAddress,
+                        product_id = ""
+                    )
+
+                    addLog(logRequest)
                 } else {
                     Log.e("Analytics", "failed : $response")
                 }

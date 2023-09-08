@@ -29,6 +29,7 @@ import me.taste2plate.app.customer.R
 import me.taste2plate.app.customer.SplashActivity
 import me.taste2plate.app.customer.common.Status
 import me.taste2plate.app.customer.ui.ContactUsDetailActivity
+import me.taste2plate.app.customer.ui.DevUseActivity
 import me.taste2plate.app.customer.ui.WooDroidActivity
 import me.taste2plate.app.customer.ui.coupon.AllOffersActivity
 import me.taste2plate.app.customer.ui.customer.BulkOrderActivity
@@ -113,32 +114,32 @@ class HomeActivity : WooDroidActivity<CartViewModel>() {
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.container, HomeFragment.newInstance())
         transaction.commit()
-/*
-        navigation.menu.getItem(0).isChecked = false;
+        /*
+                navigation.menu.getItem(0).isChecked = false;
 
-        navigation.setOnNavigationItemSelectedListener {
-            when (it.itemId) {
-                R.id.deals -> {
-                    if (AppUtils(this).defaultAddress != null) {
-                        startActivity(
-                            Intent(
-                                this@HomeActivity,
-                                AllOffersActivity::class.java
+                navigation.setOnNavigationItemSelectedListener {
+                    when (it.itemId) {
+                        R.id.deals -> {
+                            if (AppUtils(this).defaultAddress != null) {
+                                startActivity(
+                                    Intent(
+                                        this@HomeActivity,
+                                        AllOffersActivity::class.java
+                                    )
+                                )
+                            } else {
+                                showErrorDialog("Set delivery location")
+                            }
+                        }
+                        R.id.city -> {
+                            startActivity(
+                                Intent(
+                                    this@HomeActivity,
+                                    CityBrandActivity::class.java
+                                ).putExtra("type", "City")
                             )
-                        )
-                    } else {
-                        showErrorDialog("Set delivery location")
-                    }
-                }
-                R.id.city -> {
-                    startActivity(
-                        Intent(
-                            this@HomeActivity,
-                            CityBrandActivity::class.java
-                        ).putExtra("type", "City")
-                    )
 
-                    *//* if (AppUtils(this).defaultAddress != null) {
+                            *//* if (AppUtils(this).defaultAddress != null) {
                          startActivity(
                              Intent(
                                  this@HomeActivity,
@@ -208,11 +209,10 @@ class HomeActivity : WooDroidActivity<CartViewModel>() {
         val phone = customAppData.result.whatsapp
         val intent = Intent(
             Intent.ACTION_VIEW, Uri.parse(
-                "https://api.whatsapp.com/send?phone=$phone"
+                "https://api.whatsapp.com/send?phone=$+91 8100709627"
             )
         )
         startActivity(intent)
-
 
 
     }
@@ -251,20 +251,25 @@ class HomeActivity : WooDroidActivity<CartViewModel>() {
                     navItemIndex = 0
                     CURRENT_TAG = TAG_HOME
                 }
+
                 R.id.nav_orders -> {
                     navItemIndex = 1
                     CURRENT_TAG = TAG_ORDERS
                 }
+
                 R.id.nav_profile -> {
                     navItemIndex = 2
                     CURRENT_TAG = TAG_PROFILE
                 }
+
                 R.id.nav_share -> {
                     referAndEarn()
                 }
+
                 R.id.bulk_order -> {
                     startActivity(Intent(this@HomeActivity, BulkOrderActivity::class.java))
                 }
+
                 R.id.nav_rate -> {
                     val uri = Uri.parse("market://details?id=" + applicationContext.packageName)
                     val goToMarket = Intent(Intent.ACTION_VIEW, uri)
@@ -286,23 +291,27 @@ class HomeActivity : WooDroidActivity<CartViewModel>() {
                         )
                     }
                 }
+
                 R.id.nav_contact_us -> {
                     navItemIndex = 3
                     CURRENT_TAG = TAG_CONTACT_US
                 }
+
+                R.id.nav_dev -> {
+                    startActivity(Intent(this@HomeActivity, DevUseActivity::class.java))
+                }
+
                 R.id.nav_logout -> {
-                    FirebaseInstallations.getInstance().getToken(true).addOnCompleteListener {
-                        AppUtils(this).logOut()
-                        FirebaseAuth.getInstance().signOut()
-                        //AppUtils(this).saveToken(it.result.token)
-                        startActivity(
-                            Intent(
-                                this,
-                                OnBoardActivity::class.java
-                            ).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                        )
-                    }
+                    AppUtils(this).logOut()
+                    FirebaseAuth.getInstance().signOut()
+                    //AppUtils(this).saveToken(it.result.token)
+                    startActivity(
+                        Intent(
+                            this,
+                            OnBoardActivity::class.java
+                        ).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    )
                 }
 
                 R.id.member_ship -> {
@@ -337,6 +346,7 @@ class HomeActivity : WooDroidActivity<CartViewModel>() {
                 Status.LOADING -> {
                     showLoading()
                 }
+
                 Status.SUCCESS -> {
                     stopShowingLoading()
                     val pointSettings: PointSetups? = it.data().result.pointSetting
@@ -394,9 +404,11 @@ class HomeActivity : WooDroidActivity<CartViewModel>() {
             1 ->
                 // photos
                 startActivity(Intent(this, MyOrdersActivity::class.java))
+
             2 ->
                 // movies fragment
                 startActivity(Intent(this, ProfileActivity::class.java))
+
             3 ->
                 startActivity(Intent(this, ContactUsDetailActivity::class.java))
         }

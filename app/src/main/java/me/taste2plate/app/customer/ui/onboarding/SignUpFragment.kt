@@ -11,9 +11,11 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import com.appsflyer.AFInAppEventParameterName
+import com.appsflyer.AFInAppEventType
+import com.appsflyer.AppsFlyerLib
 import com.clevertap.android.sdk.CleverTapAPI
 import com.clickzin.tracking.ClickzinTracker
-import com.clickzin.tracking.utils.ClickzinUtils
 import com.facebook.FacebookSdk.getApplicationContext
 import com.facebook.appevents.AppEventsConstants
 import com.facebook.appevents.AppEventsLogger
@@ -38,6 +40,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.util.regex.Matcher
 import java.util.regex.Pattern
+
 
 class SignUpFragment : Fragment() {
 
@@ -76,6 +79,8 @@ class SignUpFragment : Fragment() {
         val analytics = AnalyticsAPI()
         val appUtils = AppUtils(context)
         val logRequest = LogRequest(
+            category = appUtils.referralInfo[0],
+            token = appUtils.referralInfo[1],
             type = "signup",
             event = "Enter signup screen",
             event_data = "signup",
@@ -231,7 +236,10 @@ class SignUpFragment : Fragment() {
 
                                 //send event info
                                 val analytics = AnalyticsAPI()
+                                val appUtils = AppUtils(context)
                                 val logRequest = LogRequest(
+                                    category = appUtils.referralInfo[0],
+                                    token = appUtils.referralInfo[1],
                                     type = "signup",
                                     event = "create new account successfully",
                                     event_data = "signup",
@@ -242,6 +250,17 @@ class SignUpFragment : Fragment() {
                                     product_id = ""
                                 )
                                 analytics.addLog(logRequest)
+
+                                //appflyer
+                                val eventParameters0: MutableMap<String, Any> = HashMap()
+                                eventParameters0[AFInAppEventParameterName.REGISTRATION_METHOD] =
+                                    otpResponse.data!!.id
+                                AppsFlyerLib.getInstance().logEvent(
+                                    getApplicationContext(),
+                                    AFInAppEventType.COMPLETE_REGISTRATION,
+                                    eventParameters0
+                                )
+
 
                                 addAppEvent()
                                 sendUserInfoToCleverTap()

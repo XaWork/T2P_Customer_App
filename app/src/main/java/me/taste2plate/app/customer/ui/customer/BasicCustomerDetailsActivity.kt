@@ -45,7 +45,10 @@ class BasicCustomerDetailsActivity : WooDroidActivity<CustomerViewModel>() {
 
         //send event info
         val analytics = AnalyticsAPI()
+        val appUtils = AppUtils(this)
         val logRequest = LogRequest(
+            category = appUtils.referralInfo[0],
+            token = appUtils.referralInfo[1],
             type = "page visit",
             event = "edit profile",
             event_data = "edit profile",

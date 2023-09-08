@@ -38,7 +38,10 @@ class BulkOrderActivity : WooDroidActivity<ProductViewModel>() {
 
         //send event info
         val analytics = AnalyticsAPI()
+        val appUtils = AppUtils(this)
         val logRequest = LogRequest(
+            category = appUtils.referralInfo[0],
+            token = appUtils.referralInfo[1],
             type = "page visit",
             event = "Visit to bulk order page",
             page_name = "/bulk order",
@@ -121,7 +124,10 @@ class BulkOrderActivity : WooDroidActivity<ProductViewModel>() {
 
                         //send event info
                         val analytics = AnalyticsAPI()
+                        val appUtils = AppUtils(this)
                         val logRequest = LogRequest(
+                            category = appUtils.referralInfo[0],
+                            token = appUtils.referralInfo[1],
                             type = "page visit",
                             event = "create bulk order successfully.",
                             page_name = "/bulk order",

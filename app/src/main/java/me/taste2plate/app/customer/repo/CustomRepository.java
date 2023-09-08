@@ -12,6 +12,7 @@ import me.taste2plate.app.Woocommerce;
 import me.taste2plate.app.customer.WcApp;
 import me.taste2plate.app.customer.common.WooLiveData;
 import me.taste2plate.app.customer.utils.AppUtils;
+import me.taste2plate.app.data.api.LogRequest;
 import me.taste2plate.app.models.AddressListResponse;
 import me.taste2plate.app.models.AppDataResponse;
 import me.taste2plate.app.models.CityBrand;
@@ -24,12 +25,14 @@ import me.taste2plate.app.models.DriverLocation;
 import me.taste2plate.app.models.GetDeliveryResponse;
 import me.taste2plate.app.models.ImageResponse;
 import me.taste2plate.app.models.AllOffersResponse;
+import me.taste2plate.app.models.LogCreatedResponse;
 import me.taste2plate.app.models.Order;
 import me.taste2plate.app.models.OrderData;
 import me.taste2plate.app.models.ProductByCityBrand;
 import me.taste2plate.app.models.ProductCityResponse;
 import me.taste2plate.app.models.ShippingTaxResponse;
 import me.taste2plate.app.models.StateCityZipCodeResponse;
+import me.taste2plate.app.models.TrackerResponse;
 import me.taste2plate.app.models.UserAddress;
 import me.taste2plate.app.models.ValidateCouponRequest;
 import me.taste2plate.app.models.Version;
@@ -55,7 +58,7 @@ public class CustomRepository {
     @Inject
     public CustomRepository() {
         context = WcApp.Companion.applicationContext();
-        token =  "Bearer "+new AppUtils(context).getToken();
+        token = "Bearer " + new AppUtils(context).getToken();
         Log.e("custom reposiotory", new AppUtils(context).getToken());
     }
 
@@ -73,15 +76,12 @@ public class CustomRepository {
     }
 
 
-
-
     public WooLiveData<CommonResponse> createBulkOrder(BulkOrder bulkOrder) {
         final WooLiveData<CommonResponse> callBack = new WooLiveData();
 
         woocommerce.CustomRepository().createBulkOrder(bulkOrder).enqueue(callBack);
         return callBack;
     }
-
 
 
     public WooLiveData<CheckAvailabilityResponse> checkAvailability(int pincode, String vendorId) {
@@ -95,8 +95,6 @@ public class CustomRepository {
         woocommerce.CustomRepository().checkCutOfftime(startCity, endCity).enqueue(callBack);
         return callBack;
     }
-
-
 
 
     public WooLiveData<CommonResponse> deleteAddress(String userId, String addressId) {
@@ -128,7 +126,7 @@ public class CustomRepository {
             String userId, String name, String phone, String city, String state, String pincode, String postOffice, String addressLine, String secondary, Double lat, Double lng, String addressType
     ) {
         final WooLiveData<CommonResponse> callBack = new WooLiveData();
-        woocommerce.CustomRepository().saveAddress(userId, name, phone, city, state, pincode, postOffice, addressLine, secondary,lat, lng, addressType).enqueue(callBack);
+        woocommerce.CustomRepository().saveAddress(userId, name, phone, city, state, pincode, postOffice, addressLine, secondary, lat, lng, addressType).enqueue(callBack);
         return callBack;
     }
 
@@ -137,10 +135,9 @@ public class CustomRepository {
             String addressId, String name, String phone, String city, String state, String pincode, String postOffice, String addressLine, String secondary, Double lat, Double lng, String addressType
     ) {
         final WooLiveData<CommonResponse> callBack = new WooLiveData();
-        woocommerce.CustomRepository().editAddress(addressId, name, phone, city, state, pincode, postOffice, addressLine, secondary,lat, lng, addressType).enqueue(callBack);
+        woocommerce.CustomRepository().editAddress(addressId, name, phone, city, state, pincode, postOffice, addressLine, secondary, lat, lng, addressType).enqueue(callBack);
         return callBack;
     }
-
 
 
     public WooLiveData<CommonResponse> cancelOrder(String orderId) {
@@ -148,7 +145,6 @@ public class CustomRepository {
         woocommerce.CustomRepository().cancelOrder(orderId).enqueue(callBack);
         return callBack;
     }
-
 
 
     public WooLiveData<OrderUpdateResponse> getOrderUpdates(String orderId) {
@@ -159,8 +155,39 @@ public class CustomRepository {
 
 
     public WooLiveData<AppDataResponse> fetchAppData() {
-        final WooLiveData<AppDataResponse> callBack = new WooLiveData();
+        final WooLiveData<AppDataResponse> callBack = new WooLiveData<>();
         woocommerce.CustomRepository().fetchAppData().enqueue(callBack);
+        return callBack;
+    }
+
+
+    public WooLiveData<LogCreatedResponse> addLog(LogRequest request) {
+        final WooLiveData<LogCreatedResponse> callBack = new WooLiveData<>();
+        woocommerce.CustomRepository().addLog(request).enqueue(callBack);
+        return callBack;
+    }
+
+    public WooLiveData<TrackerResponse> install(
+            String tracker_record, String clickId,
+            String security_token,
+            String gaid,
+            String sub4) {
+        final WooLiveData<TrackerResponse> callBack = new WooLiveData<>();
+        woocommerce.CustomRepository().install(tracker_record, clickId, security_token, gaid, sub4).enqueue(callBack);
+        return callBack;
+    }
+
+    public WooLiveData<TrackerResponse> purchased(
+            String
+                    tracker_record,
+            String clickId,
+            String security_token,
+            String gaid,
+            String sub4,
+            String goal_name,
+            String sale_amount) {
+        final WooLiveData<TrackerResponse> callBack = new WooLiveData<>();
+        woocommerce.CustomRepository().purchased(tracker_record, clickId, security_token, gaid, sub4, goal_name, sale_amount).enqueue(callBack);
         return callBack;
     }
 

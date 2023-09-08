@@ -179,7 +179,10 @@ class AddNewAddressActivity : WooDroidActivity<CustomerViewModel>() {
 
         //send event info
         val analytics = AnalyticsAPI()
+        val appUtils = AppUtils(this)
         val logRequest = LogRequest(
+            category = appUtils.referralInfo[0],
+            token = appUtils.referralInfo[1],
             type = "page visit",
             event = if(address!=null) "edit address" else "add address",
             event_data = "address add/edit",

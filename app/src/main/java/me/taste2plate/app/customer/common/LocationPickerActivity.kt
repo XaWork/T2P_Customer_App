@@ -54,7 +54,10 @@ class LocationPickerActivity : AppCompatActivity(), OnMapReadyCallback, Location
 
         //send event info
         val analytics = AnalyticsAPI()
+        val appUtils = AppUtils(this)
         val logRequest = LogRequest(
+            category = appUtils.referralInfo[0],
+            token = appUtils.referralInfo[1],
             type = "page visit",
             event = "location picker",
             event_data = "location picker",

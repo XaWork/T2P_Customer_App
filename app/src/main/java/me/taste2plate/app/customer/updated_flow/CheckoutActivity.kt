@@ -14,9 +14,11 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.clevertap.android.sdk.CleverTapAPI
-import com.clickzin.tracking.ClickzinTracker
 import com.facebook.appevents.AppEventsConstants
+import com.facebook.appevents.AppEventsConstants.EVENT_PARAM_CONTENT_ID
+import com.facebook.appevents.AppEventsConstants.EVENT_PARAM_CONTENT_TYPE
 import com.facebook.appevents.AppEventsConstants.EVENT_PARAM_CURRENCY
+import com.facebook.appevents.AppEventsConstants.EVENT_PARAM_NUM_ITEMS
 import com.facebook.appevents.AppEventsLogger
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.analytics.FirebaseAnalytics
@@ -40,7 +42,6 @@ import me.taste2plate.app.customer.ui.rewards.RewardViewModel
 import me.taste2plate.app.customer.ui.wallet.WalletViewModel
 import me.taste2plate.app.customer.utils.AppUtils
 import me.taste2plate.app.customer.utils.Utils
-import me.taste2plate.app.customer.viewmodels.CustomerViewModel
 import me.taste2plate.app.customer.viewmodels.ProductViewModel
 import me.taste2plate.app.data.api.AnalyticsAPI
 import me.taste2plate.app.data.api.LogRequest
@@ -54,8 +55,6 @@ import me.taste2plate.app.models.membership.myplan.PointSettings
 import org.json.JSONObject
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
 
 
 class CheckoutActivity : WooDroidActivity<CheckoutViewModel>(), SaveAddressListener,
@@ -92,7 +91,10 @@ class CheckoutActivity : WooDroidActivity<CheckoutViewModel>(), SaveAddressListe
 
         //send event info
         val analytics = AnalyticsAPI()
+        val appUtils = AppUtils(this)
         val logRequest = LogRequest(
+            category = appUtils.referralInfo[0],
+            token = appUtils.referralInfo[1],
             type = "page visit",
             event = "visit to checkout page",
             event_data = "Item in cart while checkout : ${cartItems.size}",
@@ -153,6 +155,7 @@ class CheckoutActivity : WooDroidActivity<CheckoutViewModel>(), SaveAddressListe
                         binding.cod.isChecked = false
                         binding.cod.isEnabled = false
                     }
+
                     R.id.standard -> {
                         deliveryMode = 2
                         binding.run {
@@ -182,6 +185,7 @@ class CheckoutActivity : WooDroidActivity<CheckoutViewModel>(), SaveAddressListe
                                     packingPrice.text =
                                         "Rs. ${couponResponse!!.total_packing_price}"
                                 }
+
                                 cartItemResponse != null -> {
                                     shippingCost =
                                         cartItemResponse!!.shipping.normal_shipping.toFloat()
@@ -210,6 +214,7 @@ class CheckoutActivity : WooDroidActivity<CheckoutViewModel>(), SaveAddressListe
                                         )
                                     )
                                 }
+
                                 else -> {
                                     finish()
                                     Toast.makeText(
@@ -219,10 +224,11 @@ class CheckoutActivity : WooDroidActivity<CheckoutViewModel>(), SaveAddressListe
                                     ).show()
                                 }
                             }
-                            deliveryModeData.text = checkAvailability!!.result.remarks
+                            deliveryModeData.text = checkAvailability?.result?.remarks
                             deliveryModeData.visibility = View.VISIBLE
                         }
                     }
+
                     else -> {}
                 }
             }
@@ -248,6 +254,7 @@ class CheckoutActivity : WooDroidActivity<CheckoutViewModel>(), SaveAddressListe
                             paymentMode = 1
                         }
                     }
+
                     R.id.cod -> {
                         if (priceToCheck !in minPrice..maxPrice) {
                             val message =
@@ -401,6 +408,7 @@ class CheckoutActivity : WooDroidActivity<CheckoutViewModel>(), SaveAddressListe
                     Status.LOADING -> {
                         showLoading()
                     }
+
                     Status.SUCCESS -> {
 
                         //Log.e("TAG", "walletDiscountInfo: ${it.data().result.pointSetting}")
@@ -625,6 +633,7 @@ class CheckoutActivity : WooDroidActivity<CheckoutViewModel>(), SaveAddressListe
                     Status.LOADING -> {
                         showLoading()
                     }
+
                     Status.SUCCESS -> {
                         stopShowingLoading()
                         if (response.data().status.contentEquals("success")) {
@@ -770,6 +779,7 @@ class CheckoutActivity : WooDroidActivity<CheckoutViewModel>(), SaveAddressListe
                                             executePendingBindings()
                                         }
                                     }
+
                                     else -> {
                                         binding.run {
                                             dFee.text =
@@ -829,6 +839,7 @@ class CheckoutActivity : WooDroidActivity<CheckoutViewModel>(), SaveAddressListe
                 Status.LOADING -> {
                     showLoading()
                 }
+
                 Status.SUCCESS -> {
                     stopShowingLoading()
 
@@ -856,6 +867,7 @@ class CheckoutActivity : WooDroidActivity<CheckoutViewModel>(), SaveAddressListe
                                     executePendingBindings()
                                 }
                             }
+
                             else -> {
                                 binding.run {
                                     productPrice = response.data().new_final_price.normal.toFloat()
@@ -996,16 +1008,20 @@ class CheckoutActivity : WooDroidActivity<CheckoutViewModel>(), SaveAddressListe
                             Toast.makeText(this@CheckoutActivity, "Order Placed", Toast.LENGTH_LONG)
                                 .show()
 
-                            addAppEvent()
                             finishAffinity()
-                            ClickzinTracker.getInstance().startTracking("order place")
                             startTrackingWithTrackier()
                             sendProductInfoToCleverTap()
+                            logPurchasedEvent(
+                                cartItems.size,
+                                response.data().result.orderid,
+                                finalProductPrice.toDouble()
+                            )
 
                             val intent =
                                 Intent(this@CheckoutActivity, OrderConfirmationActivity::class.java)
                             intent.putExtra("orderId", response.data().result.orderid)
                             intent.putExtra("slot", response.data().result.timeslot)
+                            intent.putExtra("price", finalProductPrice)
                             intent.putExtra(
                                 "deliverDate",
                                 response.data().result.delivery_date.toDate("dd-MM-yy")
@@ -1030,6 +1046,24 @@ class CheckoutActivity : WooDroidActivity<CheckoutViewModel>(), SaveAddressListe
         } catch (e: java.lang.Exception) {
             e.printStackTrace()
         }
+    }
+
+    private fun logPurchasedEvent(
+        numItems: Int,
+        contentId: String?,
+        price: Double
+    ) {
+        Log.e(
+            "facebook",
+            "Facebook log purchase event \nnumItems: $numItems, contentId: $contentId, price: $price"
+        )
+        val logger = AppEventsLogger.newLogger(this)
+        val params = Bundle()
+        params.putInt(EVENT_PARAM_NUM_ITEMS, numItems)
+        params.putString(EVENT_PARAM_CONTENT_TYPE, "product")
+        params.putString(EVENT_PARAM_CONTENT_ID, contentId)
+        params.putString(EVENT_PARAM_CURRENCY, "INR")
+        logger.logPurchase(price.toBigDecimal(), Currency.getInstance("INR"), params)
     }
 
     private fun sendProductInfoToCleverTap() {

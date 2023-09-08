@@ -3,7 +3,9 @@ package me.taste2plate.app.customer
 //import dev.anvith.blackbox.Blackbox
 import android.content.Context
 import android.content.res.Configuration
+import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
+import com.appsflyer.AppsFlyerLib
 import com.clevertap.android.sdk.ActivityLifecycleCallback
 import com.clevertap.android.sdk.CleverTapAPI
 import com.facebook.FacebookSdk
@@ -48,7 +50,7 @@ class WcApp : DaggerApplication() {
         );
         // Blackbox.context(this).init()
         Fresco.initialize(this);
-        FacebookSdk.sdkInitialize(getApplicationContext());
+       // FacebookSdk.sdkInitialize(applicationContext);
         AppEventsLogger.activateApp(this);
         Places.initialize(applicationContext, "AIzaSyCO5CDU2-xVi6VRy14HhptZ3A8Bztx5Ps4")
         ViewPump.init(
@@ -67,6 +69,21 @@ class WcApp : DaggerApplication() {
         //trackier
         trackier()
 
+        //appflyter
+        setupAppFlyter()
+
+    }
+
+    private fun setupAppFlyter() {
+        Log.e("setupAppFlyter", "AppFlyter setup")
+        val devKey = "sRXbgREMUcXQ6VbHhb2CCb"
+        val appFlyerLib = AppsFlyerLib.getInstance()
+
+        appFlyerLib.setDebugLog(true)
+        appFlyerLib.setMinTimeBetweenSessions(0)
+
+        appFlyerLib.init(devKey, null, this)
+        appFlyerLib.start(this)
     }
 
     private fun trackier() {

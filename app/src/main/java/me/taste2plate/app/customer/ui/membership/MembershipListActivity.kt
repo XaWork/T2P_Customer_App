@@ -37,7 +37,10 @@ class MembershipListActivity : WooDroidActivity<MembershipListViewModel>(), Paym
 
         //send event info
         val analytics = AnalyticsAPI()
+        val appUtils = AppUtils(this)
         val logRequest = LogRequest(
+            category = appUtils.referralInfo[0],
+            token = appUtils.referralInfo[1],
             type = "page visit",
             event = "Visit to membership plan page",
             page_name = "/MembershipListActivity",
@@ -151,7 +154,10 @@ class MembershipListActivity : WooDroidActivity<MembershipListViewModel>(), Paym
 
                         //send event info
                         val analytics = AnalyticsAPI()
+                        val appUtils = AppUtils(this)
                         val logRequest = LogRequest(
+                            category = appUtils.referralInfo[0],
+                            token = appUtils.referralInfo[1],
                             type = "page visit",
                             event = "Membership plan buy successfully.",
                             event_data = "Plan Id : ${selectedPlan!!.id}",

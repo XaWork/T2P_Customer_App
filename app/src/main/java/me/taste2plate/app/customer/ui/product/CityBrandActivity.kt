@@ -1,6 +1,7 @@
 package me.taste2plate.app.customer.ui.product
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -12,12 +13,15 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.clevertap.android.sdk.CleverTapAPI
 import io.github.inflationx.viewpump.ViewPumpContextWrapper
+import kotlinx.android.synthetic.main.activity_new_address.city
 import kotlinx.android.synthetic.main.content_subcategory.*
 import kotlinx.android.synthetic.main.toolbar.*
 import me.taste2plate.app.customer.R
 import me.taste2plate.app.customer.adapter.CityBrandAdapter
 import me.taste2plate.app.customer.common.BaseActivity
 import me.taste2plate.app.customer.common.Status
+import me.taste2plate.app.customer.ui.home.HomeActivity
+import me.taste2plate.app.customer.ui.membership.MembershipListActivity
 import me.taste2plate.app.customer.ui.state.ProgressDialogFragment
 import me.taste2plate.app.customer.utils.AppUtils
 import me.taste2plate.app.customer.viewmodels.ProductViewModel
@@ -46,7 +50,10 @@ class CityBrandActivity : BaseActivity() {
 
         //send event info
         val analytics = AnalyticsAPI()
+        val appUtils = AppUtils(this)
         val logRequest = LogRequest(
+            category = appUtils.referralInfo[0],
+            token = appUtils.referralInfo[1],
             type = "page visit",
             event = "visit to city list page",
             page_name = "/CityBrand",
@@ -68,9 +75,9 @@ class CityBrandActivity : BaseActivity() {
         }
         title = intent.getStringExtra("type");
 
-        if(intent.getStringExtra("type")!!.contentEquals("Flavours Of India")){
+        if (intent.getStringExtra("type")!!.contentEquals("Flavours Of India")) {
             getCuisine()
-        }else {
+        } else {
             cityBrand()
         }
 
@@ -79,6 +86,7 @@ class CityBrandActivity : BaseActivity() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 filter(s.toString())
             }
+
             override fun afterTextChanged(s: Editable?) {}
         })
     }
@@ -97,27 +105,38 @@ class CityBrandActivity : BaseActivity() {
         }
     }
 
-    private fun getCuisine(){
-        viewModel.homePageData(AppUtils(this).defaultAddress.city!!._id).observe(this, androidx.lifecycle.Observer { response ->
-            when (response!!.status()) {
-                Status.LOADING -> {
-                    showLoading()
-                }
+    private fun getCuisine() {
+        try{
+            val defaultAddress = AppUtils(this).defaultAddress
+            if (defaultAddress != null) {
+                viewModel.homePageData(AppUtils(this).defaultAddress.city._id)
+                    .observe(this) { response ->
+                        when (response!!.status()) {
+                            Status.LOADING -> {
+                                showLoading()
+                            }
 
-                Status.SUCCESS -> {
-                    stopShowingLoading()
-                    val homePageResponse = response.data()
-                    mCityBrandList.addAll(homePageResponse.cuisine)
-                    setUpPage()
-                }
+                            Status.SUCCESS -> {
+                                stopShowingLoading()
+                                val homePageResponse = response.data()
+                                mCityBrandList.addAll(homePageResponse.cuisine)
+                                setUpPage()
+                            }
 
-                Status.ERROR, Status.EMPTY -> {
-                    stopShowingLoading()
-                    showError(getString(R.string.something_went_wrong))
-                }
+                            Status.ERROR, Status.EMPTY -> {
+                                stopShowingLoading()
+                                showError(getString(R.string.something_went_wrong))
+                            }
+                        }
+
+                    }
+            } else {
+                Toast.makeText(this, "Select default address to continue.", Toast.LENGTH_SHORT).show()
+                startActivity(Intent(this@CityBrandActivity, HomeActivity::class.java))
             }
-
-        })
+        }catch (e: Exception){
+            e.printStackTrace()
+        }
     }
 
 
@@ -132,7 +151,9 @@ class CityBrandActivity : BaseActivity() {
 
     private fun cityBrand() {
         val data =
-            if (intent.getStringExtra("type")!!.contentEquals("City")) viewModel.city else viewModel.brandList
+            if (intent.getStringExtra("type")!!
+                    .contentEquals("City")
+            ) viewModel.city else viewModel.brandList
         data.observe(this) { response ->
             when (response!!.status()) {
                 Status.LOADING -> {
@@ -169,7 +190,7 @@ class CityBrandActivity : BaseActivity() {
     }
 
     fun stopShowingLoading() {
-        if(this::progressDialog.isInitialized)
+        if (this::progressDialog.isInitialized)
             progressDialog.dismiss()
     }
 

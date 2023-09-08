@@ -32,7 +32,10 @@ class ContactUsDetailActivity : AppCompatActivity() {
 
         //send event info
         val analytics = AnalyticsAPI()
+        val appUtils = AppUtils(this)
         val logRequest = LogRequest(
+            category = appUtils.referralInfo[0],
+            token = appUtils.referralInfo[1],
             type = "page visit",
             event = "Visit to contact us page",
             page_name = "/ContactusDetailActivity",

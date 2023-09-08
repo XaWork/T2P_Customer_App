@@ -1,6 +1,8 @@
 package me.taste2plate.app.data.api
 
 import android.util.Log
+import me.taste2plate.app.models.LogCreatedResponse
+import me.taste2plate.app.models.TrackerResponse
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
@@ -9,6 +11,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.Query
 import retrofit2.http.Url
 
 class AnalyticsAPI {
@@ -23,8 +26,6 @@ class AnalyticsAPI {
         .build()
 
     fun addLog(logRequest: LogRequest) {
-
-
         val retrofit = Retrofit.Builder()
             .baseUrl("https://api.trap2win.com/admin/")
             .client(httpClient)
@@ -33,7 +34,7 @@ class AnalyticsAPI {
 
         val apiService = retrofit.create(ApiService::class.java)
 
-        val call = apiService.addLog("add-log?log_category=64abd456600481c67e58853a", logRequest)
+        val call = apiService.addLog("add-log", logRequest)
         call.enqueue(object : retrofit2.Callback<Void> {
             override fun onResponse(call: Call<Void>, response: retrofit2.Response<Void>) {
                 if (response.isSuccessful) {
@@ -49,96 +50,12 @@ class AnalyticsAPI {
         })
 
     }
-
-    /*fun getDeviceIpAddress(context: Context): String {
-        return AppUtils(context)
-    }*/
-
-    fun getDeviceIpAddressFromUrl(): String {
-
-        val loggingInterceptor = HttpLoggingInterceptor().apply {
-            level = HttpLoggingInterceptor.Level.BODY
-        }
-
-        val httpClient = OkHttpClient.Builder()
-            .addInterceptor(loggingInterceptor)
-            .build()
-
-
-        val retrofit = Retrofit.Builder()
-            .baseUrl("https://api.ipify.org")
-            .client(httpClient)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-
-        var ip = ""
-
-
-        val apiService = retrofit.create(ApiService::class.java)
-
-        val call = apiService.getIpAddress()
-        call.enqueue(object : retrofit2.Callback<IpAddressResponse> {
-            override fun onResponse(call: Call<IpAddressResponse>, response: retrofit2.Response<IpAddressResponse>) {
-                if (response.isSuccessful) {
-                    Log.e("IP", "Success : $response")
-                    ip = response.body()?.ip ?: ""
-                } else {
-                    Log.e("Analytics", "failed : $response")
-                }
-            }
-
-            override fun onFailure(call: Call<IpAddressResponse>, t: Throwable) {
-                t.printStackTrace()
-            }
-        })
-
-        return ip
-        /*      val wifiManager = context.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
-              val wifiInfo = wifiManager.connectionInfo
-              val ipAddress = wifiInfo.ipAddress
-
-              // Convert the IP address to a human-readable format
-              val ipByteArray = byteArrayOf(
-                  (ipAddress and 0xff).toByte(),
-                  (ipAddress shr 8 and 0xff).toByte(),
-                  (ipAddress shr 16 and 0xff).toByte(),
-                  (ipAddress shr 24 and 0xff).toByte()
-              )
-
-              try {
-                  val inetAddress = InetAddress.getByAddress(ipByteArray)
-                  return inetAddress.hostAddress
-              } catch (e: Exception) {
-                  e.printStackTrace()
-              }
-
-              return ""*/
-
-
-        /*try {
-            val interfaces: List<NetworkInterface> = Collections.list(NetworkInterface.getNetworkInterfaces())
-            for (networkInterface in interfaces) {
-                val addresses: List<InetAddress> = Collections.list(networkInterface.inetAddresses)
-                for (address in addresses) {
-                    if (!address.isLoopbackAddress) {
-                        val ipAddress: String = address.hostAddress
-                        val isIPv4 = ipAddress.indexOf(':') < 0
-                        if (isIPv4) {
-                            return ipAddress
-                        }
-                    }
-                }
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-        return ""*/
-    }
 }
 
 
 data class LogRequest(
-    val token: String = AnalyticsAPI().token,
+    val category: String,
+    val token: String,
     val type: String,
     val event: String,
     val event_data: String = "",
@@ -151,10 +68,34 @@ data class LogRequest(
 
 data class IpAddressResponse(val ip: String)
 
-
 interface ApiService {
     @POST
     fun addLog(@Url url: String, @Body request: LogRequest): Call<Void>
+
+    @POST("add-log")
+    fun addLog1(@Body request: LogRequest): Call<LogCreatedResponse>
+
+    @POST("acquisition")
+    fun install(
+        @Query("tracker_record") tracker_record: String,
+        @Query("click_id") clickId: String,
+        @Query("security_token") security_token: String,
+        @Query("gaid") gaid: String,
+        @Query("sub4") sub4: String,
+        @Query("type") type: String = "install",
+    ): Call<TrackerResponse>
+
+    @POST("acquisition")
+    fun purchased(
+        @Query("tracker_record") tracker_record: String,
+        @Query("click_id") clickId: String,
+        @Query("security_token") security_token: String,
+        @Query("gaid") gaid: String,
+        @Query("sub4") sub4: String,
+        @Query("goal_name ") goal_name : String,
+        @Query("sale_amount ") sale_amount : String,
+        @Query("type") type: String = "checkout",
+    ): Call<TrackerResponse>
 
     @GET("/?format=json")
     fun getIpAddress(): Call<IpAddressResponse>

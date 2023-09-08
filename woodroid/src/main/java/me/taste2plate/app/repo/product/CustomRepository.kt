@@ -1,6 +1,8 @@
 package me.taste2plate.app.repo.product
 
+import me.taste2plate.app.data.api.ApiService
 import me.taste2plate.app.data.api.CustomAPI
+import me.taste2plate.app.data.api.LogRequest
 import me.taste2plate.app.models.*
 import me.taste2plate.app.models.address.check_zip.CheckAvailabilityResponse
 import me.taste2plate.app.models.address.cities.CityListResponse
@@ -20,9 +22,37 @@ class CustomRepository(baseUrl: String, consumerKey: String, consumerSecret: Str
     WooRepository(baseUrl, consumerKey, consumerSecret) {
 
     private var apiService: CustomAPI = retrofitWithAuth.create(CustomAPI::class.java)
+    private var analyticsAPI: ApiService = retrofitAnalytics.create(ApiService::class.java)
+    private var trackerApi: ApiService = retrofitTracker.create(ApiService::class.java)
 
     fun reInite() {
         getUpdatedAuth()
+    }
+
+    fun addLog(request: LogRequest): Call<LogCreatedResponse> {
+        return analyticsAPI.addLog1(request)
+    }
+
+    fun install(
+        clickId: String,
+        security_token: String,
+        tracker_record: String,
+        gaid: String,
+        sub4: String,
+    ): Call<TrackerResponse> {
+        return trackerApi.install(tracker_record, clickId, security_token, gaid, sub4)
+    }
+
+    fun purchased(
+        tracker_record: String,
+        clickId: String,
+        security_token: String,
+        gaid: String,
+        sub4: String,
+        goal_name : String,
+        sale_amount : String,
+    ): Call<TrackerResponse> {
+        return trackerApi.purchased(tracker_record,clickId, security_token, gaid, sub4, goal_name, sale_amount)
     }
 
     fun getCity(): Call<CityBrand> {

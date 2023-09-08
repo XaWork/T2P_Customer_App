@@ -92,9 +92,12 @@ class ProductListingViewHolder(
 
                             //send event info
                             val analytics = AnalyticsAPI()
+                            val appUtils = AppUtils(context)
                             val logRequest = LogRequest(
-                                type = "add to cart",
-                                event = "add product to wishlist",
+                                category = appUtils.referralInfo[0],
+                                token = appUtils.referralInfo[1],
+                                type = "wishlist",
+                                event = "add",
                                 page_name = "/ProductList",
                                 source = "android",
                                 geo_ip = AppUtils(context).ipAddress,

@@ -73,7 +73,10 @@ class OrderActivity : WooDroidActivity<OrderViewModel>() {
         //send event info
         val productIdList = order!!.products.map { it.id }
         val analytics = AnalyticsAPI()
+        val appUtils = AppUtils(this)
         val logRequest = LogRequest(
+            category = appUtils.referralInfo[0],
+            token = appUtils.referralInfo[1],
             type = "page visit",
             event = "order details",
             event_data = order!!._id,
@@ -81,7 +84,6 @@ class OrderActivity : WooDroidActivity<OrderViewModel>() {
             source = "android",
             user_id = AppUtils(this).user.id,
             geo_ip = AppUtils(this).ipAddress,
-            product_id = productIdList.joinToString(",")
         )
         analytics.addLog(logRequest)
 
@@ -159,7 +161,7 @@ class OrderActivity : WooDroidActivity<OrderViewModel>() {
         adapter.notifyDataSetChanged()
 
         order?.coupon?.let {
-            if (it.isNotEmpty() && order!!.couponamount.toFloat() != 0f) {
+            if (it.isNotEmpty() && order!!.couponamount.isNotEmpty() && order!!.couponamount.toFloat() != 0f) {
                 llCoupon.visibility = VISIBLE
                 couponDiscount = order!!.couponamount.toFloat()
                 tvCouponCost.text = "Rs  -${couponDiscount}"
@@ -199,9 +201,11 @@ class OrderActivity : WooDroidActivity<OrderViewModel>() {
                                 0 -> {
                                     UpdateEntryAdapterItem(item.toSummary(), UpdateType.ENTRY)
                                 }
+
                                 response.data().updates.size - 1 -> {
                                     UpdateEntryAdapterItem(item.toSummary(), UpdateType.EXIT)
                                 }
+
                                 else -> {
                                     UpdateEntryAdapterItem(
                                         item.toSummary(),
@@ -216,9 +220,11 @@ class OrderActivity : WooDroidActivity<OrderViewModel>() {
                         updates.visibility = View.GONE
                     }
                 }
+
                 Status.LOADING -> {
                     showLoading()
                 }
+
                 else -> {
                     stopShowingLoading()
                     showError("Something went wrong while getting updates!")
