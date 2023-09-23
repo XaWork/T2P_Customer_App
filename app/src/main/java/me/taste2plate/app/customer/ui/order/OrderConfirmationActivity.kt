@@ -1,7 +1,6 @@
 package me.taste2plate.app.customer.ui.order
 
 import android.content.Intent
-import android.net.http.HttpResponseCache.install
 import android.os.Bundle
 import com.appsflyer.AFInAppEventParameterName
 import com.appsflyer.AFInAppEventType
@@ -11,10 +10,11 @@ import me.taste2plate.app.customer.databinding.ActivityOrderConfirmedBinding
 import me.taste2plate.app.customer.ui.WooDroidActivity
 import me.taste2plate.app.customer.ui.home.HomeActivity
 import me.taste2plate.app.customer.utils.AppUtils
-import me.taste2plate.app.customer.viewmodels.OrderViewModel
 import me.taste2plate.app.customer.viewmodels.UserViewModel
 import me.taste2plate.app.data.api.AnalyticsAPI
+import me.taste2plate.app.data.api.Interkt
 import me.taste2plate.app.data.api.LogRequest
+import me.taste2plate.app.data.api.RequestBodyEventTrack
 import me.taste2plate.app.models.LogCreatedResponse
 
 class OrderConfirmationActivity : WooDroidActivity<UserViewModel>() {
@@ -42,7 +42,7 @@ class OrderConfirmationActivity : WooDroidActivity<UserViewModel>() {
             token = appUtils.referralInfo[1],
             type = "checkout",
             event = "visit to order confirmation page",
-            event_data = "order id : ${intent.getStringExtra("orderId")}",
+            order_id = "${intent.getStringExtra("orderId")}",
             page_name = "/order confirmed",
             source = "android",
             user_id = AppUtils(this).user.id,
@@ -51,15 +51,17 @@ class OrderConfirmationActivity : WooDroidActivity<UserViewModel>() {
         )
         addLog(logRequest)
 
-        //app flyer update
-        val eventParameters8: MutableMap<String, Any> = HashMap()
-        eventParameters8[AFInAppEventParameterName.PRICE] =intent.getStringExtra("price").toString()
-        eventParameters8[AFInAppEventParameterName.ORDER_ID] =intent.getStringExtra("orderId").toString()
-        AppsFlyerLib.getInstance().logEvent(
-            applicationContext,
-            AFInAppEventType.PURCHASE,
-            eventParameters8
-        )
+        sendUserEventInfoToInterkt()
+
+         //app flyer update
+         val eventParameters8: MutableMap<String, Any> = HashMap()
+         eventParameters8[AFInAppEventParameterName.PRICE] =intent.getStringExtra("price").toString()
+         eventParameters8[AFInAppEventParameterName.ORDER_ID] =intent.getStringExtra("orderId").toString()
+         AppsFlyerLib.getInstance().logEvent(
+             applicationContext,
+             AFInAppEventType.PURCHASE,
+             eventParameters8
+         )
 
         confirmedBinding.continueShopping.setOnClickListener {
             finishAffinity()
@@ -67,13 +69,32 @@ class OrderConfirmationActivity : WooDroidActivity<UserViewModel>() {
         }
     }
 
+    private fun sendUserEventInfoToInterkt() {
+        val appUtils = AppUtils(this)
+        val user = appUtils.user
+        val interkt = Interkt()
+        val traits = mapOf(
+            "orderCreatedBy" to user.fullName,
+            "orderNumber" to "${intent.getStringExtra(" orderId ")}",
+        )
+        val eventInfo = RequestBodyEventTrack(
+            userId = user.id,
+            phoneNumber = user.mobile,
+            countryCode = "+91",
+            event = "OrderPlaced",
+            traits = traits,
+        )
+
+        interkt.eventTrack(eventInfo)
+    }
+
     private fun addLog(request: LogRequest) {
         viewModel.addLog(request).observe(this) { response ->
             when (response!!.status()) {
                 Status.LOADING -> {}
                 Status.SUCCESS -> {
-                    if (!AppUtils(this).isInstallFromPlayStore)
-                        purchased(response.data())
+                    /*if (!AppUtils(this).isInstallFromPlayStore)
+                        purchased(response.data())*/
                 }
 
                 Status.ERROR -> {}

@@ -160,13 +160,13 @@ class HomeFragment : Fragment(), SaveAddressListener {
     }
 
 
-
     fun getWishlist() {
         viewModel.getWishlist(AppUtils(context).user.id).observe(viewLifecycleOwner) { response ->
             when (response.status()) {
                 Status.LOADING -> {
                     progressBar.visibility = VISIBLE
                 }
+
                 Status.SUCCESS -> {
                     val totalWishItem = response.data().result.size
 
@@ -217,8 +217,10 @@ class HomeFragment : Fragment(), SaveAddressListener {
                         Toast.makeText(context, "Set default address!", Toast.LENGTH_LONG).show()
                     }
                 }
+
                 Status.LOADING -> {
                 }
+
                 else -> {
                 }
             }
@@ -247,7 +249,7 @@ class HomeFragment : Fragment(), SaveAddressListener {
 
                     val adapterItems = mutableListOf<AdapterItem<*>>()
                     //
-                  // adapterItems.add(CategoryAdapterItems(response.data().city))
+                    // adapterItems.add(CategoryAdapterItems(response.data().city))
 
                     if (homePageResponse.slider.isNotEmpty()) {
                         //0
@@ -373,9 +375,11 @@ class HomeFragment : Fragment(), SaveAddressListener {
                     }
 
                     Status.SUCCESS -> {
-                        var tempTotalItem: Int = 0
-                        for (cartItem in response.data().result) {
-                            tempTotalItem += cartItem.quantity
+                        var tempTotalItem = 0
+                        if (response.data().status != "error") {
+                            for (cartItem in response.data().result) {
+                                tempTotalItem += cartItem.quantity
+                            }
                         }
                         (activity as BaseActivity).cartCounter = tempTotalItem.toString()
                         (activity as BaseActivity).invalidateOptionsMenu()

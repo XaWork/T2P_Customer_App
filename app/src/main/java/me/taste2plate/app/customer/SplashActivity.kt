@@ -7,12 +7,10 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.text.TextUtils
+import android.provider.Settings
 import android.util.Log
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import com.android.installreferrer.api.InstallReferrerClient
@@ -66,54 +64,56 @@ class SplashActivity : WooDroidActivity<UserViewModel>() {
 
 
         if (checkPermissions()) {
-            if (checkNotificationPermission())
+            if (Build.VERSION.SDK_INT == Build.VERSION_CODES.TIRAMISU)
+                checkNotificationPermission()
+            else
                 apiCalls()
         }
     }
-/*
-    private fun getDynamicLink() {
-        referrerClient = InstallReferrerClient.newBuilder(this).build()
-        referrerClient.startConnection(object : InstallReferrerStateListener {
-            override fun onInstallReferrerSetupFinished(responseCode: Int) {
-                if (responseCode == InstallReferrerClient.InstallReferrerResponse.OK) {
-                    try {
-                        val response: ReferrerDetails = referrerClient.installReferrer
-                        val referrerUrl: String = response.installReferrer
+    /*
+        private fun getDynamicLink() {
+            referrerClient = InstallReferrerClient.newBuilder(this).build()
+            referrerClient.startConnection(object : InstallReferrerStateListener {
+                override fun onInstallReferrerSetupFinished(responseCode: Int) {
+                    if (responseCode == InstallReferrerClient.InstallReferrerResponse.OK) {
+                        try {
+                            val response: ReferrerDetails = referrerClient.installReferrer
+                            val referrerUrl: String = response.installReferrer
 
-                        extractReferrerData(referrerUrl)
-                    } catch (e: Exception) {
-                        e.printStackTrace()
+                            extractReferrerData(referrerUrl)
+                        } catch (e: Exception) {
+                            e.printStackTrace()
+                        }
                     }
                 }
-            }
 
-            override fun onInstallReferrerServiceDisconnected() {
-                // Handle disconnect
-            }
-        })
-    }
-
-    private fun extractReferrerData(referrerUrl: String) {
-        // Parse the referrer string to extract affiliateId and token
-        val params = referrerUrl.split("&")
-        var affiliateId: String? = null
-        var token: String? = null
-        for (param in params) {
-            if (param.startsWith("affiliate_id=")) {
-                affiliateId = param.substringAfter("affiliate_id=")
-            } else if (param.startsWith("token=")) {
-                token = param.substringAfter("token=")
-            }
+                override fun onInstallReferrerServiceDisconnected() {
+                    // Handle disconnect
+                }
+            })
         }
-        Log.e("Splash", "Affiliate id : $affiliateId\ntoken : $token")
-    }
 
-    private fun saveUserIdAndToken(userId: String?, token: String?) {
-        val appUtils = AppUtils(this)
-        appUtils.isInstallFromPlayStore = false
-        appUtils.saveReferralInfo(userId, token)
+        private fun extractReferrerData(referrerUrl: String) {
+            // Parse the referrer string to extract affiliateId and token
+            val params = referrerUrl.split("&")
+            var affiliateId: String? = null
+            var token: String? = null
+            for (param in params) {
+                if (param.startsWith("affiliate_id=")) {
+                    affiliateId = param.substringAfter("affiliate_id=")
+                } else if (param.startsWith("token=")) {
+                    token = param.substringAfter("token=")
+                }
+            }
+            Log.e("Splash", "Affiliate id : $affiliateId\ntoken : $token")
+        }
 
-    }*/
+        private fun saveUserIdAndToken(userId: String?, token: String?) {
+            val appUtils = AppUtils(this)
+            appUtils.isInstallFromPlayStore = false
+            appUtils.saveReferralInfo(userId, token)
+
+        }*/
 
     override fun onDestroy() {
         super.onDestroy()
@@ -137,7 +137,9 @@ class SplashActivity : WooDroidActivity<UserViewModel>() {
         }
 
         if (checkPermissions()) {
-            if (checkNotificationPermission())
+            if (Build.VERSION.SDK_INT == Build.VERSION_CODES.TIRAMISU)
+                checkNotificationPermission()
+            else
                 apiCalls()
         }
     }
@@ -160,9 +162,8 @@ class SplashActivity : WooDroidActivity<UserViewModel>() {
     }
 
     private fun startTrackingWithTrackier() {
-
-        val event = TrackierEvent(TrackierEvent.START_TRIAL)
-        TrackierSDK.trackEvent(event)
+                val event = TrackierEvent(TrackierEvent.START_TRIAL)
+                TrackierSDK.trackEvent(event)
 
     }
 
@@ -171,30 +172,30 @@ class SplashActivity : WooDroidActivity<UserViewModel>() {
 
             FirebaseMessaging.getInstance().subscribeToTopic("install")
 
-         /*   FirebaseMessaging.getInstance().token.addOnSuccessListener { token: String ->
-                if (!TextUtils.isEmpty(token)) {
-                    Log.e(
-                        "Token",
-                        "retrieve token successful : $token"
-                    )
-                } else {
-                    Log.e(
-                        "Token",
-                        "token should not be null..."
-                    )
-                }
-            }.addOnFailureListener { }
-                .addOnCanceledListener {}
-                .addOnCompleteListener { task: Task<String> ->
-                    try {
-                        Log.e(
-                            "Token",
-                            "This is the token : " + task.result
-                        )
-                    } catch (exception: Exception) {
+            /*   FirebaseMessaging.getInstance().token.addOnSuccessListener { token: String ->
+                   if (!TextUtils.isEmpty(token)) {
+                       Log.e(
+                           "Token",
+                           "retrieve token successful : $token"
+                       )
+                   } else {
+                       Log.e(
+                           "Token",
+                           "token should not be null..."
+                       )
+                   }
+               }.addOnFailureListener { }
+                   .addOnCanceledListener {}
+                   .addOnCompleteListener { task: Task<String> ->
+                       try {
+                           Log.e(
+                               "Token",
+                               "This is the token : " + task.result
+                           )
+                       } catch (exception: Exception) {
 
-                    }
-                }*/
+                       }
+                   }*/
         } catch (exception: IOException) {
             Log.e("firebase", exception.toString())
         }
@@ -333,14 +334,14 @@ class SplashActivity : WooDroidActivity<UserViewModel>() {
         //startTracking()
 
         getIpAddress()
-
         startTrackingWithTrackier()
 
-        pushNotification()
+        // pushNotification()
     }
 
+
     private fun getIpAddress() {
-        var context = this
+        val context = this
         val loggingInterceptor = HttpLoggingInterceptor().apply {
             level = HttpLoggingInterceptor.Level.BODY
         }
@@ -401,30 +402,30 @@ class SplashActivity : WooDroidActivity<UserViewModel>() {
     }
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
-    private fun checkNotificationPermission(): Boolean {
+    private fun checkNotificationPermission() {
+
+        val listPermissionsNeeded: ArrayList<String> = ArrayList()
         val notificationPermission =
             ContextCompat.checkSelfPermission(
                 this,
                 android.Manifest.permission.POST_NOTIFICATIONS
             )
 
-        val listPermissionsNeeded: ArrayList<String> = ArrayList()
-
         if (notificationPermission != PackageManager.PERMISSION_GRANTED) {
             listPermissionsNeeded.add(android.Manifest.permission.POST_NOTIFICATIONS);
         }
+
 
         if (listPermissionsNeeded.isNotEmpty()) {
             PermissionUtils.requestPermission(
                 this@SplashActivity, listPermissionsNeeded,
                 0
             )
-            return false;
         }
-        return true;
+
+        apiCalls()
     }
 
-    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     private fun checkPermissions(): Boolean {
         val permissionLocation1 =
             ContextCompat.checkSelfPermission(
@@ -438,11 +439,6 @@ class SplashActivity : WooDroidActivity<UserViewModel>() {
                 android.Manifest.permission.ACCESS_FINE_LOCATION
             )
 
-        val notificationPermission =
-            ContextCompat.checkSelfPermission(
-                this,
-                android.Manifest.permission.POST_NOTIFICATIONS
-            )
 
         val listPermissionsNeeded: ArrayList<String> = ArrayList()
 
@@ -453,18 +449,16 @@ class SplashActivity : WooDroidActivity<UserViewModel>() {
             listPermissionsNeeded.add(android.Manifest.permission.ACCESS_FINE_LOCATION);
         }
 
-        /*if (notificationPermission != PackageManager.PERMISSION_GRANTED) {
-            listPermissionsNeeded.add(android.Manifest.permission.POST_NOTIFICATIONS);
-        }*/
+
 
         if (listPermissionsNeeded.isNotEmpty()) {
             PermissionUtils.requestPermission(
                 this@SplashActivity, listPermissionsNeeded,
                 1
             )
-            return false;
+            return false
         }
-        return true;
+        return true
     }
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
@@ -475,52 +469,87 @@ class SplashActivity : WooDroidActivity<UserViewModel>() {
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
-        val permissionReturn: Int = ContextCompat.checkSelfPermission(
-            this@SplashActivity,
-            android.Manifest.permission.ACCESS_FINE_LOCATION
-        )
-        val permissionReturn1: Int = ContextCompat.checkSelfPermission(
-            this@SplashActivity,
-            android.Manifest.permission.ACCESS_COARSE_LOCATION
-        )
-        val permissionReturn2: Int = ContextCompat.checkSelfPermission(
-            this@SplashActivity,
-            android.Manifest.permission.POST_NOTIFICATIONS
-        )
+        if (requestCode == 1) {
+            var allPermissionsGranted = true
 
-        Log.e(
-            "location",
-            "Access fine location: $permissionReturn\n" +
-                    "Access Coarse Location : $permissionReturn1\n" +
-                    "Post Notification : $permissionReturn2\n" +
-                    "request code : $requestCode\n" +
-                    "permissions : $permissions\n" +
-                    "grantResults : ${grantResults.size}"
-        )
+            for (result in grantResults) {
+                if (result != PackageManager.PERMISSION_GRANTED) {
+                    allPermissionsGranted = false
+                    break
+                }
+            }
 
-        when (requestCode) {
-            0 -> {
-                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    if (ContextCompat.checkSelfPermission(
-                            this@SplashActivity,
-                            android.Manifest.permission.POST_NOTIFICATIONS
-                        ) == PackageManager.PERMISSION_GRANTED
-                    ) {
-                        apiCalls()
-                        Toast.makeText(this, "Notification Permission Granted", Toast.LENGTH_SHORT)
-                            .show()
+            if (allPermissionsGranted) {
+                if (Build.VERSION.SDK_INT == Build.VERSION_CODES.TIRAMISU)
+                    checkNotificationPermission()
+                else
+                    apiCalls()
+            } else {
+                MaterialAlertDialogBuilder(this@SplashActivity)
+                    .setTitle("Alert")
+                    .setCancelable(false)
+                    .setMessage("Location services are disabled")
+                    .setPositiveButton("Allow") { _, _ ->
+                        openAppSettings()
                     }
-                } else {
-                    if (!notificationPermissionDoNotAllowed) {
-                        if (ActivityCompat.shouldShowRequestPermissionRationale(
-                                this@SplashActivity,
-                                android.Manifest.permission.POST_NOTIFICATIONS
-                            )
-                        ) {
-                            checkNotificationPermission()
-                        } else {
-                            notificationPermissionDoNotAllowed = true
-                            /*MaterialAlertDialogBuilder(this@SplashActivity)
+                    .setNegativeButton(getString(R.string.alert_cancel)) { _, _ ->
+                        exitProcess(
+                            0
+                        )
+                    }
+                    .show()
+            }
+        } else if (requestCode == 0) {
+            apiCalls()
+        }
+
+
+        /*  val permissionReturn: Int = ContextCompat.checkSelfPermission(
+              this@SplashActivity,
+              android.Manifest.permission.ACCESS_FINE_LOCATION
+          )
+          val permissionReturn1: Int = ContextCompat.checkSelfPermission(
+              this@SplashActivity,
+              android.Manifest.permission.ACCESS_COARSE_LOCATION
+          )
+          val permissionReturn2: Int = ContextCompat.checkSelfPermission(
+              this@SplashActivity,
+              android.Manifest.permission.POST_NOTIFICATIONS
+          )
+
+          Log.e(
+              "location",
+              "Access fine location: $permissionReturn\n" +
+                      "Access Coarse Location : $permissionReturn1\n" +
+                      "Post Notification : $permissionReturn2\n" +
+                      "request code : $requestCode\n" +
+                      "permissions : $permissions\n" +
+                      "grantResults : ${grantResults.size}"
+          )
+
+          when (requestCode) {
+              0 -> {
+                  if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                      if (ContextCompat.checkSelfPermission(
+                              this@SplashActivity,
+                              android.Manifest.permission.POST_NOTIFICATIONS
+                          ) == PackageManager.PERMISSION_GRANTED
+                      ) {
+                          apiCalls()
+                          Toast.makeText(this, "Notification Permission Granted", Toast.LENGTH_SHORT)
+                              .show()
+                      }
+                  } else {
+                      if (!notificationPermissionDoNotAllowed) {
+                          if (ActivityCompat.shouldShowRequestPermissionRationale(
+                                  this@SplashActivity,
+                                  android.Manifest.permission.POST_NOTIFICATIONS
+                              )
+                          ) {
+                              checkNotificationPermission()
+                          } else {
+                              notificationPermissionDoNotAllowed = true
+                              *//*MaterialAlertDialogBuilder(this@SplashActivity)
                                 .setTitle("Notification Disabled")
                                 .setCancelable(false)
                                 .setMessage("Notification service is disabled")
@@ -532,7 +561,7 @@ class SplashActivity : WooDroidActivity<UserViewModel>() {
                                         0
                                     )
                                 }
-                                .show()*/
+                                .show()*//*
                             apiCalls()
                             //Toast.makeText(this, "Notification Permission Denied", Toast.LENGTH_SHORT).show()
                         }
@@ -589,7 +618,13 @@ class SplashActivity : WooDroidActivity<UserViewModel>() {
 
                 }
             }
-        }
+        }*/
+    }
+
+    private fun openAppSettings() {
+        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+        intent.data = Uri.fromParts("package", packageName, null)
+        startActivity(intent)
     }
 
     override fun onResume() {

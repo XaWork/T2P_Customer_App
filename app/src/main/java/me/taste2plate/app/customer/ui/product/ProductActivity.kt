@@ -36,7 +36,10 @@ import me.taste2plate.app.customer.ui.state.ProgressDialogFragment
 import me.taste2plate.app.customer.utils.AppUtils
 import me.taste2plate.app.customer.viewmodels.ProductViewModel
 import me.taste2plate.app.data.api.AnalyticsAPI
+import me.taste2plate.app.data.api.Interkt
 import me.taste2plate.app.data.api.LogRequest
+import me.taste2plate.app.data.api.RequestBodyEventTrack
+import me.taste2plate.app.data.api.RequestBodyUserTrack
 import me.taste2plate.app.models.AppDataResponse
 import me.taste2plate.app.models.Image
 import me.taste2plate.app.models.address.Address
@@ -135,7 +138,7 @@ class ProductActivity : BaseActivity(), SaveAddressListener {
 
     private fun addToWish() {
         viewModel.addToWishlist(AppUtils(this).user.id, productId).observe(this) { response ->
-            when(response.status()){
+            when (response.status()) {
                 Status.LOADING -> showLoading()
                 Status.SUCCESS -> {
                     stopShowingLoading()
@@ -158,13 +161,14 @@ class ProductActivity : BaseActivity(), SaveAddressListener {
                     )
                     analytics.addLog(logRequest)
                 }
+
                 Status.ERROR -> stopShowingLoading()
                 Status.EMPTY -> stopShowingLoading()
             }
         }
     }
 
-    private fun sendProductInfoToCleverTap(eventName: String){
+    private fun sendProductInfoToCleverTap(eventName: String) {
         val prodViewedAction = mapOf(
             "Product Name" to product.name,
             "Category" to product.category,
@@ -188,14 +192,14 @@ class ProductActivity : BaseActivity(), SaveAddressListener {
     }
 
     private fun getWishlist() {
-        viewModel.getWishlist(AppUtils(this).user.id).observe(this){response->
-            when(response.status()){
+        viewModel.getWishlist(AppUtils(this).user.id).observe(this) { response ->
+            when (response.status()) {
                 Status.LOADING -> showLoading()
                 Status.SUCCESS -> {
                     stopShowingLoading()
                     val wishlistItem = response.data().result
 
-                    if(wishlistItem.isEmpty())
+                    if (wishlistItem.isEmpty())
                         tvWishlistCounter?.visibility = View.GONE
                     else {
                         Log.e("wishlist", wishlistItem.size.toString())
@@ -204,6 +208,7 @@ class ProductActivity : BaseActivity(), SaveAddressListener {
                     }
                     wishlistCounter = wishlistItem.toString()
                 }
+
                 Status.ERROR -> stopShowingLoading()
                 Status.EMPTY -> stopShowingLoading()
             }
@@ -247,6 +252,8 @@ class ProductActivity : BaseActivity(), SaveAddressListener {
                             product_id = productId
                         )
                         analytics.addLog(logRequest)
+
+                        sendUserEventInfoToInterkt()
                     }
 
                     Status.ERROR, Status.EMPTY -> {
@@ -259,7 +266,28 @@ class ProductActivity : BaseActivity(), SaveAddressListener {
     }
 
 
-    private fun addAppEvent(){
+    private fun sendUserEventInfoToInterkt() {
+        val appUtils = AppUtils(this)
+        val user = appUtils.user
+        val interkt = Interkt()
+        val traits = mapOf(
+            "productName" to product.name,
+            "quantity" to tvQty.text.toString(),
+            "price" to product.selling_price,
+            "currency" to "INR"
+        )
+        val eventInfo = RequestBodyEventTrack(
+            userId = user.id,
+            phoneNumber = user.mobile,
+            countryCode = "+91",
+            event = "Product Added To Cart",
+            traits = traits,
+        )
+
+        interkt.eventTrack(eventInfo)
+    }
+
+    private fun addAppEvent() {
         val logger = AppEventsLogger.newLogger(this)
         logger.logEvent(AppEventsConstants.EVENT_NAME_ADDED_TO_CART)
     }
@@ -300,6 +328,7 @@ class ProductActivity : BaseActivity(), SaveAddressListener {
                 Status.ERROR -> {
                     showError(getString(R.string.error) + response.error().message)
                 }
+
                 else -> showError(getString(R.string.something_went_wrong))
             }
 
@@ -314,7 +343,7 @@ class ProductActivity : BaseActivity(), SaveAddressListener {
                 }
 
                 Status.SUCCESS -> {
-                    val product = response.data().result.first()
+                    product = response.data().result.first()
                     setUpPage(product)
                     //getProductCity(product._id)
                     flLoading.visibility = View.GONE
@@ -324,6 +353,7 @@ class ProductActivity : BaseActivity(), SaveAddressListener {
                 Status.ERROR -> {
                     showError(getString(R.string.error) + response.error().message)
                 }
+
                 else -> showError(getString(R.string.something_went_wrong))
             }
         })
@@ -341,6 +371,7 @@ class ProductActivity : BaseActivity(), SaveAddressListener {
                     Status.LOADING -> {
                         showLoading()
                     }
+
                     Status.SUCCESS -> {
                         stopShowingLoading()
                         edtZipCode.setText(pincode.toString())
@@ -502,9 +533,11 @@ class ProductActivity : BaseActivity(), SaveAddressListener {
                     currentCartItem != null -> {
                         updateCart()
                     }
+
                     cal_dist == 1 -> {
                         addToCart()
                     }
+
                     else -> {
                         updateCart()
                     }

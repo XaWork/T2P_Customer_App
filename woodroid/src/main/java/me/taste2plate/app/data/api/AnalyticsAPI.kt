@@ -63,7 +63,8 @@ data class LogRequest(
     val page_name: String,
     val source: String = "android",
     val user_id: String,
-    val product_id: String = ""
+    val product_id: String = "",
+    val order_id: String = ""
 )
 
 data class IpAddressResponse(val ip: String)

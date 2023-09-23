@@ -21,7 +21,13 @@ import com.facebook.appevents.AppEventsConstants
 import com.facebook.appevents.AppEventsLogger
 import com.trackier.sdk.TrackierEvent
 import com.trackier.sdk.TrackierSDK
-import kotlinx.android.synthetic.main.fragment_sign_up.*
+import kotlinx.android.synthetic.main.fragment_sign_up.bNext
+import kotlinx.android.synthetic.main.fragment_sign_up.etEmail
+import kotlinx.android.synthetic.main.fragment_sign_up.etOtp
+import kotlinx.android.synthetic.main.fragment_sign_up.etPhoneNumber
+import kotlinx.android.synthetic.main.fragment_sign_up.referral
+import kotlinx.android.synthetic.main.fragment_sign_up.tc
+import kotlinx.android.synthetic.main.fragment_sign_up.terms
 import me.taste2plate.app.customer.R
 import me.taste2plate.app.customer.common.Status
 import me.taste2plate.app.customer.common.TermsActivity
@@ -33,8 +39,10 @@ import me.taste2plate.app.customer.ui.state.ProgressDialogFragment
 import me.taste2plate.app.customer.utils.AppUtils
 import me.taste2plate.app.customer.viewmodels.UserViewModel
 import me.taste2plate.app.data.api.AnalyticsAPI
+import me.taste2plate.app.data.api.Interkt
 import me.taste2plate.app.data.api.LogRequest
 import me.taste2plate.app.data.api.RegistrationData
+import me.taste2plate.app.data.api.RequestBodyUserTrack
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -245,11 +253,12 @@ class SignUpFragment : Fragment() {
                                     event_data = "signup",
                                     page_name = "/signup",
                                     source = "android",
-                                    user_id = "",
+                                    user_id = data!!.id,
                                     geo_ip = AppUtils(context).ipAddress,
-                                    product_id = ""
                                 )
                                 analytics.addLog(logRequest)
+
+                                sendUserInfoToInterkt()
 
                                 //appflyer
                                 val eventParameters0: MutableMap<String, Any> = HashMap()
@@ -298,6 +307,24 @@ class SignUpFragment : Fragment() {
         }
     }
 
+    private fun sendUserInfoToInterkt() {
+        val appUtils = AppUtils(context)
+        val user = appUtils.user
+        val interkt = Interkt()
+        val traits = mapOf(
+            "name" to user.fullName,
+            "email" to user.email
+        )
+        val userInfo = RequestBodyUserTrack(
+            userId = user.id,
+            phoneNumber = user.mobile,
+            countryCode = "+91",
+            traits = traits,
+
+            )
+
+        interkt.userTrack(userInfo)
+    }
     private fun startTrackingWithTrackier() {
 
         val event = TrackierEvent("Register")

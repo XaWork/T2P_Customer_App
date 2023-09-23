@@ -11,6 +11,7 @@ import android.widget.Toast
 import com.clevertap.android.sdk.CleverTapAPI
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.messaging.FirebaseMessaging
+import kotlinx.android.synthetic.main.checkout_flow_layout.phoneNumber
 import kotlinx.android.synthetic.main.fragment_sign_in.bNext
 import kotlinx.android.synthetic.main.fragment_sign_in.etOtp
 import kotlinx.android.synthetic.main.fragment_sign_in.etPhoneNumber
@@ -23,7 +24,10 @@ import me.taste2plate.app.customer.ui.state.ProgressDialogFragment
 import me.taste2plate.app.customer.utils.AppUtils
 import me.taste2plate.app.customer.viewmodels.UserViewModel
 import me.taste2plate.app.data.api.AnalyticsAPI
+import me.taste2plate.app.data.api.Interkt
 import me.taste2plate.app.data.api.LogRequest
+import me.taste2plate.app.data.api.RequestBodyUserTrack
+import okhttp3.RequestBody
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 import kotlin.system.exitProcess
@@ -197,23 +201,8 @@ class SignInFragment : androidx.fragment.app.Fragment() {
                             AppUtils(activity).saveUser(otpResponse.data!!)
                             sendUserInfoToCleverTap()
 
-                            //send event info
-                            val analytics = AnalyticsAPI()
-                            val appUtils = AppUtils(context)
-                            val logRequest = LogRequest(
-                                category = appUtils.referralInfo[0],
-                                token = appUtils.referralInfo[1],
-                                type = "login",
-                                event = "login successfully",
-                                event_data = "login",
-                                page_name = "/login",
-                                source = "android",
-                                user_id = "",
-                                geo_ip = AppUtils(context).ipAddress,
-                                product_id = ""
-                            )
-                            analytics.addLog(logRequest)
-
+                            logUserInfo()
+                            sendUserInfoToInterkt()
                             // check which data is saved
                             Log.e("TAG", "validateOtp: ${otpResponse.data}")
 
@@ -246,6 +235,44 @@ class SignInFragment : androidx.fragment.app.Fragment() {
             Toast.makeText(activity, "Please correct the information entered", Toast.LENGTH_SHORT)
                 .show()
         }
+    }
+
+    private fun logUserInfo() {
+        //send event info
+        val analytics = AnalyticsAPI()
+        val appUtils = AppUtils(context)
+        val logRequest = LogRequest(
+            category = appUtils.referralInfo[0],
+            token = appUtils.referralInfo[1],
+            type = "login",
+            event = "login successfully",
+            event_data = "login",
+            page_name = "/login",
+            source = "android",
+            user_id = "",
+            geo_ip = AppUtils(context).ipAddress,
+            product_id = ""
+        )
+        analytics.addLog(logRequest)
+    }
+
+    private fun sendUserInfoToInterkt() {
+        val appUtils = AppUtils(context)
+        val user = appUtils.user
+        val interkt = Interkt()
+        val traits = mapOf(
+            "name" to user.fullName,
+            "email" to user.email
+        )
+        val userInfo = RequestBodyUserTrack(
+            userId = user.id,
+            phoneNumber = user.mobile,
+            countryCode = "+91",
+            traits = traits,
+
+        )
+
+        interkt.userTrack(userInfo)
     }
 
     private fun validates(): Boolean {

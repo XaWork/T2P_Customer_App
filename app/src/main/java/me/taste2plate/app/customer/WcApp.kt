@@ -8,8 +8,6 @@ import androidx.appcompat.app.AppCompatDelegate
 import com.appsflyer.AppsFlyerLib
 import com.clevertap.android.sdk.ActivityLifecycleCallback
 import com.clevertap.android.sdk.CleverTapAPI
-import com.facebook.FacebookSdk
-import com.facebook.appevents.AppEventsConstants
 import com.facebook.appevents.AppEventsLogger
 import com.facebook.drawee.backends.pipeline.Fresco
 import com.google.android.libraries.places.api.Places
@@ -23,7 +21,8 @@ import io.github.inflationx.calligraphy3.CalligraphyInterceptor
 import io.github.inflationx.viewpump.ViewPump
 import me.taste2plate.app.customer.di.DaggerAppComponent
 import me.taste2plate.app.customer.utils.AppConfig
-import java.util.*
+import me.taste2plate.app.customer.utils.AppUtils
+import java.util.Objects
 
 
 class WcApp : DaggerApplication() {
@@ -96,20 +95,8 @@ class WcApp : DaggerApplication() {
         TrackierSDK.setLocalRefTrack(true, "_")
         TrackierSDK.initialize(sdkConfig)
 
-        //TrackierSDK.initialize(sdkConfig)
-        //Assosiate User Info during initialization of sdk
-        //val appUtils = AppUtils(context)
-        //TrackierSDK.setUserId("Xa kaler")
-        //TrackierSDK.setUserEmail("xakaler@gmail.com")
-        //TrackierSDK.initialize(sdkConfig)
-
-
         //explicitly fire Install
         TrackierSDK.fireInstall()
-
-        /*//Disable Organic Track
-        sdkConfig.disableOrganicTracking(true)
-        TrackierSDK.initialize(sdkConfig)*/
     }
 
 

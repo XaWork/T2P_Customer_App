@@ -1152,7 +1152,7 @@ class CheckoutActivity : WooDroidActivity<CheckoutViewModel>(), SaveAddressListe
             dialog.dismiss()
         }
 
-        dialog?.show()
+        dialog.show()
     }
 
 

@@ -17,7 +17,7 @@ data class CartItem(
     var price: String? = "0",
     val product: NewProduct,
     val productname: String,
-    var quantity: Int,
+    var quantity: Int = 0,
     val sub_category: String,
     val update_date: String,
     val user: String,
