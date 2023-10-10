@@ -177,9 +177,9 @@ public class ProductRepository {
 
 
     @NotNull
-    public WooLiveData<CheckoutResponse> initCheckout(@NotNull Boolean isWalletApplied,@NotNull String userId, @NotNull String addressId, @NotNull String timeSlot, @NotNull String date, @NotNull String deliveryCost, @NotNull String express, @NotNull String couponCode, @NotNull String couponType, @NotNull String couponAmount, String cartPrice, String finalPrice, @NotNull String customerCity, String addCost, @NotNull String cutomerZip, @NotNull String browser) {
+    public WooLiveData<CheckoutResponse> initCheckout(@NotNull Boolean isWalletApplied,@NotNull String userId, @NotNull String addressId, @NotNull String timeSlot, @NotNull String date, @NotNull String deliveryCost, @NotNull String express, @NotNull String couponCode, @NotNull String couponType, @NotNull String couponAmount, String tipPrice,String cartPrice, String finalPrice, @NotNull String customerCity, String addCost, @NotNull String cutomerZip, @NotNull String browser) {
         final WooLiveData<CheckoutResponse> callBack = new WooLiveData();
-        woocommerce.ProductRepository().initCheckout(isWalletApplied,userId,addressId,timeSlot,date,deliveryCost,express,couponCode,couponType,couponAmount,cartPrice,finalPrice,customerCity,addCost, cutomerZip, browser).enqueue(callBack);
+        woocommerce.ProductRepository().initCheckout(isWalletApplied,userId,addressId,timeSlot,date,deliveryCost,express,couponCode,couponType,couponAmount,cartPrice,finalPrice,tipPrice,customerCity,addCost, cutomerZip, browser).enqueue(callBack);
         return callBack;
     }
 

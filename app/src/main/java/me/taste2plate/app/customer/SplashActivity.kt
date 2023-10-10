@@ -1,5 +1,6 @@
 package me.taste2plate.app.customer
 
+import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -9,8 +10,11 @@ import android.os.Handler
 import android.os.Looper
 import android.provider.Settings
 import android.util.Log
+import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import com.android.installreferrer.api.InstallReferrerClient
@@ -45,6 +49,7 @@ class SplashActivity : WooDroidActivity<UserViewModel>() {
     private var customer: RegistrationData? = null
     override lateinit var viewModel: UserViewModel
     private var isVersionCheckComplete: Boolean = false
+    private var onResumeCalled = false
     private var permissionDoNotAllowed = false
     private var notificationPermissionDoNotAllowed = false
     private lateinit var referrerClient: InstallReferrerClient
@@ -59,16 +64,6 @@ class SplashActivity : WooDroidActivity<UserViewModel>() {
         customer = AppUtils(this).user
         isVersionCheckComplete = false
 
-        //if this app download from referral link then save then token and user info who refer it.
-        //checkAndSaveInstallInfo()
-
-
-        if (checkPermissions()) {
-            if (Build.VERSION.SDK_INT == Build.VERSION_CODES.TIRAMISU)
-                checkNotificationPermission()
-            else
-                apiCalls()
-        }
     }
     /*
         private fun getDynamicLink() {
@@ -161,11 +156,11 @@ class SplashActivity : WooDroidActivity<UserViewModel>() {
         appUtils.saveReferralInfo(userId, token)
     }
 
-    private fun startTrackingWithTrackier() {
-                val event = TrackierEvent(TrackierEvent.START_TRIAL)
-                TrackierSDK.trackEvent(event)
+   /* private fun startTrackingWithTrackier() {
+        val event = TrackierEvent(TrackierEvent.START_TRIAL)
+        TrackierSDK.trackEvent(event)
 
-    }
+    }*/
 
     private fun pushNotification() {
         try {
@@ -334,7 +329,7 @@ class SplashActivity : WooDroidActivity<UserViewModel>() {
         //startTracking()
 
         getIpAddress()
-        startTrackingWithTrackier()
+        //startTrackingWithTrackier()
 
         // pushNotification()
     }
@@ -421,9 +416,10 @@ class SplashActivity : WooDroidActivity<UserViewModel>() {
                 this@SplashActivity, listPermissionsNeeded,
                 0
             )
+        } else {
+            apiCalls()
         }
 
-        apiCalls()
     }
 
     private fun checkPermissions(): Boolean {
@@ -470,14 +466,30 @@ class SplashActivity : WooDroidActivity<UserViewModel>() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
         if (requestCode == 1) {
-            var allPermissionsGranted = true
 
-            for (result in grantResults) {
-                if (result != PackageManager.PERMISSION_GRANTED) {
-                    allPermissionsGranted = false
-                    break
+            val allPermissionsGranted =
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    true
+                } else if (!ActivityCompat.shouldShowRequestPermissionRationale(
+                        this,
+                        Manifest.permission.ACCESS_FINE_LOCATION
+                    ) &&
+                    !ActivityCompat.shouldShowRequestPermissionRationale(
+                        this,
+                        Manifest.permission.ACCESS_COARSE_LOCATION
+                    )
+                ) {
+                    false
+                } else {
+                    false
                 }
-            }
+
+            /* for (result in grantResults) {
+                 if (result != PackageManager.PERMISSION_GRANTED) {
+                     allPermissionsGranted = false
+                     break
+                 }
+             }*/
 
             if (allPermissionsGranted) {
                 if (Build.VERSION.SDK_INT == Build.VERSION_CODES.TIRAMISU)
@@ -499,10 +511,10 @@ class SplashActivity : WooDroidActivity<UserViewModel>() {
                     }
                     .show()
             }
-        } else if (requestCode == 0) {
+        }
+        else if (requestCode == 0) {
             apiCalls()
         }
-
 
         /*  val permissionReturn: Int = ContextCompat.checkSelfPermission(
               this@SplashActivity,
@@ -629,6 +641,35 @@ class SplashActivity : WooDroidActivity<UserViewModel>() {
 
     override fun onResume() {
         super.onResume()
+        if (onResumeCalled) {
+            val hasLocationPermission = PackageManager.PERMISSION_GRANTED ==
+                    ContextCompat.checkSelfPermission(
+                        this,
+                        Manifest.permission.ACCESS_FINE_LOCATION
+                    ) && PackageManager.PERMISSION_GRANTED ==
+                    ContextCompat.checkSelfPermission(
+                        this,
+                        Manifest.permission.ACCESS_FINE_LOCATION
+                    )
 
+            if (hasLocationPermission) {
+                if (Build.VERSION.SDK_INT == Build.VERSION_CODES.TIRAMISU)
+                    checkNotificationPermission()
+                else
+                    apiCalls()
+            } else {
+                Toast.makeText(this, "Please allow permission to move forward", Toast.LENGTH_LONG)
+                    .show()
+            }
+        } else {
+            if (checkPermissions()) {
+                if (Build.VERSION.SDK_INT == Build.VERSION_CODES.TIRAMISU)
+                    checkNotificationPermission()
+                else
+                    apiCalls()
+            }
+            onResumeCalled = true
+        }
     }
+
 }

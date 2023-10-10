@@ -53,15 +53,15 @@ class OrderConfirmationActivity : WooDroidActivity<UserViewModel>() {
 
         sendUserEventInfoToInterkt()
 
-         //app flyer update
+         //app flyer updatex
          val eventParameters8: MutableMap<String, Any> = HashMap()
          eventParameters8[AFInAppEventParameterName.PRICE] =intent.getStringExtra("price").toString()
          eventParameters8[AFInAppEventParameterName.ORDER_ID] =intent.getStringExtra("orderId").toString()
-         AppsFlyerLib.getInstance().logEvent(
+        /* AppsFlyerLib.getInstance().logEvent(
              applicationContext,
              AFInAppEventType.PURCHASE,
              eventParameters8
-         )
+         )*/
 
         confirmedBinding.continueShopping.setOnClickListener {
             finishAffinity()

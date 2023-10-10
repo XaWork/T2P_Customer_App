@@ -54,13 +54,14 @@ class CheckoutViewModel @Inject constructor(private val productRepository: Produ
         couponType: String,
         couponAmount: String,
         cartPrice: String,
+        tipPrice: String,
         finalPrice: String,
         customerCity: String,
         addCost: String,
         customerZip: String,
         browser: String
     ):WooLiveData<CheckoutResponse> {
-        return productRepository.initCheckout(isWalletApplied,userId,addressId,timeSlot,date,deliveryCost,express,couponCode,couponType,couponAmount,cartPrice,finalPrice,customerCity,addCost,customerZip, browser)
+        return productRepository.initCheckout(isWalletApplied,userId,addressId,timeSlot,date,deliveryCost,express,couponCode,couponType,couponAmount,tipPrice, cartPrice,finalPrice,customerCity,addCost,customerZip, browser)
     }
 
 }

@@ -260,7 +260,7 @@ class SignUpFragment : Fragment() {
 
                                 sendUserInfoToInterkt()
 
-                                //appflyer
+                           /*     //appflyer
                                 val eventParameters0: MutableMap<String, Any> = HashMap()
                                 eventParameters0[AFInAppEventParameterName.REGISTRATION_METHOD] =
                                     otpResponse.data!!.id
@@ -268,14 +268,14 @@ class SignUpFragment : Fragment() {
                                     getApplicationContext(),
                                     AFInAppEventType.COMPLETE_REGISTRATION,
                                     eventParameters0
-                                )
+                                )*/
 
 
                                 addAppEvent()
                                 sendUserInfoToCleverTap()
                                 ClickzinTracker.getInstance().startTracking("Registration")
 
-                                startTrackingWithTrackier()
+                               // startTrackingWithTrackier()
 
                                 moveToDashBoard()
                             }
@@ -325,13 +325,13 @@ class SignUpFragment : Fragment() {
 
         interkt.userTrack(userInfo)
     }
-    private fun startTrackingWithTrackier() {
+   /* private fun startTrackingWithTrackier() {
 
         val event = TrackierEvent("Register")
         TrackierSDK.trackEvent(event)
 
         //Log.e("trackier", "start login tracker event: ${TrackierSDK.isEnabled()}", )
-    }
+    }*/
 
     private fun addAppEvent() {
         val logger = AppEventsLogger.newLogger(requireContext())

@@ -36,6 +36,7 @@ interface ProductAPI {
         @Field("coupontype") couponType: String,
         @Field("couponamount") couponAmount: String,
         @Field("price") cartPrice: String,
+        @Field("tip_price") tipPrice: String,
         @Field("final_price") finalPrice: String,
         @Field("customer_city") customerCity: String,
         @Field("additional_cost") addCost: String,

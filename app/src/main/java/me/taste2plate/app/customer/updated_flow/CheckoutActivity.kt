@@ -55,6 +55,7 @@ import me.taste2plate.app.models.membership.myplan.PointSettings
 import org.json.JSONObject
 import java.text.SimpleDateFormat
 import java.util.*
+import java.util.regex.Pattern
 
 
 class CheckoutActivity : WooDroidActivity<CheckoutViewModel>(), SaveAddressListener,
@@ -80,6 +81,7 @@ class CheckoutActivity : WooDroidActivity<CheckoutViewModel>(), SaveAddressListe
     var cartItemResponse: CartItemResponse? = null
 
     var userId: String? = null
+    var showFinalPrice = ""
 
     var finalProductPrice = ""
 
@@ -146,6 +148,25 @@ class CheckoutActivity : WooDroidActivity<CheckoutViewModel>(), SaveAddressListe
                     clickDataPicker(it)
             }
 
+
+            binding.etTip.setupDropDown(
+                listOf(0, 10, 20, 30, 50).toTypedArray(),
+                { it.toString() },
+                { value ->
+                    val pattern = Pattern.compile("\\d+")
+                    val matcher = pattern.matcher(showFinalPrice)
+                    if (matcher.find()) {
+                        val number = matcher.group()
+                        binding.etTip.setText(value.toString())
+                        val finalPrice: Int = number.toInt() + value
+                        binding.finalFee.text = "Rs. $finalPrice"
+                    }
+                }, {
+                    it.show()
+                    hideSoftKeyboard()
+                }
+            )
+
             radioGroup.setOnCheckedChangeListener { _, checkedId ->
                 when (checkedId) {
                     R.id.express -> {
@@ -176,6 +197,7 @@ class CheckoutActivity : WooDroidActivity<CheckoutViewModel>(), SaveAddressListe
 
                                     finalFee.text =
                                         if (chooseWallet.isChecked) "Rs. ${couponResponse!!.new_final_price.withWallet!!.normal}" else "Rs. ${couponResponse!!.new_final_price.normal}"
+                                    showFinalPrice = finalFee.text.toString()
                                     igstValue.text =
                                         if (chooseWallet.isChecked) "Rs. ${couponResponse!!.gstWithWallet.normal.totalIgst}" else "Rs. ${couponResponse!!.gst.normal.totalIgst}"
                                     cgstValue.text =
@@ -198,6 +220,7 @@ class CheckoutActivity : WooDroidActivity<CheckoutViewModel>(), SaveAddressListe
 
                                     finalFee.text =
                                         if (chooseWallet.isChecked) "Rs. ${cartItemResponse!!.new_final_price.withWallet!!.normal}" else "Rs. ${cartItemResponse!!.new_final_price.normal}"
+                                    showFinalPrice = finalFee.text.toString()
                                     igstValue.text =
                                         if (chooseWallet.isChecked) "Rs. ${cartItemResponse!!.gstWithPoint.normal.totalIgst}" else "Rs. ${cartItemResponse!!.gst.normal.totalIgst}"
                                     cgstValue.text =
@@ -281,6 +304,7 @@ class CheckoutActivity : WooDroidActivity<CheckoutViewModel>(), SaveAddressListe
                                 finalFee.text =
                                     if (deliveryMode == 1) "Rs. ${couponResponse!!.new_final_price.withWallet!!.express}"
                                     else "Rs. ${couponResponse!!.new_final_price.withWallet!!.normal}"
+                                showFinalPrice = finalFee.text.toString()
                                 igstValue.text =
                                     if (deliveryMode == 1) "Rs. ${couponResponse!!.gst.express.totalIgst}" else "Rs. ${couponResponse!!.gst.normal.totalIgst}"
                                 cgstValue.text =
@@ -292,6 +316,7 @@ class CheckoutActivity : WooDroidActivity<CheckoutViewModel>(), SaveAddressListe
                             binding.run {
                                 finalFee.text =
                                     if (deliveryMode == 1) "Rs. ${cartItemResponse!!.new_final_price.withWallet!!.express}" else "Rs. ${cartItemResponse!!.new_final_price.withWallet!!.normal}"
+                                showFinalPrice = finalFee.text.toString()
                                 igstValue.text =
                                     if (deliveryMode == 1) "Rs. ${cartItemResponse!!.gstWithPoint.express.totalIgst}" else "Rs. ${cartItemResponse!!.gstWithPoint.normal.totalIgst}"
                                 cgstValue.text =
@@ -305,6 +330,7 @@ class CheckoutActivity : WooDroidActivity<CheckoutViewModel>(), SaveAddressListe
                             binding.run {
                                 finalFee.text =
                                     if (deliveryMode == 1) "Rs. ${couponResponse!!.new_final_price.express}" else "Rs. ${couponResponse!!.new_final_price.normal}"
+                                showFinalPrice = finalFee.text.toString()
                                 igstValue.text =
                                     if (deliveryMode == 1) "Rs. ${couponResponse!!.gst.express.totalIgst}" else "Rs. ${couponResponse!!.gst.normal.totalIgst}"
                                 cgstValue.text =
@@ -316,6 +342,7 @@ class CheckoutActivity : WooDroidActivity<CheckoutViewModel>(), SaveAddressListe
                             binding.run {
                                 finalFee.text =
                                     if (deliveryMode == 1) "Rs. ${cartItemResponse!!.new_final_price.express}" else "Rs. ${cartItemResponse!!.new_final_price.normal}"
+                                showFinalPrice = finalFee.text.toString()
                                 igstValue.text =
                                     if (deliveryMode == 1) "Rs. ${cartItemResponse!!.gst.express.totalIgst}" else "Rs. ${cartItemResponse!!.gst.normal.totalIgst}"
                                 cgstValue.text =
@@ -588,7 +615,7 @@ class CheckoutActivity : WooDroidActivity<CheckoutViewModel>(), SaveAddressListe
         val couponAmount =
             if (couponResponse != null) couponResponse!!.coupon_discount.toString() else ""
         val cartPrice = cartItemResponse!!.cartprice.toString()
-        val finalPrice =
+        var finalPrice =
             if (deliveryMode == 1) {
                 if (couponResponse != null) {
                     if (isWalletApplied) couponResponse!!.new_final_price.withWallet!!.express else couponResponse!!.new_final_price.express
@@ -603,12 +630,15 @@ class CheckoutActivity : WooDroidActivity<CheckoutViewModel>(), SaveAddressListe
                 }
             }
 
+        if (etTip.text.toString().isNotEmpty()) {
+            val priceAfterTip = finalPrice.toInt() + etTip.text.toString().toInt()
+            finalPrice = priceAfterTip.toString()
+        }
         finalProductPrice = finalPrice
 
-        val customerCity = AppUtils(this).defaultAddress.city!!._id
-        val customerZip = AppUtils(this).defaultAddress.pincode ?: ""
+        val customerCity = AppUtils(this).defaultAddress.city._id
+        val customerZip = AppUtils(this).defaultAddress.pincode
         val addCost = 0f.toString()
-
 
         viewModel.initCheckout(
             isWalletApplied,
@@ -622,6 +652,7 @@ class CheckoutActivity : WooDroidActivity<CheckoutViewModel>(), SaveAddressListe
             couponType,
             couponAmount,
             cartPrice,
+            etTip.text.toString().ifEmpty { "0" },
             finalPrice,
             customerCity,
             addCost,
@@ -753,6 +784,7 @@ class CheckoutActivity : WooDroidActivity<CheckoutViewModel>(), SaveAddressListe
                                 priceProduct = response.data().cartprice
                                 price.text = "Rs. ${response.data().cartprice}"
                                 finalFee.text = "Rs. ${response.data().new_final_price.normal}"
+                                showFinalPrice = finalFee.text.toString()
                                 igstValue.text = "Rs. ${response.data().gst.normal.totalIgst}"
                                 cgstValue.text = "Rs. ${response.data().gst.normal.totalCgst}"
                                 sgstValue.text = "Rs. ${response.data().gst.normal.totalSgst}"
@@ -856,6 +888,7 @@ class CheckoutActivity : WooDroidActivity<CheckoutViewModel>(), SaveAddressListe
                                     priceProduct = response.data().cartprice
                                     price.text = "Rs. ${response.data().cartprice}"
                                     finalFee.text = "Rs. ${response.data().new_final_price.express}"
+                                    showFinalPrice = finalFee.text.toString()
                                     igstValue.text = "Rs. ${response.data().gst.express.totalIgst}"
                                     cgstValue.text = "Rs. ${response.data().gst.express.totalCgst}"
                                     sgstValue.text = "Rs. ${response.data().gst.express.totalSgst}"
@@ -874,6 +907,7 @@ class CheckoutActivity : WooDroidActivity<CheckoutViewModel>(), SaveAddressListe
                                     priceProduct = response.data().cartprice
                                     price.text = "Rs. ${response.data().cartprice}"
                                     finalFee.text = "Rs. ${response.data().new_final_price.normal}"
+                                    showFinalPrice = finalFee.text.toString()
                                     igstValue.text = "Rs. ${response.data().gst.normal.totalIgst}"
                                     cgstValue.text = "Rs. ${response.data().gst.normal.totalCgst}"
                                     sgstValue.text = "Rs. ${response.data().gst.normal.totalSgst}"
@@ -1009,7 +1043,7 @@ class CheckoutActivity : WooDroidActivity<CheckoutViewModel>(), SaveAddressListe
                                 .show()
 
                             finishAffinity()
-                            startTrackingWithTrackier()
+                            // startTrackingWithTrackier()
                             sendProductInfoToCleverTap()
                             logPurchasedEvent(
                                 cartItems.size,
@@ -1113,13 +1147,13 @@ class CheckoutActivity : WooDroidActivity<CheckoutViewModel>(), SaveAddressListe
     }
 
 
-    private fun startTrackingWithTrackier() {
+    /*  private fun startTrackingWithTrackier() {
 
-        val event = TrackierEvent("Order Placed")
-        TrackierSDK.trackEvent(event)
+          val event = TrackierEvent("Order Placed")
+          TrackierSDK.trackEvent(event)
 
-        //Log.e("trackier", "start login tracker event: ${TrackierSDK.isEnabled()}", )
-    }
+          //Log.e("trackier", "start login tracker event: ${TrackierSDK.isEnabled()}", )
+      }*/
 
     override fun onSaved() {
         setupAddress()
@@ -1177,6 +1211,7 @@ class CheckoutActivity : WooDroidActivity<CheckoutViewModel>(), SaveAddressListe
 
                     finalFee.text =
                         if (chooseWallet.isChecked) "Rs. ${couponResponse!!.new_final_price.withWallet!!.express}" else "Rs. ${couponResponse!!.new_final_price.express}"
+                    showFinalPrice = finalFee.text.toString()
                     igstValue.text =
                         if (chooseWallet.isChecked) "Rs. ${couponResponse!!.gstWithWallet.express.totalIgst}" else "Rs. ${couponResponse!!.gst.express.totalIgst}"
                     cgstValue.text =
@@ -1194,6 +1229,7 @@ class CheckoutActivity : WooDroidActivity<CheckoutViewModel>(), SaveAddressListe
 
                     finalFee.text =
                         if (chooseWallet.isChecked) "Rs. ${cartItemResponse!!.new_final_price.withWallet!!.express}" else "Rs. ${cartItemResponse!!.new_final_price.express}"
+                    showFinalPrice = finalFee.text.toString()
                     igstValue.text =
                         if (chooseWallet.isChecked) "Rs. ${cartItemResponse!!.gstWithPoint.express.totalIgst}" else "Rs. ${cartItemResponse!!.gst.express.totalIgst}"
                     cgstValue.text =

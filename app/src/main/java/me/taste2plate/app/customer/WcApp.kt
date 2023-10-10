@@ -66,14 +66,14 @@ class WcApp : DaggerApplication() {
         )
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
         //trackier
-        trackier()
+        //trackier()
 
         //appflyter
-        setupAppFlyter()
+        //setupAppFlyter()
 
     }
 
-    private fun setupAppFlyter() {
+   /* private fun setupAppFlyter() {
         Log.e("setupAppFlyter", "AppFlyter setup")
         val devKey = "sRXbgREMUcXQ6VbHhb2CCb"
         val appFlyerLib = AppsFlyerLib.getInstance()
@@ -83,9 +83,9 @@ class WcApp : DaggerApplication() {
 
         appFlyerLib.init(devKey, null, this)
         appFlyerLib.start(this)
-    }
+    }*/
 
-    private fun trackier() {
+ /*   private fun trackier() {
         val TR_DEV_KEY = "3dafc9f1-61af-4cc5-aff4-b09d98fed328"
 
         val sdkConfig = TrackierSDKConfig(this, TR_DEV_KEY, "testing")
@@ -97,7 +97,7 @@ class WcApp : DaggerApplication() {
 
         //explicitly fire Install
         TrackierSDK.fireInstall()
-    }
+    }*/
 
 
     override fun applicationInjector(): AndroidInjector<out DaggerApplication> {

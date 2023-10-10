@@ -11,8 +11,8 @@ android {
         applicationId "me.taste2plate.app.customer"
         minSdkVersion 21
         targetSdkVersion 33
-        versionCode 183
-        versionName "2.0.3"
+        versionCode 186
+        versionName "2.0.6"
         vectorDrawables.useSupportLibrary = true
     }
 
@@ -91,6 +91,7 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'com.google.firebase:firebase-messaging'
     implementation 'com.google.firebase:firebase-dynamic-links'
+    implementation 'org.jetbrains:annotations:15.0'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test:runner:1.4.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
