@@ -2,8 +2,6 @@ package me.taste2plate.app.customer.ui.home
 
 import android.app.SearchManager
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -16,8 +14,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.clevertap.android.sdk.CleverTapAPI
 import com.fueled.reclaim.AdapterItem
 import com.fueled.reclaim.ItemsViewAdapter
-import kotlinx.android.synthetic.main.checkout_flow_layout.*
 import kotlinx.android.synthetic.main.fragment_home.*
+import kotlinx.android.synthetic.main.veg_nonveg_toggle.vegNonVegSwitch
 import me.taste2plate.app.customer.common.BaseActivity
 import me.taste2plate.app.customer.common.Status
 import me.taste2plate.app.customer.ui.address.AddressSelectionFragment
@@ -113,6 +111,11 @@ class HomeFragment : Fragment(), SaveAddressListener {
             addressSelection.show(parentFragmentManager, addressSelection.tag)
         }
 
+        vegNonVegSwitch.isChecked = AppUtils(context).taste != "1"
+        vegNonVegSwitch.setOnCheckedChangeListener { _, isChecked ->
+            AppUtils(context).taste = if (isChecked) "0" else "1"
+            getHomePageData()
+        }
 
         shopByCity.setOnClickListener {
             startActivity(
@@ -235,131 +238,132 @@ class HomeFragment : Fragment(), SaveAddressListener {
     private fun getHomePageData() {
         val filter = ProductCategoryFilter()
         filter.setPer_page(100)
-        viewModel.homePageData("").observe(viewLifecycleOwner) { response ->
-            when (response!!.status()) {
-                Status.LOADING -> {
-                    showLoading("Please wait", "Fetching deals and offers")
+        viewModel.homePageData("", AppUtils(context).taste)
+            .observe(viewLifecycleOwner) { response ->
+                when (response!!.status()) {
+                    Status.LOADING -> {
+                        showLoading("Please wait", "Fetching deals and offers")
+                    }
+
+                    Status.SUCCESS -> {
+                        stopShowingLoading()
+                        val homePageResponse = response.data()
+
+                        //Log.e(TAG, homePageResponse.toString())
+
+                        val adapterItems = mutableListOf<AdapterItem<*>>()
+                        //
+                        // adapterItems.add(CategoryAdapterItems(response.data().city))
+
+                        if (homePageResponse.slider.isNotEmpty()) {
+                            //0
+                            adapterItems.add(CarouselAdapterItem(homePageResponse.slider))
+                        }
+
+                        if (homePageResponse.hiddenGems.isNotEmpty()) {
+                            //1
+                            adapterItems.add(SectionAdapterItem("Hidden Gems"))
+                            //2
+                            adapterItems.add(
+                                HiddenGemsAdapterItem(
+                                    homePageResponse.hiddenGems
+                                )
+                            )
+                        }
+                        if (homePageResponse.top_most_ordered_products.isNotEmpty()) {
+                            adapterItems.add(SectionAdapterItem("Top Ordered Food / City"))
+                            adapterItems.add(
+                                TopMostOrderProductsAdapterItem(
+                                    homePageResponse.top_most_ordered_products
+                                )
+                            )
+                        }
+
+                        if (homePageResponse.mostOrderedItem.isNotEmpty()) {
+                            adapterItems.add(SectionAdapterItem("Most Ordered Item"))
+                            adapterItems.add(
+                                ProductsAdapterItemHor(
+                                    requireContext(),
+                                    homePageResponse.mostOrderedItem,
+                                    viewModel,
+                                    viewLifecycleOwner,
+                                    this,
+                                )
+                            )
+                        }
+
+                        if (homePageResponse.topBrands.isNotEmpty()) {
+                            val brands = homePageResponse.topBrands
+
+                            //6
+                            adapterItems.add(SectionAdapterItem("Top Brands"))
+                            //7
+                            adapterItems.add(TopBrandsAdapterItem(brands))
+                            //8
+                        }
+
+                        if (homePageResponse.product_deal.isNotEmpty()) {
+                            adapterItems.add(SectionAdapterItem("Deals"))
+                            adapterItems.add(
+                                ProductsAdapterItem(
+                                    requireContext(),
+                                    homePageResponse.product_deal,
+                                    viewModel,
+                                    viewLifecycleOwner,
+                                    this,
+                                )
+                            )
+                        }
+
+                        if (homePageResponse.combo.isNotEmpty()) {
+                            adapterItems.add(SectionAdapterItem("Combos"))
+                            adapterItems.add(
+                                ProductsAdapterItem(
+                                    requireContext(),
+                                    homePageResponse.combo,
+                                    viewModel,
+                                    viewLifecycleOwner,
+                                    this,
+                                )
+                            )
+                        }
+                        if (homePageResponse.best_seller.isNotEmpty()) {
+                            adapterItems.add(SectionAdapterItem("Best Sellers"))
+                            adapterItems.add(
+                                ProductsAdapterItem(
+                                    requireContext(),
+                                    homePageResponse.best_seller,
+                                    viewModel,
+                                    viewLifecycleOwner,
+                                    this,
+                                )
+                            )
+                        }
+                        if (homePageResponse.featured.isNotEmpty()) {
+                            adapterItems.add(SectionAdapterItem("Feature Products"))
+                            adapterItems.add(
+                                ProductsAdapterItem(
+                                    requireContext(),
+                                    homePageResponse.featured,
+                                    viewModel,
+                                    viewLifecycleOwner,
+                                    this,
+                                )
+                            )
+                        }
+                        itemsAdapter.replaceItems(adapterItems, true)
+                    }
+
+                    Status.ERROR -> {
+                        stopShowingLoading()
+                    }
+
+                    Status.EMPTY -> {
+                        stopShowingLoading()
+                    }
                 }
 
-                Status.SUCCESS -> {
-                    stopShowingLoading()
-                    val homePageResponse = response.data()
-
-                    //Log.e(TAG, homePageResponse.toString())
-
-                    val adapterItems = mutableListOf<AdapterItem<*>>()
-                    //
-                    // adapterItems.add(CategoryAdapterItems(response.data().city))
-
-                    if (homePageResponse.slider.isNotEmpty()) {
-                        //0
-                        adapterItems.add(CarouselAdapterItem(homePageResponse.slider))
-                    }
-
-                    if (homePageResponse.hiddenGems.isNotEmpty()) {
-                        //1
-                        adapterItems.add(SectionAdapterItem("Hidden Gems"))
-                        //2
-                        adapterItems.add(
-                            HiddenGemsAdapterItem(
-                                homePageResponse.hiddenGems
-                            )
-                        )
-                    }
-                    if (homePageResponse.top_most_ordered_products.isNotEmpty()) {
-                        adapterItems.add(SectionAdapterItem("Top Ordered Food / City"))
-                        adapterItems.add(
-                            TopMostOrderProductsAdapterItem(
-                                homePageResponse.top_most_ordered_products
-                            )
-                        )
-                    }
-
-                    if (homePageResponse.mostOrderedItem.isNotEmpty()) {
-                        adapterItems.add(SectionAdapterItem("Most Ordered Item"))
-                        adapterItems.add(
-                            ProductsAdapterItemHor(
-                                requireContext(),
-                                homePageResponse.mostOrderedItem,
-                                viewModel,
-                                viewLifecycleOwner,
-                                this,
-                            )
-                        )
-                    }
-
-                    if (homePageResponse.topBrands.isNotEmpty()) {
-                        val brands = homePageResponse.topBrands
-
-                        //6
-                        adapterItems.add(SectionAdapterItem("Top Brands"))
-                        //7
-                        adapterItems.add(TopBrandsAdapterItem(brands))
-                        //8
-                    }
-
-                    if (homePageResponse.product_deal.isNotEmpty()) {
-                        adapterItems.add(SectionAdapterItem("Deals"))
-                        adapterItems.add(
-                            ProductsAdapterItem(
-                                requireContext(),
-                                homePageResponse.product_deal,
-                                viewModel,
-                                viewLifecycleOwner,
-                                this,
-                            )
-                        )
-                    }
-
-                    if (homePageResponse.combo.isNotEmpty()) {
-                        adapterItems.add(SectionAdapterItem("Combos"))
-                        adapterItems.add(
-                            ProductsAdapterItem(
-                                requireContext(),
-                                homePageResponse.combo,
-                                viewModel,
-                                viewLifecycleOwner,
-                                this,
-                            )
-                        )
-                    }
-                    if (homePageResponse.best_seller.isNotEmpty()) {
-                        adapterItems.add(SectionAdapterItem("Best Sellers"))
-                        adapterItems.add(
-                            ProductsAdapterItem(
-                                requireContext(),
-                                homePageResponse.best_seller,
-                                viewModel,
-                                viewLifecycleOwner,
-                                this,
-                            )
-                        )
-                    }
-                    if (homePageResponse.featured.isNotEmpty()) {
-                        adapterItems.add(SectionAdapterItem("Feature Products"))
-                        adapterItems.add(
-                            ProductsAdapterItem(
-                                requireContext(),
-                                homePageResponse.featured,
-                                viewModel,
-                                viewLifecycleOwner,
-                                this,
-                            )
-                        )
-                    }
-                    itemsAdapter.replaceItems(adapterItems, true)
-                }
-
-                Status.ERROR -> {
-                    stopShowingLoading()
-                }
-
-                Status.EMPTY -> {
-                    stopShowingLoading()
-                }
             }
-
-        }
     }
 
     fun cart(cityId: String, zipCode: String) {

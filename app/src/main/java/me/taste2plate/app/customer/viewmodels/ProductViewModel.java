@@ -73,30 +73,30 @@ public final class ProductViewModel extends ViewModel {
         selectedProductId.setValue(productId);
     }
 
-    public WooLiveData<NewProductResponse> productsBySubcategory(String id) {
-        return productRepository.productsBySubcategory(id);
+    public WooLiveData<NewProductResponse> productsBySubcategory(String id, String taste) {
+        return productRepository.productsBySubcategory(id, taste);
     }
 
 
-    public WooLiveData<NewProductResponse> productByFilter(Map<String, String> filters) {
-        return productRepository.productByFilter(filters);
+    public WooLiveData<NewProductResponse> productByFilter(Map<String, String> filters, String taste) {
+        return productRepository.productByFilter(filters, taste);
     }
 
-    public WooLiveData<NewProductResponse> productsByCity(String id) {
-        return productRepository.productsByCity(id);
+    public WooLiveData<NewProductResponse> productsByCity(String id, String taste) {
+        return productRepository.productsByCity(id, taste);
     }
 
-    public WooLiveData<NewProductResponse> productsByBrand(String id) {
-        return productRepository.productsByBrand(id);
+    public WooLiveData<NewProductResponse> productsByBrand(String id, String taste) {
+        return productRepository.productsByBrand(id, taste);
     }
 
-    public WooLiveData<SliderProductsResponse> productsBySlider(String name) {
-        return productRepository.productsBySlider(name);
+    public WooLiveData<SliderProductsResponse> productsBySlider(String name, String taste) {
+        return productRepository.productsBySlider(name, taste);
     }
 
 
-    public WooLiveData<NewProductResponse> productsByCuisine(String id) {
-        return productRepository.productsByCuisine(id);
+    public WooLiveData<NewProductResponse> productsByCuisine(String id, String taste) {
+        return productRepository.productsByCuisine(id, taste);
     }
 
 
@@ -170,12 +170,12 @@ public final class ProductViewModel extends ViewModel {
     }
 
 
-    public WooLiveData<Category> categories(ProductCategoryFilter productCategoryFilter) {
-        return categoryRepository.categories(productCategoryFilter);
+    public WooLiveData<Category> categories(ProductCategoryFilter productCategoryFilter, String taste) {
+        return categoryRepository.categories(productCategoryFilter, taste);
     }
 
-    public WooLiveData<HomePageResponse> homePageData(String cityId) {
-        return categoryRepository.homePageData(cityId);
+    public WooLiveData<HomePageResponse> homePageData(String cityId, String taste) {
+        return categoryRepository.homePageData(cityId, taste);
     }
 
     public WooLiveData<HomePageModel> homePageData() {

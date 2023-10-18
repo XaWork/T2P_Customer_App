@@ -18,7 +18,9 @@ interface ProductCategoryAPI {
     fun view(@Path("id") id: Int): Call<Category>
 
     @GET("products/categories")
-    fun list(): Call<List<Category>>
+    fun list(
+        @Query("taste") taste: String
+    ): Call<List<Category>>
 
     @Headers("Content-Type: application/json")
     @PUT("products/categories/{id}")
@@ -34,7 +36,10 @@ interface ProductCategoryAPI {
     fun batch(@Body body: Category): Call<String>
 
     @GET("app/all-parent-categories")
-    fun filter(@QueryMap filter: Map<String, String>): Call<Category>
+    fun filter(
+        @QueryMap filter: Map<String, String>,
+        @Query("taste") taste: String
+    ): Call<Category>
 
     @GET("app/home")
     fun homeData(): Call<HomePageResponse>
@@ -43,7 +48,10 @@ interface ProductCategoryAPI {
     fun getHome(): Call<HomePageModel>
 
     @GET("app/home")
-    fun homeDataForCity(@Query("city") cityId: String): Call<HomePageResponse>
+    fun homeDataForCity(
+        @Query("city") cityId: String,
+        @Query("taste") taste: String
+    ): Call<HomePageResponse>
 
     @GET("app/all-sub-categories")
     fun subCategories(@Query("parent") parentId: String): Call<SubCategories>

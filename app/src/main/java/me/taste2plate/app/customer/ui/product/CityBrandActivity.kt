@@ -2,26 +2,21 @@ package me.taste2plate.app.customer.ui.product
 
 import android.content.Context
 import android.content.Intent
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.widget.Toast
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.clevertap.android.sdk.CleverTapAPI
 import io.github.inflationx.viewpump.ViewPumpContextWrapper
-import kotlinx.android.synthetic.main.activity_new_address.city
 import kotlinx.android.synthetic.main.content_subcategory.*
 import kotlinx.android.synthetic.main.toolbar.*
+import kotlinx.android.synthetic.main.veg_nonveg_toggle.vegNonVegSwitch
 import me.taste2plate.app.customer.R
 import me.taste2plate.app.customer.adapter.CityBrandAdapter
 import me.taste2plate.app.customer.common.BaseActivity
 import me.taste2plate.app.customer.common.Status
 import me.taste2plate.app.customer.ui.home.HomeActivity
-import me.taste2plate.app.customer.ui.membership.MembershipListActivity
 import me.taste2plate.app.customer.ui.state.ProgressDialogFragment
 import me.taste2plate.app.customer.utils.AppUtils
 import me.taste2plate.app.customer.viewmodels.ProductViewModel
@@ -70,16 +65,19 @@ class CityBrandActivity : BaseActivity() {
 
         val customAppData = AppUtils(this).appData
 
+       // vegNonVegToggle.visibility = View.VISIBLE
+        vegNonVegSwitch.isChecked = AppUtils(this).taste != "1"
+        vegNonVegSwitch.setOnCheckedChangeListener{ _, isChecked ->
+            AppUtils(this).taste = if (isChecked) "0" else "1"
+            getData()
+        }
+
         toolbar.setNavigationOnClickListener {
             finish()
         }
         title = intent.getStringExtra("type");
 
-        if (intent.getStringExtra("type")!!.contentEquals("Flavours Of India")) {
-            getCuisine()
-        } else {
-            cityBrand()
-        }
+        getData()
 
         searchCityBrand.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -89,6 +87,14 @@ class CityBrandActivity : BaseActivity() {
 
             override fun afterTextChanged(s: Editable?) {}
         })
+    }
+
+    private fun getData(){
+        if (intent.getStringExtra("type")!!.contentEquals("Flavours Of India")) {
+            getCuisine()
+        } else {
+            cityBrand()
+        }
     }
 
     private fun filter(text: String) {
@@ -109,7 +115,7 @@ class CityBrandActivity : BaseActivity() {
         try{
             val defaultAddress = AppUtils(this).defaultAddress
             if (defaultAddress != null) {
-                viewModel.homePageData(AppUtils(this).defaultAddress.city._id)
+                viewModel.homePageData(AppUtils(this).defaultAddress.city._id, "1")
                     .observe(this) { response ->
                         when (response!!.status()) {
                             Status.LOADING -> {
@@ -150,10 +156,12 @@ class CityBrandActivity : BaseActivity() {
     }
 
     private fun cityBrand() {
+        val taste = AppUtils(this).taste
         val data =
             if (intent.getStringExtra("type")!!
                     .contentEquals("City")
-            ) viewModel.city else viewModel.brandList
+            ) viewModel.city else viewModel.getBrandList()
+
         data.observe(this) { response ->
             when (response!!.status()) {
                 Status.LOADING -> {

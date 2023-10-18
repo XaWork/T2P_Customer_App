@@ -11,6 +11,7 @@ import kotlinx.android.synthetic.main.fragment_category.*
 import me.taste2plate.app.customer.R
 import me.taste2plate.app.customer.adapter.CategoryAdapter
 import me.taste2plate.app.customer.common.Status
+import me.taste2plate.app.customer.utils.AppUtils
 import me.taste2plate.app.customer.viewmodels.CategoryViewModel
 import me.taste2plate.app.models.Category
 import me.taste2plate.app.models.filters.ProductCategoryFilter
@@ -70,7 +71,7 @@ class CategoryFragment : androidx.fragment.app.Fragment() {
         val filter = ProductCategoryFilter()
         filter.setPer_page(50)
 
-        viewModel.categories(filter).observe(this, androidx.lifecycle.Observer { response ->
+        viewModel.categories(filter, AppUtils(context).taste).observe(this, androidx.lifecycle.Observer { response ->
             when (response!!.status()) {
                 Status.LOADING -> {
                 }

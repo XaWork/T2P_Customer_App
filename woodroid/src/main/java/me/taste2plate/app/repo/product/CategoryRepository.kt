@@ -27,18 +27,18 @@ class CategoryRepository(baseUrl: String, consumerKey: String, consumerSecret: S
         return apiService.view(id)
     }
 
-    fun categories(): Call<List<Category>> {
-        return apiService.list()
+    fun categories(taste: String): Call<List<Category>> {
+        return apiService.list(taste)
     }
 
-    fun categories(productCategoryFilter: ProductCategoryFilter): Call<Category> {
-        return apiService.filter(productCategoryFilter.filters)
+    fun categories(productCategoryFilter: ProductCategoryFilter, taste: String): Call<Category> {
+        return apiService.filter(productCategoryFilter.filters, taste)
     }
 
 
-    fun homePageData(cityId: String): Call<HomePageResponse> {
+    fun homePageData(cityId: String, taste: String): Call<HomePageResponse> {
         return if (cityId.isNotEmpty()) {
-            apiService.homeDataForCity(cityId)
+            apiService.homeDataForCity(cityId, taste)
         } else {
             apiService.homeData()
         }

@@ -14,7 +14,19 @@
 	  app:navigationIcon="@drawable/ic_back_1"
 	  app:titleTextColor="@color/colorAccent"
 	  app:subtitleTextAppearance="@style/ToolbarSubtitleAppearance"
-	  app:titleTextAppearance="@style/ToolbarTitleAppearance" />
+	  app:titleTextAppearance="@style/ToolbarTitleAppearance" >
+
+
+		<include layout="@layout/veg_nonveg_toggle"
+			android:id="@+id/vegNonVegToggle"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginEnd="20dp"
+			android:layout_gravity="end"
+			android:visibility="gone"
+			android:layout_alignParentEnd="true"/>
+
+	</androidx.appcompat.widget.Toolbar>
 
   </com.google.android.material.appbar.AppBarLayout>
 </layout>

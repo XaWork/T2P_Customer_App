@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:paddingHorizontal="10dp">
+
+        <TextView
+            android:id="@+id/vegTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:text="Veg" />
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/vegNonVegSwitch"
+            android:paddingHorizontal="10dp"
+            android:layout_width="wrap_content"
+            app:thumbTint="@color/white"
+            app:trackTint="@color/carnation_red"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/nonVegTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:text="Non Veg" />
+
+</androidx.appcompat.widget.LinearLayoutCompat>

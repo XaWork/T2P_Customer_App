@@ -11,8 +11,8 @@ android {
         applicationId "me.taste2plate.app.customer"
         minSdkVersion 21
         targetSdkVersion 33
-        versionCode 186
-        versionName "2.0.6"
+        versionCode 187
+        versionName "2.0.7"
         vectorDrawables.useSupportLibrary = true
     }
 
@@ -164,7 +164,7 @@ dependencies {
     implementation 'com.google.android.gms:play-services-auth:20.4.0'
     implementation 'com.google.android.gms:play-services-auth-api-phone:18.0.1'
 
-    implementation 'com.facebook.android:facebook-android-sdk:12.3.0'
+    implementation 'com.facebook.android:facebook-android-sdk:13.0.0'
 
     implementation 'com.google.firebase:firebase-crashlytics-ktx'
     implementation 'com.google.firebase:firebase-analytics-ktx'

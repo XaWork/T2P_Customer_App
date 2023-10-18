@@ -9,6 +9,7 @@ data class ProductDeal(
     val active: Int,
     val attribute: String,
     val backorders: String,
+    val taste: String,
     val batchno: String,
     val brand: String,
     val category: String,

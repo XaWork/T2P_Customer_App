@@ -130,6 +130,18 @@ public class AppUtils {
         return prefs.getString(key, value);
     }
 
+    public void setTaste(String value) {
+        SharedPreferences.Editor editor = context.getSharedPreferences(MY_PREFS_NAME, context.MODE_PRIVATE).edit();
+        editor.putString("taste", value);
+        editor.apply();
+        getTaste();
+    }
+
+    public String getTaste() {
+        SharedPreferences prefs = context.getSharedPreferences(MY_PREFS_NAME, context.MODE_PRIVATE);
+        return prefs.getString("taste", "1");
+    }
+
     public RegistrationData getUser() {
         SharedPreferences prefs = context.getSharedPreferences(MY_PREFS_NAME, context.MODE_PRIVATE);
         String userGson = prefs.getString("user_data", "");

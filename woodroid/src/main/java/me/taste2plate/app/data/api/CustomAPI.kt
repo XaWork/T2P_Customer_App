@@ -17,10 +17,12 @@ import retrofit2.http.*
 interface CustomAPI {
 
     @GET("app/all-cities")
-    fun cityList(): Call<CityBrand>
+    fun cityList(
+    ): Call<CityBrand>
 
     @GET("app/all-brands")
-    fun brandList(): Call<CityBrand>
+    fun brandList(
+    ): Call<CityBrand>
 
 
     @POST("app/bulk-order")

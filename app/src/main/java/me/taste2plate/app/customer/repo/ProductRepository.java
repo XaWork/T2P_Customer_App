@@ -36,41 +36,41 @@ public class ProductRepository {
     public ProductRepository() {
     }
 
-    public WooLiveData<NewProductResponse> productByFilter(Map<String, String> filters) {
+    public WooLiveData<NewProductResponse> productByFilter(Map<String, String> filters, String taste) {
         final WooLiveData<NewProductResponse> callBack = new WooLiveData();
-        woocommerce.ProductRepository().productByFilter(filters).enqueue(callBack);
+        woocommerce.ProductRepository().productByFilter(filters, taste).enqueue(callBack);
         return callBack;
     }
 
-    public WooLiveData<NewProductResponse> productsBySubcategory(String id) {
+    public WooLiveData<NewProductResponse> productsBySubcategory(String id, String taste) {
         final WooLiveData<NewProductResponse> callBack = new WooLiveData();
-        woocommerce.ProductRepository().productsBySubcategory(id).enqueue(callBack);
+        woocommerce.ProductRepository().productsBySubcategory(id, taste).enqueue(callBack);
         return callBack;
     }
 
-    public WooLiveData<NewProductResponse> productsByCity(String id) {
+    public WooLiveData<NewProductResponse> productsByCity(String id, String taste) {
         final WooLiveData<NewProductResponse> callBack = new WooLiveData();
-        woocommerce.ProductRepository().productsByCity(id).enqueue(callBack);
+        woocommerce.ProductRepository().productsByCity(id, taste).enqueue(callBack);
         return callBack;
     }
 
 
-    public WooLiveData<NewProductResponse> productsByBrand(String id) {
+    public WooLiveData<NewProductResponse> productsByBrand(String id, String taste) {
         final WooLiveData<NewProductResponse> callBack = new WooLiveData();
-        woocommerce.ProductRepository().productsByBrand(id).enqueue(callBack);
+        woocommerce.ProductRepository().productsByBrand(id, taste).enqueue(callBack);
         return callBack;
     }
 
-    public WooLiveData<SliderProductsResponse> productsBySlider(String name) {
+    public WooLiveData<SliderProductsResponse> productsBySlider(String name, String taste) {
         final WooLiveData<SliderProductsResponse> callBack = new WooLiveData();
-        woocommerce.ProductRepository().productsBySlider(name).enqueue(callBack);
+        woocommerce.ProductRepository().productsBySlider(name, taste).enqueue(callBack);
         return callBack;
     }
 
 
-    public WooLiveData<NewProductResponse> productsByCuisine(String id) {
+    public WooLiveData<NewProductResponse> productsByCuisine(String id, String taste) {
         final WooLiveData<NewProductResponse> callBack = new WooLiveData();
-        woocommerce.ProductRepository().productsByCuisine(id).enqueue(callBack);
+        woocommerce.ProductRepository().productsByCuisine(id, taste).enqueue(callBack);
         return callBack;
     }
 

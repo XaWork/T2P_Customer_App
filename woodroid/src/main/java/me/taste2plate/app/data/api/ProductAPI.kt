@@ -50,22 +50,40 @@ interface ProductAPI {
 
 
     @GET("app/all-products")
-    fun productBySubcategory(@Query("sub_category") id: String): Call<NewProductResponse>
+    fun productBySubcategory(
+        @Query("sub_category") id: String,
+        @Query("taste") taste: String
+    ): Call<NewProductResponse>
 
     @GET("app/all-products")
-    fun productByFilters(@QueryMap filter: Map<String, String>): Call<NewProductResponse>
+    fun productByFilters(
+        @QueryMap filter: Map<String, String>,
+        @Query("taste") taste: String
+    ): Call<NewProductResponse>
 
     @GET("app/all-products")
-    fun productsByCity(@Query("city") id: String): Call<NewProductResponse>
+    fun productsByCity(
+        @Query("city") id: String,
+        @Query("taste") taste: String
+    ): Call<NewProductResponse>
 
     @GET("app/all-products")
-    fun productsByBrand(@Query("brand") id: String): Call<NewProductResponse>
+    fun productsByBrand(
+        @Query("brand") id: String,
+        @Query("taste") taste: String
+    ): Call<NewProductResponse>
 
     @POST("app/fetch-shop-by-slider")
-    fun productsBySlider(@Query("slider_name") name: String): Call<SliderProductsResponse>
+    fun productsBySlider(
+        @Query("slider_name") name: String,
+        @Query("taste") taste: String
+    ): Call<SliderProductsResponse>
 
     @GET("app/all-products")
-    fun productsByCuisine(@Query("cuisine") id: String): Call<NewProductResponse>
+    fun productsByCuisine(
+        @Query("cuisine") id: String,
+        @Query("taste") taste: String
+    ): Call<NewProductResponse>
 
     @GET("app/all-products")
     fun productByQuery(@Query("search") searchQuert: String): Call<NewProductResponse>
@@ -76,7 +94,6 @@ interface ProductAPI {
         @Query("customer_city") cityId: String,
         @Query("customer_zip") zipCode: String
     ): Call<CartItemResponse>
-
 
 
     @FormUrlEncoded
@@ -124,7 +141,6 @@ interface ProductAPI {
         @Query("userid") userId: String,
         @Query("id") productId: String
     ): Call<DeleteWishlistItemResponse>
-
 
 
     @GET("app/all-address")

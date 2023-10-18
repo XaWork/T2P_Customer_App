@@ -1,16 +1,14 @@
 package me.taste2plate.app.customer.ui.product
 
 import android.content.Context
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import androidx.recyclerview.widget.GridLayoutManager
+import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import io.github.inflationx.viewpump.ViewPumpContextWrapper
 import kotlinx.android.synthetic.main.content_subcategory.*
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.toolbar.*
+import kotlinx.android.synthetic.main.veg_nonveg_toggle.vegNonVegSwitch
 import me.taste2plate.app.customer.R
 import me.taste2plate.app.customer.adapter.CategoryAdapter
 import me.taste2plate.app.customer.common.BaseActivity
@@ -62,6 +60,13 @@ class CategoryActivity : BaseActivity() {
 
         val customAppData = AppUtils(this).appData
 
+        vegNonVegToggle.visibility = View.VISIBLE
+        vegNonVegSwitch.isChecked = AppUtils(this).taste != "1"
+        vegNonVegSwitch.setOnCheckedChangeListener{ _, isChecked ->
+            AppUtils(this).taste = if (isChecked) "0" else "1"
+            getCategories()
+        }
+
         viewModel = getViewModel(ProductViewModel::class.java)
 
         toolbar.setNavigationOnClickListener {
@@ -73,10 +78,10 @@ class CategoryActivity : BaseActivity() {
     }
 
     private fun getCategories() {
-
+        val taste = AppUtils(this).taste
         val filter = ProductCategoryFilter()
         filter.setPer_page(100)
-        viewModel.categories(filter).observe(this, androidx.lifecycle.Observer { response ->
+        viewModel.categories(filter, taste).observe(this, androidx.lifecycle.Observer { response ->
             when (response!!.status()) {
                 Status.LOADING -> {
                     showLoading()

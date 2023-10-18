@@ -28,12 +28,12 @@ public final class CategoryViewModel extends ViewModel {
         return categoryRepository.category(id);
     }
 
-    public WooLiveData<List<Category>> categories() {
-        return categoryRepository.categories();
+    public WooLiveData<List<Category>> categories(String taste) {
+        return categoryRepository.categories(taste);
     }
 
-    public WooLiveData<Category> categories(ProductCategoryFilter productCategoryFilter) {
-        return categoryRepository.categories(productCategoryFilter);
+    public WooLiveData<Category> categories(ProductCategoryFilter productCategoryFilter, String taste) {
+        return categoryRepository.categories(productCategoryFilter, taste);
     }
 
     public WooLiveData<Category> update(int id, Category category) {

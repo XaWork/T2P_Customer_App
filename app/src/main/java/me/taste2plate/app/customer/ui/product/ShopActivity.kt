@@ -1,8 +1,6 @@
 package me.taste2plate.app.customer.ui.product
 
 import android.content.Context
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -10,17 +8,23 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.core.view.GravityCompat
-import androidx.drawerlayout.widget.DrawerLayout
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.clevertap.android.sdk.CleverTapAPI
 import io.github.inflationx.viewpump.ViewPumpContextWrapper
-import kotlinx.android.synthetic.main.activity_shop.*
-import kotlinx.android.synthetic.main.content_shop.*
-import kotlinx.android.synthetic.main.drawer_filter.*
-import kotlinx.android.synthetic.main.toolbar.*
+import kotlinx.android.synthetic.main.activity_shop.drawer_layout
+import kotlinx.android.synthetic.main.content_shop.noProductFound
+import kotlinx.android.synthetic.main.content_shop.rvShop
+import kotlinx.android.synthetic.main.drawer_filter.bFilter
+import kotlinx.android.synthetic.main.drawer_filter.cbFeatured
+import kotlinx.android.synthetic.main.drawer_filter.cbOnSale
+import kotlinx.android.synthetic.main.drawer_filter.etMaxPrice
+import kotlinx.android.synthetic.main.drawer_filter.etMinPrice
+import kotlinx.android.synthetic.main.drawer_filter.etSearch
+import kotlinx.android.synthetic.main.drawer_filter.sSort
+import kotlinx.android.synthetic.main.toolbar.toolbar
+import kotlinx.android.synthetic.main.toolbar.vegNonVegToggle
+import kotlinx.android.synthetic.main.veg_nonveg_toggle.vegNonVegSwitch
 import me.taste2plate.app.customer.R
 import me.taste2plate.app.customer.adapter.ProductAdapter
 import me.taste2plate.app.customer.adapter.SliderProductAdapter
@@ -30,13 +34,9 @@ import me.taste2plate.app.customer.ui.state.ProgressDialogFragment
 import me.taste2plate.app.customer.utils.AppUtils
 import me.taste2plate.app.customer.utils.ItemOffsetDecoration
 import me.taste2plate.app.customer.viewmodels.ProductViewModel
-import me.taste2plate.app.models.Product
-import me.taste2plate.app.models.CityBrandFilter
 import me.taste2plate.app.models.filters.ProductFilter
 import me.taste2plate.app.models.home.ProductDeal
 import me.taste2plate.app.models.newproducts.NewProduct
-import me.taste2plate.app.models.newproducts.NewProductResponse
-import java.util.*
 
 
 class ShopActivity : BaseActivity() {
@@ -45,6 +45,8 @@ class ShopActivity : BaseActivity() {
     lateinit var sliderAdapter: SliderProductAdapter
     var products: ArrayList<NewProduct> = ArrayList()
     var sliderProducts: ArrayList<ProductDeal> = ArrayList()
+    var sliderProductsResponse: ArrayList<ProductDeal> = ArrayList()
+    var taste = "1"
 
     private lateinit var viewModel: ProductViewModel
     val TAG = this::getLocalClassName
@@ -55,21 +57,39 @@ class ShopActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(me.taste2plate.app.customer.R.layout.activity_shop)
+        setContentView(R.layout.activity_shop)
         setSupportActionBar(toolbar)
         CleverTapAPI.getDefaultInstance(this)?.recordScreen("Product List/Shop")
         val customAppData = AppUtils(this).appData
+        taste = AppUtils(this).taste
 
         toolbar.setNavigationOnClickListener {
             finish()
         }
 
+        vegNonVegToggle.visibility = View.VISIBLE
+        vegNonVegSwitch.isChecked = AppUtils(this).taste != "1"
+        vegNonVegSwitch.setOnCheckedChangeListener { _, isChecked ->
+            AppUtils(this).taste = if (isChecked) "0" else "1"
+            taste = AppUtils(this).taste
+            val type = intent.getStringExtra("type")
+            if (type != null && intent.getStringExtra("type")!!.contentEquals("slider")) {
+                updateSliderProducts()
+            } else
+                getData()
+        }
         viewModel = getViewModel(ProductViewModel::class.java)
 
+        getData()
         title = "Shop"
         setUpPage()
 
         bFilter.setOnClickListener { filter() }
+
+        title = intent.getStringExtra("name")
+    }
+
+    private fun getData() {
         val type = intent.getStringExtra("type")
         if (type != null && intent.getStringExtra("type")!!.contentEquals("category")) {
             Log.e("shop", "category")
@@ -89,7 +109,6 @@ class ShopActivity : BaseActivity() {
             Log.e("shop", "cuisine")
             productsByCuisine(intent.getStringExtra("id")!!)
         }
-        title = intent.getStringExtra("name")
     }
 
     private fun setUpPage() {
@@ -100,7 +119,6 @@ class ShopActivity : BaseActivity() {
         rvShop.isNestedScrollingEnabled = false
 
         products = ArrayList()
-
 
         val type = intent.getStringExtra("type")
         adapter = ProductAdapter(products, viewModel, this)
@@ -170,44 +188,13 @@ class ShopActivity : BaseActivity() {
     }
 
     private fun applyFilters(filters: Map<String, String>) {
-        viewModel.productByFilter(filters).observe(this, androidx.lifecycle.Observer { response ->
-            when (response!!.status()) {
-                Status.LOADING -> {
-                    showLoading()
-                    products.clear()
-                    adapter.notifyDataSetChanged()
-                }
-
-                Status.SUCCESS -> {
-                    stopShowingLoading()
-                    if (response.data().result.isEmpty()) {
-                        showNoProductFound()
-                    } else {
-                        products.clear()
-                        Log.e("data", response.data().toString())
-                        products.addAll(response.data().result)
-                        adapter.notifyDataSetChanged()
-                    }
-                }
-
-                Status.ERROR -> {
-                    stopShowingLoading()
-                }
-
-                Status.EMPTY -> {
-                    stopShowingLoading()
-                }
-            }
-        })
-    }
-
-
-    private fun productsBySubcategory(subcategoryId: String) {
-        viewModel.productsBySubcategory(subcategoryId)
+        viewModel.productByFilter(filters, taste)
             .observe(this, androidx.lifecycle.Observer { response ->
                 when (response!!.status()) {
                     Status.LOADING -> {
                         showLoading()
+                        products.clear()
+                        adapter.notifyDataSetChanged()
                     }
 
                     Status.SUCCESS -> {
@@ -215,6 +202,47 @@ class ShopActivity : BaseActivity() {
                         if (response.data().result.isEmpty()) {
                             showNoProductFound()
                         } else {
+                            hideNoProductFound()
+                            products.clear()
+                            Log.e("data", response.data().toString())
+                            products.addAll(response.data().result)
+                            adapter.notifyDataSetChanged()
+                        }
+                    }
+
+                    Status.ERROR -> {
+                        stopShowingLoading()
+                    }
+
+                    Status.EMPTY -> {
+                        stopShowingLoading()
+                    }
+                }
+            })
+    }
+
+    private fun clearProductList() {
+        products.clear()
+        adapter.notifyDataSetChanged()
+
+    }
+
+
+    private fun productsBySubcategory(subcategoryId: String) {
+        viewModel.productsBySubcategory(subcategoryId, taste)
+            .observe(this) { response ->
+                when (response!!.status()) {
+                    Status.LOADING -> {
+                        showLoading()
+                        clearProductList()
+                    }
+
+                    Status.SUCCESS -> {
+                        stopShowingLoading()
+                        if (response.data().result.isEmpty()) {
+                            showNoProductFound()
+                        } else {
+                            hideNoProductFound()
                             products.clear()
                             Log.e("data", response.data().toString())
                             val productsResponse = response.data()
@@ -232,88 +260,19 @@ class ShopActivity : BaseActivity() {
                         stopShowingLoading()
                     }
                 }
-            })
+            }
     }
 
 
     private fun productsByCity(cityId: String) {
         val filter = ProductFilter()
         filter.setPer_page(100)
-        viewModel.productsByCity(cityId).observe(this, androidx.lifecycle.Observer { response ->
-            when (response!!.status()) {
-                Status.LOADING -> {
-                    showLoading()
-                }
-
-                Status.SUCCESS -> {
-                    stopShowingLoading()
-                    if (response.data().result.isEmpty()) {
-                        showNoProductFound()
-                    } else {
-                        products.clear()
-                        Log.e("data", response.data().toString())
-                        val productsResponse = response.data()
-                        products.addAll(response.data().result)
-                        adapter.notifyDataSetChanged()
-                    }
-                }
-
-                Status.ERROR -> {
-                    stopShowingLoading()
-                }
-
-                Status.EMPTY -> {
-                    stopShowingLoading()
-                }
-            }
-
-        })
-    }
-
-
-    private fun productsByBrand(brandId: String) {
-        val filter = ProductFilter()
-        filter.setPer_page(100)
-        viewModel.productsByBrand(brandId).observe(this, androidx.lifecycle.Observer { response ->
-            when (response!!.status()) {
-                Status.LOADING -> {
-                    showLoading()
-                }
-
-                Status.SUCCESS -> {
-                    stopShowingLoading()
-                    if (response.data().result.isEmpty()) {
-                        showNoProductFound()
-                    } else {
-                        products.clear()
-                        Log.e("data", response.data().toString())
-                        val productsResponse = response.data()
-                        products.addAll(response.data().result)
-                        adapter.notifyDataSetChanged()
-                    }
-
-                }
-
-                Status.ERROR -> {
-                    stopShowingLoading()
-                }
-
-                Status.EMPTY -> {
-                    stopShowingLoading()
-                }
-            }
-
-        })
-    }
-
-    private fun productsBySlider(sliderName: String) {
-        val filter = ProductFilter()
-        filter.setPer_page(100)
-        viewModel.productsBySlider(sliderName)
+        viewModel.productsByCity(cityId, taste)
             .observe(this, androidx.lifecycle.Observer { response ->
                 when (response!!.status()) {
                     Status.LOADING -> {
                         showLoading()
+                        clearProductList()
                     }
 
                     Status.SUCCESS -> {
@@ -321,42 +280,7 @@ class ShopActivity : BaseActivity() {
                         if (response.data().result.isEmpty()) {
                             showNoProductFound()
                         } else {
-                            products.clear()
-                            Log.e("data", response.data().toString())
-                            val productsResponse = response.data()
-                            sliderProducts.addAll(response.data().result[0].products)
-                            sliderAdapter.notifyDataSetChanged()
-                        }
-
-                    }
-
-                    Status.ERROR -> {
-                        stopShowingLoading()
-                    }
-
-                    Status.EMPTY -> {
-                        stopShowingLoading()
-                    }
-                }
-            })
-    }
-
-    private fun productsByCuisine(cuisineId: String) {
-        Log.e("cuisine", cuisineId)
-        val filter = ProductFilter()
-        filter.setPer_page(100)
-        viewModel.productsByCuisine(cuisineId)
-            .observe(this, androidx.lifecycle.Observer { response ->
-                when (response!!.status()) {
-                    Status.LOADING -> {
-                        showLoading()
-                    }
-
-                    Status.SUCCESS -> {
-                        stopShowingLoading()
-                        if (response.data().result.isEmpty()) {
-                            showNoProductFound()
-                        } else {
+                            hideNoProductFound()
                             products.clear()
                             Log.e("data", response.data().toString())
                             val productsResponse = response.data()
@@ -377,10 +301,136 @@ class ShopActivity : BaseActivity() {
             })
     }
 
+
+    private fun productsByBrand(brandId: String) {
+        val filter = ProductFilter()
+        filter.setPer_page(100)
+        viewModel.productsByBrand(brandId, taste)
+            .observe(this, androidx.lifecycle.Observer { response ->
+                when (response!!.status()) {
+                    Status.LOADING -> {
+                        showLoading()
+                        clearProductList()
+                    }
+
+                    Status.SUCCESS -> {
+                        stopShowingLoading()
+                        if (response.data().result.isEmpty()) {
+                            showNoProductFound()
+                        } else {
+                            hideNoProductFound()
+                            products.clear()
+                            Log.e("data", response.data().toString())
+                            val productsResponse = response.data()
+                            products.addAll(response.data().result)
+                            adapter.notifyDataSetChanged()
+                        }
+
+                    }
+
+                    Status.ERROR -> {
+                        stopShowingLoading()
+                    }
+
+                    Status.EMPTY -> {
+                        stopShowingLoading()
+                    }
+                }
+
+            })
+    }
+
+    private fun productsBySlider(sliderName: String) {
+        val filter = ProductFilter()
+        filter.setPer_page(100)
+        viewModel.productsBySlider(sliderName, taste)
+            .observe(this) { response ->
+                when (response!!.status()) {
+                    Status.LOADING -> {
+                        showLoading()
+                        clearProductList()
+                    }
+
+                    Status.SUCCESS -> {
+                        stopShowingLoading()
+                        if (response.data().result.isEmpty()) {
+                            showNoProductFound()
+                        } else {
+                            hideNoProductFound()
+                            sliderProducts.clear()
+                            Log.e("data", response.data().toString())
+                            sliderProductsResponse.addAll(response.data().result[0].products)
+                            updateSliderProducts()
+                        }
+
+                    }
+
+                    Status.ERROR -> {
+                        stopShowingLoading()
+                    }
+
+                    Status.EMPTY -> {
+                        stopShowingLoading()
+                    }
+                }
+            }
+    }
+
+    private fun updateSliderProducts() {
+        sliderProducts.clear()
+        for (product in sliderProductsResponse) {
+            if (product.taste == AppUtils(this).taste)
+                sliderProducts.add(product)
+        }
+        sliderAdapter.notifyDataSetChanged()
+    }
+
+    private fun productsByCuisine(cuisineId: String) {
+        Log.e("cuisine", cuisineId)
+        val filter = ProductFilter()
+        filter.setPer_page(100)
+        viewModel.productsByCuisine(cuisineId, taste)
+            .observe(this) { response ->
+                when (response!!.status()) {
+                    Status.LOADING -> {
+                        showLoading()
+                        clearProductList()
+                    }
+
+                    Status.SUCCESS -> {
+                        stopShowingLoading()
+                        if (response.data().result.isEmpty()) {
+                            showNoProductFound()
+                        } else {
+                            hideNoProductFound()
+                            products.clear()
+                            Log.e("data", response.data().toString())
+                            val productsResponse = response.data()
+                            products.addAll(response.data().result)
+                            adapter.notifyDataSetChanged()
+                        }
+                    }
+
+                    Status.ERROR -> {
+                        stopShowingLoading()
+                    }
+
+                    Status.EMPTY -> {
+                        stopShowingLoading()
+                    }
+                }
+
+            }
+    }
+
     private fun showNoProductFound() {
         noProductFound.visibility = View.VISIBLE
         val message = AppUtils(this).appData.result.productNotAvailableMessage
         noProductFound.text = message
+    }
+
+    private fun hideNoProductFound() {
+        noProductFound.visibility = View.GONE
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

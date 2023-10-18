@@ -31,28 +31,28 @@ class ProductRepository(baseUrl: String, consumerKey: String, consumerSecret: St
         return apiService.productById(id)
     }
 
-    fun productsBySubcategory(id: String): Call<NewProductResponse> {
-        return apiService.productBySubcategory(id)
+    fun productsBySubcategory(id: String, taste: String): Call<NewProductResponse> {
+        return apiService.productBySubcategory(id, taste)
     }
 
-    fun productByFilter(filters: Map<String, String>): Call<NewProductResponse> {
-        return apiService.productByFilters(filters)
+    fun productByFilter(filters: Map<String, String>, taste: String): Call<NewProductResponse> {
+        return apiService.productByFilters(filters, taste)
     }
 
-    fun productsByCity(id: String): Call<NewProductResponse> {
-        return apiService.productsByCity(id)
+    fun productsByCity(id: String, taste: String): Call<NewProductResponse> {
+        return apiService.productsByCity(id, taste)
     }
 
-    fun productsByBrand(id: String): Call<NewProductResponse> {
-        return apiService.productsByBrand(id)
+    fun productsByBrand(id: String, taste: String): Call<NewProductResponse> {
+        return apiService.productsByBrand(id, taste)
     }
 
-    fun productsBySlider(name: String): Call<SliderProductsResponse> {
-        return apiService.productsBySlider(name)
+    fun productsBySlider(name: String, taste: String): Call<SliderProductsResponse> {
+        return apiService.productsBySlider(name, taste)
     }
 
-    fun productsByCuisine(id: String): Call<NewProductResponse> {
-        return apiService.productsByCuisine(id)
+    fun productsByCuisine(id: String, taste: String): Call<NewProductResponse> {
+        return apiService.productsByCuisine(id, taste)
     }
 
     fun productByQuery(query: String): Call<NewProductResponse> {

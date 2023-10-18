@@ -32,24 +32,24 @@ constructor() {
         return callBack
     }
 
-    fun categories(): WooLiveData<List<Category>> {
+    fun categories(taste: String): WooLiveData<List<Category>> {
         val callBack = WooLiveData<List<Category>>()
 
-        woocommerce.CategoryRepository().categories().enqueue(callBack)
+        woocommerce.CategoryRepository().categories(taste).enqueue(callBack)
         return callBack
     }
 
-    fun categories(productCategoryFilter: ProductCategoryFilter): WooLiveData<Category> {
+    fun categories(productCategoryFilter: ProductCategoryFilter, taste: String): WooLiveData<Category> {
         val callBack = WooLiveData<Category>()
 
-        woocommerce.CategoryRepository().categories(productCategoryFilter).enqueue(callBack)
+        woocommerce.CategoryRepository().categories(productCategoryFilter, taste).enqueue(callBack)
         return callBack
     }
 
 
-    fun homePageData(cityId:String): WooLiveData<HomePageResponse> {
+    fun homePageData(cityId:String, taste: String): WooLiveData<HomePageResponse> {
         val callBack = WooLiveData<HomePageResponse>()
-        woocommerce.CategoryRepository().homePageData(cityId).enqueue(callBack)
+        woocommerce.CategoryRepository().homePageData(cityId, taste).enqueue(callBack)
         return callBack
     }
 
