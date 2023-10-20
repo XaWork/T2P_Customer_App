@@ -40,7 +40,7 @@ class CategoryRepository(baseUrl: String, consumerKey: String, consumerSecret: S
         return if (cityId.isNotEmpty()) {
             apiService.homeDataForCity(cityId, taste)
         } else {
-            apiService.homeData()
+            apiService.homeData(taste)
         }
     }
 

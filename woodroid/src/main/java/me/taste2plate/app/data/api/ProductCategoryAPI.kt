@@ -42,7 +42,9 @@ interface ProductCategoryAPI {
     ): Call<Category>
 
     @GET("app/home")
-    fun homeData(): Call<HomePageResponse>
+    fun homeData(
+        @Query("taste") taste: String
+    ): Call<HomePageResponse>
 
     @GET("app/home")
     fun getHome(): Call<HomePageModel>

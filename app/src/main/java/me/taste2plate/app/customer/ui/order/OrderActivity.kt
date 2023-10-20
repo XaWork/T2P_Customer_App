@@ -188,7 +188,7 @@ class OrderActivity : WooDroidActivity<OrderViewModel>() {
 
 
     private fun getUpdates() {
-        viewModel.getOrderUpdates(order!!._id).observe(this, Observer { response ->
+        viewModel.getOrderUpdates(order!!._id).observe(this) { response ->
             when (response.status()) {
                 Status.SUCCESS -> {
                     stopShowingLoading()
@@ -231,7 +231,7 @@ class OrderActivity : WooDroidActivity<OrderViewModel>() {
                     finish()
                 }
             }
-        })
+        }
     }
 
 
