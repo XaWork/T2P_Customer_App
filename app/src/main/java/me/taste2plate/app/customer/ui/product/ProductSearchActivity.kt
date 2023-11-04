@@ -165,14 +165,13 @@ class ProductSearchActivity : BaseActivity() {
             Observable
                 .create(ObservableOnSubscribe<String> { subscriber ->
                     searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-                        override fun onQueryTextChange(newText: String?): Boolean {
-                            subscriber.onNext(newText!!)
-
-                            return false
-                        }
 
                         override fun onQueryTextSubmit(query: String?): Boolean {
                             subscriber.onNext(query!!)
+                            return true
+                        }
+
+                        override fun onQueryTextChange(newText: String?): Boolean {
                             return false
                         }
                     })
@@ -186,7 +185,7 @@ class ProductSearchActivity : BaseActivity() {
                 .subscribe({
                     Log.d("Demo", "subscriber: $it")
                     Handler(Looper.getMainLooper()).post {
-
+                        hideKeyboard(searchView)
                         search(it)
                     }
                 }, {

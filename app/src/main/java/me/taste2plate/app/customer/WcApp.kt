@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatDelegate
 import com.appsflyer.AppsFlyerLib
 import com.clevertap.android.sdk.ActivityLifecycleCallback
 import com.clevertap.android.sdk.CleverTapAPI
+import com.facebook.FacebookSdk
 import com.facebook.appevents.AppEventsLogger
 import com.facebook.drawee.backends.pipeline.Fresco
 import com.google.android.libraries.places.api.Places
@@ -49,9 +50,9 @@ class WcApp : DaggerApplication() {
         );
         // Blackbox.context(this).init()
         Fresco.initialize(this);
-       // FacebookSdk.sdkInitialize(applicationContext);
+       FacebookSdk.sdkInitialize(applicationContext);
         AppEventsLogger.activateApp(this);
-        Places.initialize(applicationContext, "AIzaSyCO5CDU2-xVi6VRy14HhptZ3A8Bztx5Ps4")
+        Places.initialize(applicationContext, "AIzaSyBbpYO8zLmSh0-c5_MDiyPiQnMCl4Jc6ko")
         ViewPump.init(
             ViewPump.builder()
                 .addInterceptor(

@@ -2,6 +2,7 @@ package me.taste2plate.app.customer.adapter.viewholder
 
 import android.content.Context
 import android.content.Intent
+import android.os.Bundle
 import android.text.Html
 import android.text.TextUtils
 import android.util.Log
@@ -12,6 +13,11 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.lifecycle.LifecycleOwner
 import com.clevertap.android.sdk.CleverTapAPI
+import com.facebook.AccessToken
+import com.facebook.GraphRequest
+import com.facebook.GraphResponse
+import com.facebook.appevents.AppEventsConstants
+import com.facebook.appevents.AppEventsLogger
 import com.facebook.drawee.drawable.ScalingUtils
 import com.facebook.drawee.view.SimpleDraweeView
 import me.taste2plate.app.customer.R
@@ -22,6 +28,7 @@ import me.taste2plate.app.customer.viewmodels.ProductViewModel
 import me.taste2plate.app.data.api.AnalyticsAPI
 import me.taste2plate.app.data.api.LogRequest
 import me.taste2plate.app.models.newproducts.NewProduct
+import org.json.JSONObject
 
 
 class ProductListingViewHolder(
@@ -105,6 +112,20 @@ class ProductListingViewHolder(
                                 product_id = product._id
                             )
                             analytics.addLog(logRequest)
+
+                            /*//facebook
+                            val pixelId = context.getString(R.string.facebook_pixel_id)
+                            AccessToken.getCurrentAccessToken()
+                                ?.let { it1 -> sendGraphRequest(it1, pixelId) }*/
+
+                            val logger = AppEventsLogger.newLogger(context)
+                            val params = Bundle()
+
+                            params.putString(AppEventsConstants.EVENT_PARAM_CURRENCY, "INR");
+                            params.putString(AppEventsConstants.EVENT_PARAM_CONTENT_TYPE, "product");
+                            params.putString(AppEventsConstants.EVENT_PARAM_CONTENT_ID, product._id);
+                            logger.logEvent(AppEventsConstants.EVENT_NAME_ADDED_TO_WISHLIST)
+
                         }
                         Status.EMPTY -> {
                             progressBar.visibility = View.GONE
@@ -121,6 +142,27 @@ class ProductListingViewHolder(
                 }
         }
 
+
+
+    }
+
+
+    fun sendGraphRequest(accessToken: AccessToken, pixelId: String) {
+        val parameters = JSONObject()
+        parameters.put("data", "[{\"action_source\":\"app\",\"app_data\":{\"advertiser_tracking_enabled\":false,\"application_tracking_enabled\":false,\"extinfo\":[\"a2\",\"com.some.app\",\"771\",\"Version 7.7.1\",\"10.1.1\",\"OnePlus6\",\"en_US\",\"GMT-1\",\"TMobile\",\"1920\",\"1080\",\"2.00\",\"2\",\"128\",\"8\",\"USA/New York\"],\"event_id\":12345,\"event_name\":\"TestEvent\",\"event_time\":1698745588,\"user_data\":{\"client_ip_address\":\"254.254.254.254\",\"client_user_agent\":\"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:63.0) Gecko/20100101 Firefox/63.0\",\"em\":\"f660ab912ec121d1b1e928a0bb4bc61b15f5ad44d5efdc4e1c92a25e99b8e44a\"},\"test_event_code\":\"TEST39443\",\"fbc\":\"$pixelId\",\"fbp\":\"$pixelId\"}], \"test_event_code\", \"TEST39443\"")
+
+
+        val request = GraphRequest.newPostRequest(
+            accessToken,
+            "/1667197037079128/events",
+            parameters,
+            object : GraphRequest.Callback {
+                override fun onCompleted(response: GraphResponse) {
+                    // Insert your code here
+                }
+            }
+        )
+        request.executeAsync()
     }
 
     private fun sendProductInfoToCleverTap(product: NewProduct) {

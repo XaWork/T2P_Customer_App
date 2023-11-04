@@ -4,9 +4,12 @@
     <string name="title_activity_shop">ShopActivity</string>
     <string name="title_activity_coupon">CouponActivity</string>
     <string name="title_activity_menu">MenuActivity</string>
-    <string name="facebook_app_id">118282577862315</string>
+
+    <string name="facebook_app_id">752784741945467</string>
     <string name="facebook_client_token">abaa9a413c0a95d9112b2432cabed1e7</string>
+    <string name="facebook_pixel_id">1667197037079128</string>
     <string name="fb_login_protocol_scheme">fb[752784741945467]</string>
+
     <string name="api_key">AIzaSyAe_TB4tSHMVBT2weqw74MR5-EHZZ4HBnc</string>
 
 

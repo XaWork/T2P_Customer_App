@@ -87,7 +87,7 @@ class TrackLocationActivity : WooDroidActivity<CustomerViewModel>(), OnMapReadyC
                 if(latitude!=null && longitude!=null) {
                     updateMap(Driver(lat = latitude.toString(), lng = longitude.toString()))
                     mMap!!.drawRouteOnMap(
-                        "AIzaSyAj0qAw3RL4AhbO3ly22EFMqThPbm7dBT4", //your API key
+                        "AIzaSyBbpYO8zLmSh0-c5_MDiyPiQnMCl4Jc6ko", //your API key
                         source = LatLng(latitude, longitude),
                         markers = false,
                         destination = LatLng(

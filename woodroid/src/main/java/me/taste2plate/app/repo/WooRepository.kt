@@ -33,6 +33,12 @@ open class WooRepository(var baseUrl: String, var consumerKey: String, var consu
 
         val client = getUnsafeOkHttpClient()
 
+        retrofitWithAuth = Retrofit.Builder()
+            .baseUrl(Constants.baseUrl)
+            .addConverterFactory(GsonConverterFactory.create(gson))
+            .client(client)
+            .build()
+
         retrofit = Retrofit.Builder()
             .baseUrl(Constants.baseUrl)
             .addConverterFactory(GsonConverterFactory.create(gson))
@@ -50,12 +56,6 @@ open class WooRepository(var baseUrl: String, var consumerKey: String, var consu
             .addConverterFactory(GsonConverterFactory.create(gson))
             .client(client)
             .build()
-
-        retrofitWithAuth = Retrofit.Builder()
-            .baseUrl(Constants.baseUrl)
-            .addConverterFactory(GsonConverterFactory.create(gson))
-            .client(client)
-            .build()
     }
 
 
@@ -68,7 +68,6 @@ open class WooRepository(var baseUrl: String, var consumerKey: String, var consu
 
         retrofitWithAuth = Retrofit.Builder()
             .baseUrl(Constants.baseUrl)
-
             .addConverterFactory(GsonConverterFactory.create(gson))
             .client(client)
             .build()

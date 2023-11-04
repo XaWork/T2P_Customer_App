@@ -9,6 +9,8 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.clevertap.android.sdk.CleverTapAPI
+import com.facebook.appevents.AppEventsConstants
+import com.facebook.appevents.AppEventsLogger
 import io.github.inflationx.viewpump.ViewPumpContextWrapper
 import kotlinx.android.synthetic.main.activity_cart.*
 import kotlinx.android.synthetic.main.content_cart.*
@@ -189,6 +191,19 @@ class CartActivity : WooDroidActivity<CartViewModel>() {
                         product_id = productId
                     )
                     analytics.addLog(logRequest)
+
+                    //facebook
+                    val logger = AppEventsLogger.newLogger(this)
+                    val params = Bundle()
+
+                    params.putString(AppEventsConstants.EVENT_PARAM_CURRENCY, "INR");
+                    params.putString(AppEventsConstants.EVENT_PARAM_CONTENT_TYPE, "product");
+                    params.putString(AppEventsConstants.EVENT_PARAM_CONTENT_ID, productId);
+                    params.putString(AppEventsConstants.EVENT_PARAM_NUM_ITEMS, quantity.toString());
+
+                    logger.logEvent(AppEventsConstants.EVENT_NAME_ADDED_TO_CART,
+                        54.23,
+                        params)
 
                     cart(AppUtils(this).user.id , address!!.city!!._id, address!!.pincode!!)
                 }

@@ -160,6 +160,8 @@ class ProductActivity : BaseActivity(), SaveAddressListener {
                         product_id = product._id
                     )
                     analytics.addLog(logRequest)
+
+                    addAppEvent(AppEventsConstants.EVENT_NAME_ADDED_TO_WISHLIST)
                 }
 
                 Status.ERROR -> stopShowingLoading()
@@ -233,8 +235,7 @@ class ProductActivity : BaseActivity(), SaveAddressListener {
                         bundle.putDouble(FirebaseAnalytics.Param.VALUE, 0.0)
                         mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.ADD_TO_CART, bundle)
 
-                        addAppEvent()
-
+                        addAppEvent(AppEventsConstants.EVENT_NAME_ADDED_TO_CART)
 
                         //send event info
                         val analytics = AnalyticsAPI()
@@ -287,9 +288,15 @@ class ProductActivity : BaseActivity(), SaveAddressListener {
         interkt.eventTrack(eventInfo)
     }
 
-    private fun addAppEvent() {
+    private fun addAppEvent(log: String) {
+        //facebook
         val logger = AppEventsLogger.newLogger(this)
-        logger.logEvent(AppEventsConstants.EVENT_NAME_ADDED_TO_CART)
+        val params = Bundle()
+
+        params.putString(AppEventsConstants.EVENT_PARAM_CURRENCY, "INR");
+        params.putString(AppEventsConstants.EVENT_PARAM_CONTENT_TYPE, "product");
+        params.putString(AppEventsConstants.EVENT_PARAM_CONTENT_ID, productId);
+        logger.logEvent(log)
     }
 
     private fun updateCart() {

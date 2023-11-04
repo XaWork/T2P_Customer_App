@@ -99,6 +99,8 @@
 
         <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
         <meta-data android:name="com.facebook.sdk.ClientToken" android:value="@string/facebook_client_token"/>
+      <!--  <meta-data android:name="com.facebook.sdk.AutoLogAppEventsEnabled"
+            android:value="false"/>-->
 
         <activity
             android:name=".ui.ContactUsDetailActivity"
@@ -285,7 +287,8 @@
             android:value="rzp_live_ZLgzjgdHBJDlP8" />
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyAe_TB4tSHMVBT2weqw74MR5-EHZZ4HBnc" />
+            android:value="AIzaSyBbpYO8zLmSh0-c5_MDiyPiQnMCl4Jc6ko" />
+           <!-- android:value="AIzaSyAe_TB4tSHMVBT2weqw74MR5-EHZZ4HBnc" />-->
         <!--
 <meta-data
             android:name="com.google.android.geo.API_KEY"
