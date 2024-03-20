@@ -75,71 +75,80 @@ class Utils {
                     pDescColor = appData.result.appSettings.cancel.cancel_subtitle_desctiption_color
                     pBagColor = appData.result.appSettings.cancel.cancel_popup_bg_color
                 }
+
                 COD_DIGITAL -> {
                     pTitle = appData.result.appSettings.cod.cod_popup_title
-                    pTitleColor =  appData.result.appSettings.cod.cod_popup_title_color
-                    pSubTitle =  appData.result.appSettings.cod.cod_popup_subtitle
+                    pTitleColor = appData.result.appSettings.cod.cod_popup_title_color
+                    pSubTitle = appData.result.appSettings.cod.cod_popup_subtitle
                     pSubTitleColor = appData.result.appSettings.cod.cod_subtitle_title_color
                     pDesc = appData.result.appSettings.cod.cod_popup_desctiption
                     pDescColor = appData.result.appSettings.cod.cod_subtitle_desctiption_color
                     pBagColor = appData.result.appSettings.cod.cod_popup_bg_color
-                    rbDigitalCOD.visibility=VISIBLE
-                    desc.visibility= GONE
+                    rbDigitalCOD.visibility = VISIBLE
+                    desc.visibility = GONE
                     rbDigitalCOD.text = pDesc
                     rbDigitalCOD.setTextColor(Color.parseColor(pDescColor))
                 }
+
                 EXPRESS_DELIVERY -> {
                     pTitle = appData.result.appSettings.express.express_popup_title
                     pTitleColor = appData.result.appSettings.express.express_popup_title_color
-                    pSubTitle =  appData.result.appSettings.express.express_popup_subtitle
+                    pSubTitle = appData.result.appSettings.express.express_popup_subtitle
                     pSubTitleColor = appData.result.appSettings.express.express_subtitle_title_color
                     pDesc = appData.result.appSettings.express.express_popup_desctiption
-                    pDescColor = appData.result.appSettings.express.express_subtitle_desctiption_color
+                    pDescColor =
+                        appData.result.appSettings.express.express_subtitle_desctiption_color
                     pBagColor = appData.result.appSettings.express.express_popup_bg_color
-                    rbDigitalCOD.visibility=VISIBLE
-                    desc.visibility= GONE
+                    rbDigitalCOD.visibility = VISIBLE
+                    desc.visibility = GONE
                     rbDigitalCOD.text = pDesc
                     rbDigitalCOD.setTextColor(Color.parseColor(pDescColor))
                 }
+
                 SELECTED_ADDRESS -> {
                     pTitle = "\"Select Delivery Location\""
                     pTitleColor = appData.result.appSettings.express.express_popup_title_color
-                    pSubTitle =  "\'Delivery Location is Required to Proceed\'"
+                    pSubTitle = "\'Delivery Location is Required to Proceed\'"
                     pSubTitleColor = appData.result.appSettings.express.express_subtitle_title_color
                     pDesc = "To continue using the app, please select or create an Address"
-                    pDescColor = appData.result.appSettings.express.express_subtitle_desctiption_color
+                    pDescColor =
+                        appData.result.appSettings.express.express_subtitle_desctiption_color
                     pBagColor = appData.result.appSettings.express.express_popup_bg_color
-                    rbDigitalCOD.visibility=GONE
-                    desc.visibility= VISIBLE
+                    rbDigitalCOD.visibility = GONE
+                    desc.visibility = VISIBLE
 
                     title.textSize = 18.sp.toFloat()
                 }
+
                 COMPANION_TRACK -> {
                     pTitle = appData.result.appSettings.order.order_track_popup_title
                     pTitleColor = appData.result.appSettings.order.order_track_popup_title_color
-                    pSubTitle =  appData.result.appSettings.order.order_track_popup_subtitle
-                    pSubTitleColor = appData.result.appSettings.order.order_track_subtitle_title_color
+                    pSubTitle = appData.result.appSettings.order.order_track_popup_subtitle
+                    pSubTitleColor =
+                        appData.result.appSettings.order.order_track_subtitle_title_color
                     pDesc = appData.result.appSettings.order.order_track_popup_desctiption
-                    pDescColor = appData.result.appSettings.order.order_track_subtitle_desctiption_color
+                    pDescColor =
+                        appData.result.appSettings.order.order_track_subtitle_desctiption_color
                     pBagColor = appData.result.appSettings.order.order_track_popup_bg_color
-                    rbDigitalCOD.visibility=GONE
-                    desc.visibility= VISIBLE
+                    rbDigitalCOD.visibility = GONE
+                    desc.visibility = VISIBLE
                 }
+
                 else -> {
                     pTitle = appData.result.appSettings.express.express_popup_title
                     pTitleColor = appData.result.appSettings.express.express_popup_title_color
-                    pSubTitle =  appData.result.appSettings.express.express_popup_subtitle
+                    pSubTitle = appData.result.appSettings.express.express_popup_subtitle
                     pSubTitleColor = appData.result.appSettings.express.express_subtitle_title_color
                     pDesc = appData.result.appSettings.express.express_popup_desctiption
-                    pDescColor = appData.result.appSettings.express.express_subtitle_desctiption_color
+                    pDescColor =
+                        appData.result.appSettings.express.express_subtitle_desctiption_color
                     pBagColor = appData.result.appSettings.express.express_popup_bg_color
-                    rbDigitalCOD.visibility=VISIBLE
-                    desc.visibility= GONE
+                    rbDigitalCOD.visibility = VISIBLE
+                    desc.visibility = GONE
                     rbDigitalCOD.text = pDesc
                     rbDigitalCOD.setTextColor(Color.parseColor(pDescColor))
                 }
             }
-
 
             title.text = pTitle
             title.setTextColor(Color.parseColor(pTitleColor))

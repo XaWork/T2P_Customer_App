@@ -1,9 +1,7 @@
 package me.taste2plate.app.customer.ui.order
 
 import android.app.Dialog
-import android.content.DialogInterface
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.view.View.GONE
@@ -14,13 +12,41 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.fueled.reclaim.ItemsViewAdapter
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import kotlinx.android.synthetic.main.content_order.*
-import kotlinx.android.synthetic.main.toolbar.*
-import me.taste2plate.app.customer.*
+import kotlinx.android.synthetic.main.content_order.btnCancelOrder
+import kotlinx.android.synthetic.main.content_order.deliveryDate
+import kotlinx.android.synthetic.main.content_order.llCGSTLayout
+import kotlinx.android.synthetic.main.content_order.llCoupon
+import kotlinx.android.synthetic.main.content_order.llIGSTLayout
+import kotlinx.android.synthetic.main.content_order.llSGSTLayout
+import kotlinx.android.synthetic.main.content_order.rbEnableCOD
+import kotlinx.android.synthetic.main.content_order.rbEnablePayNow
+import kotlinx.android.synthetic.main.content_order.rgPaymentType
+import kotlinx.android.synthetic.main.content_order.rvCheckOutCart
+import kotlinx.android.synthetic.main.content_order.tvCGSTCost
+import kotlinx.android.synthetic.main.content_order.tvCouponCost
+import kotlinx.android.synthetic.main.content_order.tvIGSTCost
+import kotlinx.android.synthetic.main.content_order.tvSGSTCost
+import kotlinx.android.synthetic.main.content_order.tvShippingAddress
+import kotlinx.android.synthetic.main.content_order.tvShippingAddressEdit
+import kotlinx.android.synthetic.main.content_order.tvShippingCost
+import kotlinx.android.synthetic.main.content_order.tvTotal
+import kotlinx.android.synthetic.main.content_order.tvTotalItemCostValue
+import kotlinx.android.synthetic.main.content_order.tvTrackOrder
+import kotlinx.android.synthetic.main.content_order.updateTitle
+import kotlinx.android.synthetic.main.content_order.updates
+import kotlinx.android.synthetic.main.content_order.weight_delivery
+import kotlinx.android.synthetic.main.content_order.weight_delivery_container
+import kotlinx.android.synthetic.main.content_order.weight_pickup
+import kotlinx.android.synthetic.main.content_order.weight_pickup_container
+import kotlinx.android.synthetic.main.toolbar.toolbar
+import me.taste2plate.app.customer.R
 import me.taste2plate.app.customer.adapter.CheckoutAdapter
 import me.taste2plate.app.customer.common.Status
 import me.taste2plate.app.customer.common.UpdateEntryAdapterItem
 import me.taste2plate.app.customer.common.UpdateType
+import me.taste2plate.app.customer.toDate
+import me.taste2plate.app.customer.toDateObject
+import me.taste2plate.app.customer.toSummary
 import me.taste2plate.app.customer.ui.WooDroidActivity
 import me.taste2plate.app.customer.ui.location.TrackLocationActivity
 import me.taste2plate.app.customer.utils.AppUtils
@@ -29,7 +55,10 @@ import me.taste2plate.app.customer.viewmodels.OrderViewModel
 import me.taste2plate.app.data.api.AnalyticsAPI
 import me.taste2plate.app.data.api.LogRequest
 import me.taste2plate.app.models.address.toSummary
-import me.taste2plate.app.models.order.*
+import me.taste2plate.app.models.order.Order
+import me.taste2plate.app.models.order.OrderProductItem
+import me.taste2plate.app.models.order.tIGST
+import me.taste2plate.app.models.order.tSGST
 import kotlinx.android.synthetic.main.content_order.tvPackagingChargeCost as tvPackagingChargeCost1
 
 
@@ -97,7 +126,7 @@ class OrderActivity : WooDroidActivity<OrderViewModel>() {
         }
 
         if (order!!.status.contentEquals("cancel")) {
-            tvTrackOrder.visibility = View.GONE
+            tvTrackOrder.visibility = GONE
         } else {
             tvTrackOrder.visibility = View.VISIBLE
         }
@@ -136,54 +165,55 @@ class OrderActivity : WooDroidActivity<OrderViewModel>() {
         } else {
             weight_pickup_container.visibility = VISIBLE
             weight_pickup.text = "${order!!.pickup_weight} Kg"
-        }
-
-        btnCancelOrder.setOnClickListener {
-            MaterialAlertDialogBuilder(this@OrderActivity)
-                .setTitle("Cancel Order")
-                .setMessage("Are you sure, you want to cancel the order")
-                .setPositiveButton("Yes") { dialog, _ ->
-                    cancelOrder()
-                    dialog.dismiss()
-                }
-                .setNegativeButton("No") { dialog, _ ->
-                    dialog.dismiss()
-                }
-                .show()
-        }
 
 
-        title = "Order: ${order!!.orderid}"
-        if (order?.status?.contentEquals("cancelled")!!) {
-            btnCancelOrder.visibility = GONE
-        }
-        cartItems.addAll(order!!.products)
-        adapter.notifyDataSetChanged()
-
-        order?.coupon?.let {
-            if (it.isNotEmpty() && order!!.couponamount.isNotEmpty() && order!!.couponamount.toFloat() != 0f) {
-                llCoupon.visibility = VISIBLE
-                couponDiscount = order!!.couponamount.toFloat()
-                tvCouponCost.text = "Rs  -${couponDiscount}"
-            } else {
-                llCoupon.visibility = GONE
+            btnCancelOrder.setOnClickListener {
+                MaterialAlertDialogBuilder(this@OrderActivity)
+                    .setTitle("Cancel Order")
+                    .setMessage("Are you sure, you want to cancel the order")
+                    .setPositiveButton("Yes") { dialog, _ ->
+                        cancelOrder()
+                        dialog.dismiss()
+                    }
+                    .setNegativeButton("No") { dialog, _ ->
+                        dialog.dismiss()
+                    }
+                    .show()
             }
-        }
 
-        deliveryDate.text =
-            "Delivery Date: ${order!!.delivery_date.toDate("dd-MM-yyyy")} ${order!!.timeslot}"
 
-        /*if(order!!.otp.isNotEmpty()){
+            title = "Order: ${order!!.orderid}"
+            if (order?.status?.contentEquals("cancelled")!!) {
+                btnCancelOrder.visibility = GONE
+            }
+            cartItems.addAll(order!!.products)
+            adapter.notifyDataSetChanged()
+
+            order?.coupon?.let {
+                if (it.isNotEmpty() && order!!.couponamount.isNotEmpty() && order!!.couponamount.toFloat() != 0f) {
+                    llCoupon.visibility = VISIBLE
+                    couponDiscount = order!!.couponamount.toFloat()
+                    tvCouponCost.text = "Rs  -${couponDiscount}"
+                } else {
+                    llCoupon.visibility = GONE
+                }
+            }
+
+            deliveryDate.text =
+                "Delivery Date: ${order!!.delivery_date.toDate("dd-MM-yyyy")} ${order!!.timeslot}"
+
+            /*if(order!!.otp.isNotEmpty()){
             orderOtp.text = "OTP : ${order!!.otp}"
         }*/
 
 
-        totalAmount = order!!.finalprice.toFloat()
+            totalAmount = order!!.finalprice.toFloat()
 
-        updateShippingInfo(order!!)
-        updateShippingAddress()
+            updateShippingInfo(order!!)
+            updateShippingAddress()
 
-        getUpdates()
+            getUpdates()
+        }
     }
 
 
@@ -217,7 +247,7 @@ class OrderActivity : WooDroidActivity<OrderViewModel>() {
                         itemAdapter.replaceItems(items, true)
                     } else {
                         updateTitle.visibility = GONE
-                        updates.visibility = View.GONE
+                        updates.visibility = GONE
                     }
                 }
 

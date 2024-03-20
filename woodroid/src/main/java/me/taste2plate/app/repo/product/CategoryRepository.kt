@@ -1,5 +1,6 @@
 package me.taste2plate.app.repo.product
 
+import android.util.Log
 import me.taste2plate.app.data.api.ProductCategoryAPI
 import me.taste2plate.app.models.Category
 import me.taste2plate.app.models.SubCategories

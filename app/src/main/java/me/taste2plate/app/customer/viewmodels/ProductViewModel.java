@@ -1,6 +1,7 @@
 package me.taste2plate.app.customer.viewmodels;
 
 import android.content.Context;
+import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -175,6 +176,7 @@ public final class ProductViewModel extends ViewModel {
     }
 
     public WooLiveData<HomePageResponse> homePageData(String cityId, String taste) {
+       // Log.e("Homepage", categoryRepository.homePageData(cityId, taste).toString());
         return categoryRepository.homePageData(cityId, taste);
     }
 

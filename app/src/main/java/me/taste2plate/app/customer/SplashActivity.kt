@@ -257,15 +257,15 @@ class SplashActivity : WooDroidActivity<UserViewModel>() {
                         "minLength: $minLength\n replace1 : $replace1\n replace2: $replace2"
                     )
 
-                    if (BuildConfig.VERSION_NAME.take(minLength).replace(".", "")
+                    /*if (BuildConfig.VERSION_NAME.take(minLength).replace(".", "")
                             .toFloat() < response.data().result.customerAndroidVersion.take(
                             minLength
                         ).replace(".", "").toFloat()
                     ) {
                         showVersionAlert()
                     } else {
+                    }*/
                         moveToNext()
-                    }
                 }
 
                 Status.ERROR -> {
@@ -344,7 +344,6 @@ class SplashActivity : WooDroidActivity<UserViewModel>() {
         val httpClient = OkHttpClient.Builder()
             .addInterceptor(loggingInterceptor)
             .build()
-
 
         val retrofit = Retrofit.Builder()
             .baseUrl("https://api.ipify.org")

@@ -3,6 +3,7 @@ package me.taste2plate.app.customer.ui.home
 import android.app.SearchManager
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
@@ -243,13 +244,14 @@ class HomeFragment : Fragment(), SaveAddressListener {
                 when (response!!.status()) {
                     Status.LOADING -> {
                         showLoading("Please wait", "Fetching deals and offers")
+                        Log.e("Homepage", "Loading deals and offers")
                     }
 
                     Status.SUCCESS -> {
                         stopShowingLoading()
                         val homePageResponse = response.data()
 
-                        //Log.e(TAG, homePageResponse.toString())
+                        Log.e("Homepage", homePageResponse.best_seller.toString())
 
                         val adapterItems = mutableListOf<AdapterItem<*>>()
                         //
@@ -356,10 +358,12 @@ class HomeFragment : Fragment(), SaveAddressListener {
 
                     Status.ERROR -> {
                         stopShowingLoading()
+                        Log.e("Homepage", "Error")
                     }
 
                     Status.EMPTY -> {
                         stopShowingLoading()
+                        Log.e("Homepage", "Empty")
                     }
                 }
 

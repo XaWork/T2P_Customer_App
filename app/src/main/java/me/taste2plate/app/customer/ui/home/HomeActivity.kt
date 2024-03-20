@@ -213,8 +213,6 @@ class HomeActivity : WooDroidActivity<CartViewModel>() {
             )
         )
         startActivity(intent)
-
-
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {

@@ -294,7 +294,6 @@ class CheckoutActivity : WooDroidActivity<CheckoutViewModel>(), SaveAddressListe
                 if (checkWalletDiscountValidation()) {
                     if (isChecked) {
                         if (couponResponse != null) {
-
                             Log.e(
                                 "TAG",
                                 "if coupon response is not null: ${Gson().toJson(couponResponse)}"
@@ -429,7 +428,7 @@ class CheckoutActivity : WooDroidActivity<CheckoutViewModel>(), SaveAddressListe
         var maxOrder: String
         var walletPoint: String
 
-        userId?.let {
+        userId?.let { it ->
             walletViewModel.getMyPlan(it).observe(this) {
                 when (it.status()) {
                     Status.LOADING -> {
@@ -597,7 +596,6 @@ class CheckoutActivity : WooDroidActivity<CheckoutViewModel>(), SaveAddressListe
                 showError("Select Delivery Date, Dalivery Time & Payment Mode!")
             }
         }
-
         checkCODAvailability()
     }
 
@@ -1132,18 +1130,6 @@ class CheckoutActivity : WooDroidActivity<CheckoutViewModel>(), SaveAddressListe
 
         Log.d("clevertap", "$charges, \n$items")
         CleverTapAPI.getDefaultInstance(this)?.pushChargedEvent(charges, items)
-    }
-
-    private fun addAppEvent() {
-        val logger = AppEventsLogger.newLogger(this)
-        val params = Bundle()
-        params.putString(EVENT_PARAM_CURRENCY, "INR")
-
-        logger.logEvent(
-            AppEventsConstants.EVENT_NAME_PURCHASED,
-            finalProductPrice.toDouble(),
-            params
-        )
     }
 
 
